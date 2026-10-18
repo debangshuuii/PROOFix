@@ -71,9 +71,9 @@ export async function generatePatchProposal(params: {
           'The navigation component contains an anchor tag pointing to non-existent route "/broken-route". Replaced with valid route "/about" to prevent HTTP 404 user drop-off.';
         unifiedDiff = `--- a/src/fixtures/sample-app/src/app/page.tsx
 +++ b/src/fixtures/sample-app/src/app/page.tsx
-@@ -14,1 +14,1 @@
--          <Link href="/broken-route" className="text-rose-400 hover:underline">Broken Navigation Link</Link>
-+          <Link href="/about" className="text-emerald-400 hover:underline">About Us</Link>`;
+@@ -38,1 +38,1 @@
+-          <Link href="/broken-route" style={{ color: '#f87171' }}>Broken Link (404)</Link>
++          <Link href="/about" style={{ color: '#38bdf8' }}>About</Link>`;
         affectedFiles = ['src/fixtures/sample-app/src/app/page.tsx'];
         confidenceScore = 96;
       } else if (context.errorMessage.includes('/api/data')) {

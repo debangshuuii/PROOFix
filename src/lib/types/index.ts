@@ -277,3 +277,5 @@ export interface SystemSettings {
   sandboxTimeoutSecs: number;
   allowOutboundNetwork: boolean;
 }
+
+export * from './proposal';

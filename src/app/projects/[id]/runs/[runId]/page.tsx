@@ -6,7 +6,9 @@ import { useParams, useRouter } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { StatusBadge } from '@/components/StatusBadge';
 import { DiffViewer } from '@/components/DiffViewer';
+import { PatchReviewModal } from '@/components/PatchReviewModal';
 import { VerificationRun, TestResult, Finding, Project } from '@/lib/types';
+import { FixProposal } from '@/lib/types/proposal';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -46,6 +48,7 @@ function VerificationRunContent() {
   const [testFilter, setTestFilter] = useState<'all' | 'passed' | 'failed' | 'inconclusive'>('all');
   const [expandedTests, setExpandedTests] = useState<Record<string, boolean>>({});
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
+  const [selectedProposal, setSelectedProposal] = useState<FixProposal | null>(null);
 
   // Streaming logs state
   const [logs, setLogs] = useState<string[]>([]);
@@ -667,6 +670,28 @@ function VerificationRunContent() {
                         diff={fnd.patchPreview}
                         fileName={fnd.affectedFiles?.[0] || 'Proposed Patch'}
                       />
+                      <button
+                        onClick={() =>
+                          setSelectedProposal({
+                            id: fnd.id,
+                            projectId,
+                            runId,
+                            failureId: fnd.testResultId || fnd.id,
+                            commitSha: run?.commitHash || 'a1b2c3d4e5f6',
+                            explanation: fnd.suggestedFix,
+                            proposedChanges: fnd.patchPreview!,
+                            affectedFiles: fnd.affectedFiles || ['src/fixtures/sample-app/src/app/page.tsx'],
+                            confidenceScore: fnd.confidenceScore,
+                            validationStatus: 'valid',
+                            createdAt: fnd.createdAt,
+                            updatedAt: fnd.createdAt,
+                          })
+                        }
+                        className="mt-3 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-sky-600/90 hover:bg-sky-500 text-white font-medium text-xs shadow-sm shadow-sky-600/20 transition-colors"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        Review & Test Patch in Sandbox
+                      </button>
                     </div>
                   )}
 
@@ -825,6 +850,16 @@ function VerificationRunContent() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Patch Review Modal */}
+      {selectedProposal && (
+        <PatchReviewModal
+          proposal={selectedProposal}
+          isOpen={!!selectedProposal}
+          onClose={() => setSelectedProposal(null)}
+          onActionComplete={(updated) => setSelectedProposal(updated)}
+        />
       )}
     </div>
   );

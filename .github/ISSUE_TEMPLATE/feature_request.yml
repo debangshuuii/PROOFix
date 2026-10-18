@@ -1,0 +1,34 @@
+name: Feature Request
+description: Propose a new feature, analyzer capability, or enhancement
+labels: ["enhancement", "idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We welcome feature ideas and architectural improvements to PROOFix!
+  - type: input
+    id: title
+    attributes:
+      label: Feature Title
+      placeholder: e.g. Support Astro framework route inspection
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem or developer pain point?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your proposed design, workflow, or API changes.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative implementations or existing tools you have evaluated?

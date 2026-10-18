@@ -1,0 +1,51 @@
+name: Bug Report
+description: Create a report to help us improve PROOFix
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report an issue in PROOFix!
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: A concise description of the bug.
+      placeholder: e.g. Port readiness timeout when inspecting SvelteKit project
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: What steps are needed to trigger this behavior?
+      placeholder: |
+        1. Open dashboard at `/dashboard`
+        2. Click 'Verify Project'
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen instead?
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Info
+      description: Operating System, Node.js version, Browser version.
+      placeholder: |
+        - OS: Windows 11 / Ubuntu 22.04 / macOS
+        - Node Version: v20.x or v22.x
+        - Browser: Chromium / Playwright
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Error Output
+      description: Paste any terminal logs or browser console errors (redact sensitive tokens).
+      render: shell

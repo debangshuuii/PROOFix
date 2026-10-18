@@ -1,0 +1,456 @@
+{
+  "users": [
+    {
+      "id": "usr_default",
+      "email": "developer@proofix.dev",
+      "name": "Lead Engineer",
+      "createdAt": "2026-10-17T21:26:25.390Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj_fixture_01",
+      "ownerId": "usr_default",
+      "name": "PROOFix Verification Testbed",
+      "description": "Controlled multi-route web application with known test conditions: working home, broken navigation, 500 API failure, and uncaught JS exception.",
+      "repoUrl": "https://github.com/debangshuuii/PROOFix/fixtures/sample-app",
+      "repoProvider": "sample_fixture",
+      "defaultBranch": "main",
+      "localPath": "src/fixtures/sample-app",
+      "config": {
+        "startupCommand": "npm run start",
+        "buildCommand": "npm run build",
+        "installCommand": "npm install",
+        "port": 4173,
+        "readinessPath": "/",
+        "timeoutSecs": 30
+      },
+      "createdAt": "2026-10-17T21:26:25.390Z",
+      "updatedAt": "2026-10-17T21:26:25.390Z"
+    }
+  ],
+  "projectVersions": [
+    {
+      "id": "ver_fixture_01",
+      "projectId": "proj_fixture_01",
+      "commitHash": "a1b2c3d4e5f6",
+      "branch": "main",
+      "analysis": {
+        "framework": "Next.js 15 (App Router)",
+        "runtime": "Node.js v24.x",
+        "packageManager": "npm",
+        "scripts": {
+          "dev": "next dev",
+          "build": "next build",
+          "start": "next start",
+          "test": "playwright test"
+        },
+        "entryPoints": [
+          "src/app/page.tsx",
+          "src/app/layout.tsx"
+        ],
+        "routes": [
+          {
+            "path": "/",
+            "type": "page",
+            "fileSource": "src/app/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/about",
+            "type": "page",
+            "fileSource": "src/app/about/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/broken-route",
+            "type": "page",
+            "fileSource": "src/app/broken-route/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/data",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/data/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/runtime-error",
+            "type": "page",
+            "fileSource": "src/app/runtime-error/page.tsx",
+            "isDynamic": false
+          }
+        ],
+        "envVarsDetected": [
+          "DATABASE_URL",
+          "AUTH_SECRET"
+        ],
+        "existingTests": [
+          "tests/e2e/home.spec.ts"
+        ],
+        "dockerConfig": {
+          "hasDockerfile": true,
+          "hasDockerCompose": false
+        },
+        "inferredStartup": {
+          "command": "npm run dev",
+          "port": 4173,
+          "readinessPath": "/",
+          "confidence": "high",
+          "rationale": "Standard Next.js scripts detected with App Router pages."
+        },
+        "blockers": [
+          {
+            "severity": "warning",
+            "message": "DATABASE_URL detected in schema but not set in execution environment.",
+            "suggestedResolution": "Provide a mock or isolated test database connection string."
+          }
+        ]
+      },
+      "createdAt": "2026-10-17T21:26:25.390Z"
+    }
+  ],
+  "runs": [
+    {
+      "id": "run_fixture_baseline",
+      "projectId": "proj_fixture_01",
+      "projectVersionId": "ver_fixture_01",
+      "runNumber": 1,
+      "status": "completed",
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "startedAt": "2026-10-17T20:26:25.390Z",
+      "completedAt": "2026-10-17T20:26:55.390Z",
+      "durationMs": 30000,
+      "commitHash": "a1b2c3d4e5f6",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 4173,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Local Process Sandbox: Subprocess tree isolation with unprivileged process context, port isolation, and environment secret sanitization. Note: Full container cgroup isolation requires Docker daemon.",
+      "summary": {
+        "total": 6,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 1
+      },
+      "errorSummary": "2 checks failed: Broken link 404 navigation and HTTP 500 on /api/data endpoint.",
+      "logs": [
+        "[PROOFix 02:00:00] Initializing verification run #1 for PROOFix Verification Testbed...",
+        "[PROOFix 02:00:01] Sandbox mode: local_process_sandbox on port 4173.",
+        "[PROOFix 02:00:02] Project inspection verified: 5 routes discovered.",
+        "[PROOFix 02:00:03] Starting application server process...",
+        "[PROOFix 02:00:07] Readiness probe responded 200 OK at http://localhost:4173/.",
+        "[PROOFix 02:00:08] Launching Playwright Chromium headless engine...",
+        "[PROOFix 02:00:12] Test 1: Root URL Health Check -> PASSED",
+        "[PROOFix 02:00:15] Test 2: Navigation & About Page -> PASSED",
+        "[PROOFix 02:00:19] Test 3: Broken Route Link Check -> FAILED (HTTP 404)",
+        "[PROOFix 02:00:23] Test 4: API Health Check /api/data -> FAILED (HTTP 500)",
+        "[PROOFix 02:00:27] Test 5: Interactive Counter UI Check -> PASSED",
+        "[PROOFix 02:00:29] Test 6: Form Validation Safe Check -> INCONCLUSIVE (Form submission blocked by safe policy)",
+        "[PROOFix 02:00:30] Run finished with 3 Passed, 2 Failed, 1 Inconclusive."
+      ],
+      "createdAt": "2026-10-17T20:26:25.390Z"
+    }
+  ],
+  "testResults": [
+    {
+      "id": "res_01",
+      "runId": "run_fixture_baseline",
+      "name": "Root Application Health & Title Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 1420,
+      "actualResult": "Root page loaded within 850ms with HTTP 200 and valid DOM hierarchy.",
+      "evidence": {
+        "screenshotPath": "/artifacts/baseline_home.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Navigate to http://localhost:4173/",
+            "status": "passed",
+            "durationMs": 450
+          },
+          {
+            "name": "Verify page status is 200 OK",
+            "status": "passed",
+            "durationMs": 50
+          },
+          {
+            "name": "Verify page title contains \"PROOFix Testbed\"",
+            "status": "passed",
+            "durationMs": 20
+          },
+          {
+            "name": "Check main heading visibility",
+            "status": "passed",
+            "durationMs": 30
+          }
+        ]
+      },
+      "startedAt": "2026-10-17T20:26:35.390Z",
+      "completedAt": "2026-10-17T20:26:36.890Z"
+    },
+    {
+      "id": "res_02",
+      "runId": "run_fixture_baseline",
+      "name": "Navigation & About Page Flow",
+      "category": "user_flow",
+      "status": "passed",
+      "durationMs": 1850,
+      "actualResult": "Navigation to /about completed cleanly without console errors.",
+      "evidence": {
+        "screenshotPath": "/artifacts/baseline_about.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Click header link \"About\"",
+            "status": "passed",
+            "durationMs": 310
+          },
+          {
+            "name": "Wait for URL to update to /about",
+            "status": "passed",
+            "durationMs": 180
+          },
+          {
+            "name": "Verify about content renders",
+            "status": "passed",
+            "durationMs": 40
+          }
+        ]
+      },
+      "startedAt": "2026-10-17T20:26:37.390Z",
+      "completedAt": "2026-10-17T20:26:39.390Z"
+    },
+    {
+      "id": "res_03",
+      "runId": "run_fixture_baseline",
+      "name": "Internal Link Integrity & 404 Prevention",
+      "category": "route_discovery",
+      "status": "failed",
+      "durationMs": 2200,
+      "actualResult": "Navigation to /broken-route returned HTTP 404 Not Found.",
+      "failureCategory": "navigation_failed",
+      "errorDetails": {
+        "message": "Target route \"/broken-route\" returned HTTP 404.",
+        "url": "http://localhost:4173/broken-route",
+        "stepFailed": "Verify navigation target returns HTTP < 400"
+      },
+      "evidence": {
+        "screenshotPath": "/artifacts/baseline_broken.png",
+        "consoleErrors": [
+          {
+            "timestamp": "02:00:19",
+            "type": "error",
+            "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "location": "http://localhost:4173/broken-route"
+          }
+        ],
+        "networkFailures": [
+          {
+            "url": "http://localhost:4173/broken-route",
+            "method": "GET",
+            "status": 404,
+            "statusText": "Not Found",
+            "durationMs": 42
+          }
+        ],
+        "steps": [
+          {
+            "name": "Locate broken route anchor link",
+            "status": "passed",
+            "durationMs": 110
+          },
+          {
+            "name": "Click link to /broken-route",
+            "status": "passed",
+            "durationMs": 190
+          },
+          {
+            "name": "Verify HTTP status code",
+            "status": "failed",
+            "durationMs": 45,
+            "error": "Expected status < 400, received 404"
+          }
+        ]
+      },
+      "startedAt": "2026-10-17T20:26:40.390Z",
+      "completedAt": "2026-10-17T20:26:42.590Z"
+    },
+    {
+      "id": "res_04",
+      "runId": "run_fixture_baseline",
+      "name": "Backend API Endpoint Health (/api/data)",
+      "category": "api_health",
+      "status": "failed",
+      "durationMs": 1650,
+      "actualResult": "Endpoint /api/data returned HTTP 500 Internal Server Error.",
+      "failureCategory": "http_error",
+      "errorDetails": {
+        "message": "API returned status 500: \"Internal Server Error - Database connection refused\"",
+        "url": "http://localhost:4173/api/data",
+        "stepFailed": "Fetch JSON payload from /api/data"
+      },
+      "evidence": {
+        "screenshotPath": "/artifacts/baseline_api_error.png",
+        "consoleErrors": [
+          {
+            "timestamp": "02:00:23",
+            "type": "error",
+            "text": "Fetch failed for http://localhost:4173/api/data (500 Internal Server Error)",
+            "location": "api/data/route.ts:14"
+          }
+        ],
+        "networkFailures": [
+          {
+            "url": "http://localhost:4173/api/data",
+            "method": "GET",
+            "status": 500,
+            "statusText": "Internal Server Error",
+            "failureReason": "ECONNREFUSED 127.0.0.1:5432",
+            "durationMs": 125
+          }
+        ],
+        "steps": [
+          {
+            "name": "Send GET request to /api/data",
+            "status": "passed",
+            "durationMs": 130
+          },
+          {
+            "name": "Assert response status is 200",
+            "status": "failed",
+            "durationMs": 20,
+            "error": "Received status 500"
+          }
+        ]
+      },
+      "startedAt": "2026-10-17T20:26:43.390Z",
+      "completedAt": "2026-10-17T20:26:45.040Z"
+    },
+    {
+      "id": "res_05",
+      "runId": "run_fixture_baseline",
+      "name": "Interactive Counter State & Button Clickability",
+      "category": "user_flow",
+      "status": "passed",
+      "durationMs": 1100,
+      "actualResult": "Button click incremented state cleanly without exceptions.",
+      "evidence": {
+        "screenshotPath": "/artifacts/baseline_counter.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Locate counter display",
+            "status": "passed",
+            "durationMs": 90
+          },
+          {
+            "name": "Click increment button twice",
+            "status": "passed",
+            "durationMs": 250
+          },
+          {
+            "name": "Verify counter displays \"Count: 2\"",
+            "status": "passed",
+            "durationMs": 40
+          }
+        ]
+      },
+      "startedAt": "2026-10-17T20:26:45.390Z",
+      "completedAt": "2026-10-17T20:26:46.490Z"
+    },
+    {
+      "id": "res_06",
+      "runId": "run_fixture_baseline",
+      "name": "Newsletter Subscription Form Validation",
+      "category": "form_validation",
+      "status": "inconclusive",
+      "durationMs": 890,
+      "actualResult": "Form requires external email delivery service; destructive submission bypassed under Safe Test Policy.",
+      "evidence": {
+        "screenshotPath": "/artifacts/baseline_form.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Inspect form fields",
+            "status": "passed",
+            "durationMs": 120
+          },
+          {
+            "name": "Check client-side HTML5 required constraint",
+            "status": "passed",
+            "durationMs": 50
+          },
+          {
+            "name": "Evaluate server submission safety",
+            "status": "skipped",
+            "durationMs": 10,
+            "error": "Skipped to prevent unauthenticated outbound webhooks"
+          }
+        ]
+      },
+      "startedAt": "2026-10-17T20:26:47.390Z",
+      "completedAt": "2026-10-17T20:26:48.280Z"
+    }
+  ],
+  "findings": [
+    {
+      "id": "fnd_01",
+      "runId": "run_fixture_baseline",
+      "testResultId": "res_03",
+      "severity": "high",
+      "title": "Broken Navigation Link to Missing Route (/broken-route)",
+      "description": "The navigation header or page anchor points to /broken-route which does not exist in the routing manifest, producing a 404 user drop-off.",
+      "observedEvidence": "Observed HTTP 404 Not Found response when browser navigated to http://localhost:4173/broken-route.",
+      "aiHypothesis": "The developer likely renamed or deleted the broken route or made a typo in the href attribute (e.g., href=\"/broken-route\" instead of a valid route like \"/about\").",
+      "suggestedFix": "Update the anchor href in navigation or create the missing page file at src/app/broken-route/page.tsx.",
+      "patchPreview": "--- a/src/components/Navigation.tsx\n+++ b/src/components/Navigation.tsx\n@@ -12,3 +12,3 @@\n-<Link href=\"/broken-route\" className=\"nav-link\">Broken Link</Link>\n+<Link href=\"/about\" className=\"nav-link\">About Us</Link>",
+      "affectedFiles": [
+        "src/components/Navigation.tsx"
+      ],
+      "sideEffects": "None; routes correctly to existing About page.",
+      "verificationStep": "Re-run PROOFix Navigation Flow test to verify 200 OK response.",
+      "confidenceScore": 95,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-17T20:26:50.390Z"
+    },
+    {
+      "id": "fnd_02",
+      "runId": "run_fixture_baseline",
+      "testResultId": "res_04",
+      "severity": "critical",
+      "title": "Internal Server Error (500) on API Route /api/data",
+      "description": "The endpoint /api/data crashed during request execution due to an unhandled database connection failure.",
+      "observedEvidence": "Server returned HTTP 500 with network failure reason \"ECONNREFUSED 127.0.0.1:5432\".",
+      "aiHypothesis": "The database connection pool fails to connect because no PostgreSQL instance is running on localhost:5432, or the DATABASE_URL environment variable is unset/invalid.",
+      "suggestedFix": "Add connection error handling with fallback or mock data in development mode when DATABASE_URL is unavailable.",
+      "patchPreview": "--- a/src/app/api/data/route.ts\n+++ b/src/app/api/data/route.ts\n@@ -8,3 +8,8 @@\n-    const client = await pool.connect();\n-    const result = await client.query('SELECT * FROM items');\n-    return Response.json(result.rows);\n+    try {\n+      const client = await pool.connect();\n+      const result = await client.query('SELECT * FROM items');\n+      return Response.json(result.rows);\n+    } catch (err) {\n+      console.warn('DB unavailable, returning fallback test fixture:', err);\n+      return Response.json({ items: [], fallback: true }, { status: 200 });\n+    }",
+      "affectedFiles": [
+        "src/app/api/data/route.ts"
+      ],
+      "sideEffects": "Returns empty fallback payload when database is unreachable instead of crashing with HTTP 500.",
+      "verificationStep": "Re-run PROOFix API Health Check to ensure graceful recovery.",
+      "confidenceScore": 92,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-17T20:26:51.390Z"
+    }
+  ],
+  "artifacts": [],
+  "settings": {
+    "aiProvider": "offline",
+    "sandboxMemoryLimitMb": 1024,
+    "sandboxTimeoutSecs": 45,
+    "allowOutboundNetwork": false
+  }
+}

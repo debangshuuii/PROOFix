@@ -52,7 +52,7 @@ async function runTests() {
     assert(Array.isArray(dbData.runs), 'Runs array must exist');
     assert(dbData.runs.length >= 1, 'Pre-seeded baseline run must exist');
 
-    const baseline = dbData.runs[0];
+    const baseline = dbData.runs.find((r) => r.id === 'run_fixture_baseline') || dbData.runs[0];
     assert.strictEqual(baseline.status, 'completed');
     assert.strictEqual(baseline.summary.failed, 2, 'Baseline run must have 2 failing tests');
     assert.strictEqual(baseline.summary.passed, 3, 'Baseline run must have 3 passing tests');

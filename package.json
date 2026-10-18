@@ -12,7 +12,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "node tests/verify-proofix.mjs",
-    "test:repair": "npx tsx tests/verify-repair-workflow.mjs"
+    "test:repair": "npx tsx tests/verify-repair-workflow.mjs",
+    "test:visual": "npx tsx tests/verify-visual-regression-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

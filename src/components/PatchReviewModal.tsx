@@ -119,10 +119,43 @@ export function PatchReviewModal({
             <DiffViewer diff={currentProposal.proposedChanges} />
           </div>
 
+          {/* Verification Outcome Card */}
+          {currentProposal.verificationOutcome && (
+            <div
+              className={`p-4 rounded-xl border ${
+                currentProposal.verificationOutcome.status === 'passed'
+                  ? 'bg-emerald-950/40 border-emerald-800 text-emerald-300'
+                  : currentProposal.verificationOutcome.status === 'partial'
+                  ? 'bg-amber-950/40 border-amber-800 text-amber-300'
+                  : 'bg-rose-950/40 border-rose-800 text-rose-300'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  {currentProposal.verificationOutcome.status === 'passed' && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+                  {currentProposal.verificationOutcome.status === 'partial' && <AlertTriangle className="w-4 h-4 text-amber-400" />}
+                  {currentProposal.verificationOutcome.status === 'failed' && <XCircle className="w-4 h-4 text-rose-400" />}
+                  {currentProposal.verificationOutcome.status === 'passed'
+                    ? 'Verified Fix'
+                    : currentProposal.verificationOutcome.status === 'partial'
+                    ? 'Partial Improvement'
+                    : 'Unsuccessful Attempt'}
+                </span>
+                <span className="text-[11px] text-slate-400 font-mono">
+                  {currentProposal.verificationOutcome.durationMs}ms
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                {currentProposal.verificationOutcome.summary}
+              </p>
+            </div>
+          )}
+
           {/* Status Message */}
           {currentProposal.validationStatus !== 'valid' && (
             <div className="flex items-center gap-2 p-3 rounded-lg text-xs font-medium bg-slate-950 border border-slate-800">
-              {currentProposal.validationStatus === 'applied' && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+              {currentProposal.validationStatus === 'verified' && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+              {currentProposal.validationStatus === 'applied' && <CheckCircle2 className="w-4 h-4 text-sky-400" />}
               {currentProposal.validationStatus === 'rejected' && <XCircle className="w-4 h-4 text-rose-400" />}
               <span className="text-slate-300">
                 Current Proposal Status:{' '}
@@ -137,6 +170,8 @@ export function PatchReviewModal({
           <div className="text-xs text-slate-400">
             {currentProposal.validationStatus === 'rejected' ? (
               <span className="text-rose-400">This patch was rejected. No repository files were modified.</span>
+            ) : currentProposal.validationStatus === 'verified' ? (
+              <span className="text-emerald-400">Patch verified successfully in disposable sandbox.</span>
             ) : (
               <span>Inspecting patch does not mutate workspace files.</span>
             )}

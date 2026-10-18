@@ -37,6 +37,7 @@ yarn-error.log*
 # data workspaces & tmp
 /data/workspaces
 /data/*.tmp
+/data/*.json
 
 
 # vercel

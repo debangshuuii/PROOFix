@@ -279,3 +279,4 @@ export interface SystemSettings {
 }
 
 export * from './proposal';
+export * from './visual-regression';

@@ -1,0 +1,17 @@
+{
+  "name": "proofix-sample-fixture",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Controlled multi-route verification testbed with predictable success and failure modes.",
+  "scripts": {
+    "dev": "next dev -p 4173",
+    "build": "next build",
+    "start": "next start -p 4173",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}

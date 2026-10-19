@@ -1,5 +1,5 @@
-import { NextRequest } from 'next/server';
-import { Project } from '@/lib/types';
+import type { NextRequest } from 'next/server';
+import type { Project } from '../types/index.ts';
 
 export interface AuthContext {
   userId: string;

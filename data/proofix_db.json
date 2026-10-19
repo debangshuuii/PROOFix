@@ -453,5 +453,6 @@
     "sandboxTimeoutSecs": 45,
     "allowOutboundNetwork": false
   },
-  "journeys": []
+  "journeys": [],
+  "notificationSettings": {}
 }

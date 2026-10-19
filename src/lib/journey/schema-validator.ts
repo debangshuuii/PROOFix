@@ -1,12 +1,12 @@
 import fs from 'fs';
-import {
+import type {
   UserJourney,
   JourneyStep,
   JourneyValidationResult,
   JourneySchemaVersion,
   StepActionType,
   StepSelectorType,
-} from '../types/journey';
+} from '../types/journey.ts';
 
 export const CURRENT_SCHEMA_VERSION: JourneySchemaVersion = '1.0.0';
 export const SUPPORTED_SCHEMA_VERSIONS: JourneySchemaVersion[] = ['1.0.0'];

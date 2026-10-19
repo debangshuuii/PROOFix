@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import {
+import type {
   User,
   Project,
   ProjectVersion,
@@ -10,9 +10,12 @@ import {
   Artifact,
   SystemSettings,
   RunStatus,
+  ProjectNotificationSettings,
 } from '../types/index.ts';
-import { UserJourney } from '../types/journey.ts';
+import type { UserJourney } from '../types/journey.ts';
 import { assertValidJourney } from '../journey/schema-validator.ts';
+import { getDefaultNotificationSettings } from '../notifications/schema.ts';
+import { verifyProjectOwnership } from '../security/ownership.ts';
 
 interface DatabaseSchema {
   users: User[];
@@ -24,6 +27,7 @@ interface DatabaseSchema {
   artifacts: Artifact[];
   settings: SystemSettings;
   journeys: UserJourney[];
+  notificationSettings?: Record<string, ProjectNotificationSettings>;
 }
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -401,6 +405,7 @@ function getInitialData(): DatabaseSchema {
       allowOutboundNetwork: false,
     },
     journeys: [],
+    notificationSettings: {},
   };
 }
 
@@ -451,6 +456,9 @@ async function ensureDataFile(): Promise<DatabaseSchema> {
     inMemoryDb = JSON.parse(raw);
     if (!inMemoryDb!.journeys) {
       inMemoryDb!.journeys = [];
+    }
+    if (!inMemoryDb!.notificationSettings) {
+      inMemoryDb!.notificationSettings = {};
     }
     if (recoverHangingRuns(inMemoryDb!)) {
       persist().catch(() => {});
@@ -529,6 +537,9 @@ export const db = {
     if (data.projects.length !== prevLen) {
       data.runs = data.runs.filter((r) => r.projectId !== id);
       data.projectVersions = data.projectVersions.filter((v) => v.projectId !== id);
+      if (data.notificationSettings && data.notificationSettings[id]) {
+        delete data.notificationSettings[id];
+      }
       await persist();
       return true;
     }
@@ -741,5 +752,62 @@ export const db = {
     await persist();
     return true;
   },
+
+  async getProjectNotificationSettings(
+    projectId: string,
+    requesterUserId?: string
+  ): Promise<ProjectNotificationSettings> {
+    const data = await ensureDataFile();
+    const project = data.projects.find((p) => p.id === projectId);
+    if (!project) {
+      throw new Error(`Project with ID "${projectId}" not found.`);
+    }
+
+    const authContext = {
+      userId: requesterUserId || 'usr_default',
+      role: requesterUserId === 'admin' ? ('admin' as const) : ('user' as const),
+    };
+    const auth = verifyProjectOwnership(project, authContext, 'read');
+    if (!auth.authorized) {
+      throw new Error(auth.reason || `Unauthorized access to project "${projectId}".`);
+    }
+
+    data.notificationSettings = data.notificationSettings || {};
+    return data.notificationSettings[projectId] || getDefaultNotificationSettings(projectId);
+  },
+
+  async saveProjectNotificationSettings(
+    projectId: string,
+    settings: ProjectNotificationSettings,
+    requesterUserId?: string
+  ): Promise<ProjectNotificationSettings> {
+    const data = await ensureDataFile();
+    const project = data.projects.find((p) => p.id === projectId);
+    if (!project) {
+      throw new Error(`Project with ID "${projectId}" not found.`);
+    }
+
+    const authContext = {
+      userId: requesterUserId || 'usr_default',
+      role: requesterUserId === 'admin' ? ('admin' as const) : ('user' as const),
+    };
+    const auth = verifyProjectOwnership(project, authContext, 'write');
+    if (!auth.authorized) {
+      throw new Error(
+        auth.reason ||
+          `Unauthorized: User "${requesterUserId}" cannot modify notification settings for project "${projectId}".`
+      );
+    }
+
+    data.notificationSettings = data.notificationSettings || {};
+    data.notificationSettings[projectId] = {
+      ...settings,
+      projectId,
+      updatedAt: new Date().toISOString(),
+    };
+    await persist();
+    return data.notificationSettings[projectId];
+  },
 };
+
 

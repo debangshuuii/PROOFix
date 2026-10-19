@@ -108,3 +108,21 @@ export interface SecurityPreflightReport {
   scanDurationMs: number;
   createdAt: string;
 }
+
+export interface HardenedScanOptions {
+  timeoutMs?: number;
+  maxDependencies?: number;
+  maxFilesToScan?: number;
+  consentExternalNetworkLookup?: boolean;
+  gatePolicy?: SecurityGatePolicy;
+  scratchBaseDir?: string;
+  simulateTimeout?: boolean;
+}
+
+export interface HardenedScanExecutionResult {
+  report: SecurityPreflightReport;
+  timedOut: boolean;
+  externalNetworkUsed: boolean;
+  resourceLimitsExceeded: boolean;
+  errors: string[];
+}

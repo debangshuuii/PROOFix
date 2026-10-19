@@ -40,7 +40,7 @@ const SENSITIVE_PATTERNS = [
   // Key-value pairs for secrets in logs/env
   { regex: /(AUTH_SECRET|DATABASE_URL|API_KEY|SECRET|PASSWORD)=([^\s\n"';]+)/gi, replacement: '$1=[REDACTED_SECRET]' },
   // Private keys
-  { regex: /-----BEGIN[ A-Z0-9_-]+PRIVATE KEY-----[^-]+-----END[ A-Z0-9_-]+PRIVATE KEY-----/gs, replacement: '[REDACTED_PRIVATE_KEY]' },
+  { regex: /-----BEGIN[ A-Z0-9_-]+PRIVATE KEY-----[^-]+-----END[ A-Z0-9_-]+PRIVATE KEY-----/g, replacement: '[REDACTED_PRIVATE_KEY]' },
 ];
 
 /**

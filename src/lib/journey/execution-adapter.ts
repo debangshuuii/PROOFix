@@ -153,12 +153,14 @@ export async function executeJourney(
         case 'assert_text':
         case 'assert_url':
         case 'assert_form_value': {
+          const targetKey = step.target?.value || '';
+          const domEntry = targetKey ? virtualDom[targetKey] : undefined;
           const evalRes = evaluateAssertion(step, {
             currentUrl,
-            elementFound: true,
-            elementVisible: true,
-            elementText: virtualDom[step.target?.value || '']?.text || step.params?.expectedText,
-            formValue: step.params?.expectedValue,
+            elementFound: domEntry ? true : (step.action === 'assert_url'),
+            elementVisible: domEntry ? domEntry.visible : false,
+            elementText: domEntry ? domEntry.text : undefined,
+            formValue: domEntry ? domEntry.value : undefined,
           });
 
           expected = evalRes.expectedValue;

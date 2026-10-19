@@ -590,6 +590,25 @@ function VerificationRunContent() {
                             </div>
                           </div>
                         )}
+
+                        {/* Session Replay Video if available */}
+                        {test.evidence.videoPath && (
+                          <div className="mt-3">
+                            <div className="font-semibold text-slate-300 uppercase tracking-wider text-[11px] mb-2 flex items-center gap-1.5">
+                              <Film className="w-3.5 h-3.5 text-rose-400" />
+                              Failure Session Video Recording
+                            </div>
+                            <div className="max-w-xl">
+                              <VideoPlayer
+                                videoUrl={test.evidence.videoPath}
+                                title={`${test.name} - Failure Session`}
+                                durationMs={test.durationMs}
+                                resolution={test.evidence.viewport || { width: 1280, height: 720 }}
+                                downloadUrl={`/api/v1/projects/${projectId}/runs/${runId}/videos/${test.evidence.videoArtifactId || test.id}/download`}
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

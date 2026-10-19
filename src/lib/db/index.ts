@@ -466,7 +466,13 @@ async function persist(): Promise<void> {
   writeQueue = writeQueue.then(async () => {
     try {
       await fs.promises.writeFile(tempFile, dataCopy, 'utf-8');
-      await fs.promises.rename(tempFile, DB_FILE);
+      try {
+        await fs.promises.rename(tempFile, DB_FILE);
+      } catch (renameErr) {
+        // Fallback for Windows EPERM file locking
+        await fs.promises.copyFile(tempFile, DB_FILE);
+        await fs.promises.unlink(tempFile).catch(() => {});
+      }
     } catch (err) {
       console.error('Atomic db write error:', err);
       try {

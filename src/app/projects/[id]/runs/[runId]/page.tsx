@@ -9,6 +9,8 @@ import { DiffViewer } from '@/components/DiffViewer';
 import { PatchReviewModal } from '@/components/PatchReviewModal';
 import { VerificationRun, TestResult, Finding, Project } from '@/lib/types';
 import { FixProposal } from '@/lib/types/proposal';
+import { ViewportMatrixReport } from '@/components/viewport/ViewportMatrixReport';
+import { deriveViewportRecordsFromResults } from '@/lib/viewport/derive-records';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -44,7 +46,7 @@ function VerificationRunContent() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'tests' | 'evidence' | 'ai' | 'errors' | 'logs' | 'coverage'>('tests');
+  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'ai' | 'errors' | 'logs' | 'coverage'>('tests');
   const [testFilter, setTestFilter] = useState<'all' | 'passed' | 'failed' | 'inconclusive'>('all');
   const [expandedTests, setExpandedTests] = useState<Record<string, boolean>>({});
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
@@ -182,6 +184,7 @@ function VerificationRunContent() {
 
   const allConsoleErrors = testResults.flatMap((t) => t.evidence.consoleErrors);
   const allNetworkFailures = testResults.flatMap((t) => t.evidence.networkFailures);
+  const viewportRecords = deriveViewportRecordsFromResults(testResults, runId);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
@@ -378,6 +381,18 @@ function VerificationRunContent() {
           </button>
 
           <button
+            onClick={() => setActiveTab('viewport')}
+            className={`pb-3 flex items-center gap-2 transition-colors relative ${
+              activeTab === 'viewport'
+                ? 'text-sky-400 border-b-2 border-sky-400 font-semibold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 text-indigo-400" />
+            Viewport Matrix ({viewportRecords.length})
+          </button>
+
+          <button
             onClick={() => setActiveTab('evidence')}
             className={`pb-3 flex items-center gap-2 transition-colors relative ${
               activeTab === 'evidence'
@@ -568,6 +583,15 @@ function VerificationRunContent() {
               })}
             </div>
           </div>
+        )}
+
+        {/* TAB: VIEWPORT MATRIX */}
+        {activeTab === 'viewport' && (
+          <ViewportMatrixReport
+            records={viewportRecords}
+            allTests={testResults}
+            onSelectScreenshot={(path) => setSelectedScreenshot(path)}
+          />
         )}
 
         {/* TAB 2: VISUAL EVIDENCE & SCREENSHOTS */}

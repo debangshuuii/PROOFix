@@ -94,6 +94,7 @@ export interface ProjectConfig {
   timeoutSecs?: number;
   environmentVariables?: Record<string, string>;
   maxRetries?: number;
+  videoConfig?: import('./video').VideoRecordingConfig;
 }
 
 export interface Project {
@@ -149,6 +150,9 @@ export interface TestResultEvidence {
   networkFailures: NetworkFailureItem[];
   steps: TestStep[];
   viewport?: { width: number; height: number };
+  videoPath?: string;
+  videoArtifactId?: string;
+  videoStatus?: import('./video').VideoProcessingStatus;
 }
 
 export interface TestResult {
@@ -282,3 +286,4 @@ export * from './proposal';
 export * from './visual-regression';
 export * from './viewport';
 export * from './journey';
+export * from './video';

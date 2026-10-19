@@ -282,8 +282,8 @@ export interface SystemSettings {
   allowOutboundNetwork: boolean;
 }
 
-export * from './proposal';
-export * from './visual-regression';
-export * from './viewport';
-export * from './journey';
-export * from './video';
+export * from './proposal.ts';
+export * from './visual-regression.ts';
+export * from './viewport.ts';
+export * from './journey.ts';
+export * from './video.ts';

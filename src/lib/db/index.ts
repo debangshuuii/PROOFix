@@ -10,9 +10,9 @@ import {
   Artifact,
   SystemSettings,
   RunStatus,
-} from '../types/index';
-import { UserJourney } from '../types/journey';
-import { assertValidJourney } from '../journey/schema-validator';
+} from '../types/index.ts';
+import { UserJourney } from '../types/journey.ts';
+import { assertValidJourney } from '../journey/schema-validator.ts';
 
 interface DatabaseSchema {
   users: User[];

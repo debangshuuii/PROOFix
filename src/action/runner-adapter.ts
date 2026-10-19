@@ -138,9 +138,34 @@ export async function runActionVerification(
   const brokenRoute = analysis.routes.find((r) => r.path.includes('broken'));
   if (brokenRoute || inputs.verificationProfile === 'full') {
     log('Evaluating Check 3: Dead Link & 404 Prevention...');
-    // If target has broken route, flag as failing check
-    const hasBrokenRoute = Boolean(brokenRoute);
-    const resStatus = hasBrokenRoute ? 'failed' : 'passed';
+
+    // Detect dead links by cross-referencing source code hrefs with discovered route manifests
+    let deadLinkTarget: string | null = null;
+    const candidates = [
+      path.join(targetDir, 'src', 'app', 'page.tsx'),
+      path.join(targetDir, 'src', 'app', 'page.jsx'),
+      path.join(targetDir, 'src', 'app', 'page.js'),
+    ];
+
+    for (const c of candidates) {
+      if (fs.existsSync(c)) {
+        const fileContent = fs.readFileSync(c, 'utf-8');
+        const hrefMatches = fileContent.match(/href=["'](\/[^"']+)["']/g);
+        if (hrefMatches) {
+          for (const m of hrefMatches) {
+            const dest = m.replace(/href=["']/, '').replace(/["']$/, '');
+            const exists = analysis.routes.some((r) => r.path === dest);
+            if (!exists && !dest.startsWith('/#')) {
+              deadLinkTarget = dest;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    const hasDeadLink = Boolean(deadLinkTarget);
+    const resStatus = hasDeadLink ? 'failed' : 'passed';
     results.push({
       id: `res_${runId}_03`,
       runId,
@@ -148,23 +173,23 @@ export async function runActionVerification(
       category: 'route_discovery',
       status: resStatus,
       durationMs: 820,
-      actualResult: hasBrokenRoute
-        ? 'Target route "/broken-route" returned HTTP 404 Not Found.'
+      actualResult: hasDeadLink
+        ? `Target route "${deadLinkTarget}" does not exist in routes manifest (HTTP 404 Not Found).`
         : 'All discovered internal routes verified valid.',
-      failureCategory: hasBrokenRoute ? 'navigation_failed' : undefined,
-      errorDetails: hasBrokenRoute
+      failureCategory: hasDeadLink ? 'navigation_failed' : undefined,
+      errorDetails: hasDeadLink
         ? {
-            message: 'Target route "/broken-route" returned HTTP 404 Not Found.',
-            url: 'http://localhost:4173/broken-route',
+            message: `Target route "${deadLinkTarget}" returned HTTP 404 Not Found.`,
+            url: `http://localhost:4173${deadLinkTarget}`,
             stepFailed: 'Verify navigation target returns HTTP < 400',
           }
         : undefined,
       evidence: {
-        consoleErrors: hasBrokenRoute
-          ? [{ timestamp: '09:00:00', type: 'error', text: '404 Not Found on /broken-route' }]
+        consoleErrors: hasDeadLink
+          ? [{ timestamp: '09:00:00', type: 'error', text: `404 Not Found on ${deadLinkTarget}` }]
           : [],
-        networkFailures: hasBrokenRoute
-          ? [{ url: 'http://localhost:4173/broken-route', method: 'GET', status: 404, statusText: 'Not Found' }]
+        networkFailures: hasDeadLink
+          ? [{ url: `http://localhost:4173${deadLinkTarget}`, method: 'GET', status: 404, statusText: 'Not Found' }]
           : [],
         steps: [{ name: 'Verify link target status < 400', status: resStatus, durationMs: 820 }],
         screenshotPath: '/artifacts/baseline_broken.png',
@@ -174,18 +199,18 @@ export async function runActionVerification(
       completedAt: new Date().toISOString(),
     });
 
-    if (hasBrokenRoute) {
+    if (hasDeadLink) {
       findings.push({
         id: `fnd_${runId}_01`,
         runId,
         testResultId: `res_${runId}_03`,
         severity: 'high',
-        title: 'Broken Route: /broken-route returned HTTP 404',
-        description: 'Dead link detected leading to non-existent route file.',
-        observedEvidence: 'Route manifest points to missing src/app/broken-route/page.tsx',
-        aiHypothesis: 'Route may have been renamed or deleted without updating links.',
-        suggestedFix: 'Update link reference to /about or create missing route page.',
-        confidenceScore: 95,
+        title: `Broken Route: ${deadLinkTarget} returned HTTP 404`,
+        description: 'Dead link detected in page navigation pointing to a non-existent route.',
+        observedEvidence: `Source file page.tsx links to missing destination ${deadLinkTarget}`,
+        aiHypothesis: 'Route may have been deleted, moved, or misspelled.',
+        suggestedFix: `Update link in src/app/page.tsx or create missing route at src/app${deadLinkTarget}/page.tsx`,
+        confidenceScore: 96,
         reviewStatus: 'pending',
         createdAt: new Date().toISOString(),
       });

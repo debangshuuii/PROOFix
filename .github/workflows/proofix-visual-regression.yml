@@ -1,0 +1,40 @@
+name: PROOFix Visual Regression Check
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  visual-diff:
+    name: Pixel Variance & Visual Inspection
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout PR Branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run PROOFix Visual Regression Profile
+        id: visual_check
+        uses: ./
+        with:
+          project-path: '.'
+          verification-profile: 'visual'
+          fail-on-regression: 'true'
+          report-output: 'proofix-visual-reports'
+          generate-summary: 'true'
+          upload-artifacts: 'true'

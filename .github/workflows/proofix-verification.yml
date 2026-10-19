@@ -1,0 +1,50 @@
+name: PROOFix Verification Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify:
+    name: Verify Application Integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Execute PROOFix Verification
+        id: proofix
+        uses: ./
+        with:
+          project-path: '.'
+          verification-profile: 'full'
+          fail-on-regression: 'true'
+          timeout-minutes: '15'
+          report-output: 'proofix-reports'
+          generate-summary: 'true'
+          upload-artifacts: 'true'
+
+      - name: Archive Verification Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: proofix-verification-artifacts
+          path: ${{ steps.proofix.outputs.artifacts-bundle }}
+          retention-days: 14

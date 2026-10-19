@@ -65,4 +65,4 @@ outputs:
 
 runs:
   using: 'node20'
-  main: 'src/action/index.js'
+  main: 'bin/action.js'

@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node tests/verify-proofix.mjs",
     "test:repair": "npx tsx tests/verify-repair-workflow.mjs",
-    "test:visual": "npx tsx tests/verify-visual-regression-ci.mjs"
+    "test:visual": "npx tsx tests/verify-visual-regression-ci.mjs",
+    "test:action": "npx tsx tests/verify-action-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

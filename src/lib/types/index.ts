@@ -288,3 +288,4 @@ export * from './viewport.ts';
 export * from './journey.ts';
 export * from './video.ts';
 export * from './security.ts';
+export * from './notification.ts';

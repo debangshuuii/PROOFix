@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { getAuthContext, verifyProjectOwnership } from '@/lib/security/ownership';
 import { validateNotificationSettings } from '@/lib/notifications/schema';
+import { encryptWebhookUrl, maskWebhookUrl } from '@/lib/notifications/secret-vault';
 import type { ProjectNotificationSettings } from '@/lib/types/notification';
 
 interface RouteContext {
@@ -9,7 +10,8 @@ interface RouteContext {
 }
 
 /**
- * Mask raw secret fields in response so ordinary settings APIs never return secrets.
+ * Mask raw secret fields in response so ordinary settings APIs never return plaintext secrets.
+ * "Done when: persisted secrets are protected and never returned in plaintext by ordinary settings APIs."
  */
 function sanitizeSettingsForClient(
   settings: ProjectNotificationSettings
@@ -18,7 +20,7 @@ function sanitizeSettingsForClient(
     ...settings,
     channels: settings.channels.map((ch) => ({
       ...ch,
-      webhookUrlEncrypted: undefined, // Never expose encrypted blob to client
+      webhookUrlEncrypted: undefined, // Never expose encrypted blob or plaintext to client
       webhookUrlMasked: ch.webhookUrlMasked || (ch.hasSecret ? '••••••••••••••••' : undefined),
     })),
   };
@@ -74,11 +76,29 @@ export async function PUT(req: NextRequest, context: RouteContext) {
       );
     }
 
-    // Preserve existing encrypted secrets if not updating the URL
+    // Encrypt newly submitted webhook URLs and preserve existing encrypted secrets
     const existing = await db.getProjectNotificationSettings(projectId, auth.userId);
     const existingChannelMap = new Map(existing.channels.map((c) => [c.id, c]));
 
-    const mergedChannels = validation.settings.channels.map((ch) => {
+    const rawChannels = Array.isArray(body.channels) ? body.channels : [];
+    const mergedChannels = validation.settings.channels.map((ch, idx) => {
+      const rawInput = rawChannels[idx] || {};
+      const candidateUrl =
+        rawInput.webhookUrl ||
+        (typeof rawInput.webhookUrlEncrypted === 'string' &&
+        !rawInput.webhookUrlEncrypted.startsWith('enc:v1:')
+          ? rawInput.webhookUrlEncrypted
+          : undefined);
+
+      if (candidateUrl && typeof candidateUrl === 'string' && candidateUrl.startsWith('http')) {
+        return {
+          ...ch,
+          webhookUrlEncrypted: encryptWebhookUrl(candidateUrl),
+          webhookUrlMasked: maskWebhookUrl(candidateUrl),
+          hasSecret: true,
+        };
+      }
+
       const prev = existingChannelMap.get(ch.id);
       if (prev && !ch.webhookUrlEncrypted && prev.webhookUrlEncrypted) {
         return {

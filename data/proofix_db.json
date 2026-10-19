@@ -452,5 +452,6 @@
     "sandboxMemoryLimitMb": 1024,
     "sandboxTimeoutSecs": 45,
     "allowOutboundNetwork": false
-  }
+  },
+  "journeys": []
 }

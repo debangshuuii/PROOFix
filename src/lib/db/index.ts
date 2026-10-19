@@ -10,7 +10,9 @@ import {
   Artifact,
   SystemSettings,
   RunStatus,
-} from '../types';
+} from '../types/index';
+import { UserJourney } from '../types/journey';
+import { assertValidJourney } from '../journey/schema-validator';
 
 interface DatabaseSchema {
   users: User[];
@@ -21,6 +23,7 @@ interface DatabaseSchema {
   findings: Finding[];
   artifacts: Artifact[];
   settings: SystemSettings;
+  journeys: UserJourney[];
 }
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -397,6 +400,7 @@ function getInitialData(): DatabaseSchema {
       sandboxTimeoutSecs: 45,
       allowOutboundNetwork: false,
     },
+    journeys: [],
   };
 }
 
@@ -445,6 +449,9 @@ async function ensureDataFile(): Promise<DatabaseSchema> {
   try {
     const raw = fs.readFileSync(DB_FILE, 'utf-8');
     inMemoryDb = JSON.parse(raw);
+    if (!inMemoryDb!.journeys) {
+      inMemoryDb!.journeys = [];
+    }
     if (recoverHangingRuns(inMemoryDb!)) {
       persist().catch(() => {});
     }
@@ -639,4 +646,100 @@ export const db = {
     await persist();
     return data.settings;
   },
+
+  async getJourneys(projectId?: string, requesterUserId?: string): Promise<UserJourney[]> {
+    const data = await ensureDataFile();
+    let list = data.journeys || [];
+    if (projectId) {
+      list = list.filter((j) => j.projectId === projectId);
+    }
+    if (requesterUserId) {
+      list = list.filter((j) => j.ownerId === requesterUserId);
+    }
+    return list;
+  },
+
+  async getJourneyById(journeyId: string, requesterUserId?: string): Promise<UserJourney | null> {
+    const data = await ensureDataFile();
+    const journey = (data.journeys || []).find((j) => j.id === journeyId);
+    if (!journey) return null;
+    if (requesterUserId && journey.ownerId !== requesterUserId) {
+      throw new Error(`Access denied: User "${requesterUserId}" is not authorized to access journey "${journeyId}".`);
+    }
+    return journey;
+  },
+
+  async saveJourney(journey: UserJourney, requesterUserId?: string): Promise<UserJourney> {
+    const validated = assertValidJourney(journey);
+    const data = await ensureDataFile();
+    data.journeys = data.journeys || [];
+
+    const existingIndex = data.journeys.findIndex((j) => j.id === validated.id);
+    if (existingIndex !== -1) {
+      const existing = data.journeys[existingIndex];
+      if (requesterUserId && existing.ownerId !== requesterUserId) {
+        throw new Error(`Access denied: User "${requesterUserId}" cannot modify journey owned by "${existing.ownerId}".`);
+      }
+      data.journeys[existingIndex] = { ...validated, updatedAt: new Date().toISOString() };
+    } else {
+      data.journeys.push(validated);
+    }
+
+    await persist();
+    return validated;
+  },
+
+  async renameJourney(journeyId: string, newTitle: string, requesterUserId?: string): Promise<UserJourney> {
+    const data = await ensureDataFile();
+    data.journeys = data.journeys || [];
+    const journey = data.journeys.find((j) => j.id === journeyId);
+    if (!journey) {
+      throw new Error(`Journey with ID "${journeyId}" not found.`);
+    }
+    if (requesterUserId && journey.ownerId !== requesterUserId) {
+      throw new Error(`Access denied: User "${requesterUserId}" cannot rename journey owned by "${journey.ownerId}".`);
+    }
+
+    journey.title = newTitle.trim();
+    journey.updatedAt = new Date().toISOString();
+    assertValidJourney(journey);
+    await persist();
+    return journey;
+  },
+
+  async duplicateJourney(journeyId: string, requesterUserId: string, newTitle?: string): Promise<UserJourney> {
+    const existing = await this.getJourneyById(journeyId, requesterUserId);
+    if (!existing) {
+      throw new Error(`Journey with ID "${journeyId}" not found.`);
+    }
+
+    const now = new Date().toISOString();
+    const cloned: UserJourney = {
+      ...JSON.parse(JSON.stringify(existing)),
+      id: `jny_${Date.now()}_clone`,
+      ownerId: requesterUserId,
+      title: newTitle || `${existing.title} (Copy)`,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    return await this.saveJourney(cloned, requesterUserId);
+  },
+
+  async deleteJourney(journeyId: string, requesterUserId?: string): Promise<boolean> {
+    const data = await ensureDataFile();
+    data.journeys = data.journeys || [];
+    const index = data.journeys.findIndex((j) => j.id === journeyId);
+    if (index === -1) return false;
+
+    const existing = data.journeys[index];
+    if (requesterUserId && existing.ownerId !== requesterUserId) {
+      throw new Error(`Access denied: User "${requesterUserId}" cannot delete journey owned by "${existing.ownerId}".`);
+    }
+
+    data.journeys.splice(index, 1);
+    await persist();
+    return true;
+  },
 };
+

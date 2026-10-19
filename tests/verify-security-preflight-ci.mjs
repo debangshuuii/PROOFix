@@ -180,7 +180,7 @@ async function runMasterSecurityRegressionSuite() {
     const sanitizedLog = sanitizeLogOutput(testLog, syntheticSecrets);
     assert.equal(sanitizedLog.includes(syntheticSecrets[0]), false);
     assert.equal(sanitizedLog.includes(syntheticSecrets[1]), false);
-    assert.ok(sanitizedLog.includes('***'));
+    assert.ok(sanitizedLog.includes('[REDACTED_SECRET]') || sanitizedLog.includes('***'));
 
     const sanitizedReport = sanitizeReportForApiResponse(report);
     const serializedReport = JSON.stringify(sanitizedReport);

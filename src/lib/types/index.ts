@@ -281,3 +281,4 @@ export interface SystemSettings {
 export * from './proposal';
 export * from './visual-regression';
 export * from './viewport';
+export * from './journey';

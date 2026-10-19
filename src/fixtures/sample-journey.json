@@ -1,0 +1,85 @@
+{
+  "id": "jny_fixture_auth_flow",
+  "projectId": "proj_fixture_01",
+  "ownerId": "usr_default",
+  "title": "User Authentication & Dashboard Verification Flow",
+  "description": "Deterministic visual user journey testing login form, navigation, and dashboard assertion.",
+  "schemaVersion": "1.0.0",
+  "config": {
+    "baseUrl": "http://localhost:4173",
+    "allowedHosts": ["localhost", "127.0.0.1"],
+    "defaultTimeoutMs": 10000,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "stopOnFailure": true,
+    "takeScreenshotsOnFailure": true
+  },
+  "steps": [
+    {
+      "id": "stp_01",
+      "order": 1,
+      "title": "Open Application Login Page",
+      "action": "navigate",
+      "params": {
+        "url": "/login"
+      }
+    },
+    {
+      "id": "stp_02",
+      "order": 2,
+      "title": "Type User Email",
+      "action": "fill",
+      "target": {
+        "type": "label",
+        "value": "Email Address"
+      },
+      "params": {
+        "value": "alice@example.com"
+      }
+    },
+    {
+      "id": "stp_03",
+      "order": 3,
+      "title": "Type Password",
+      "action": "fill",
+      "target": {
+        "type": "placeholder",
+        "value": "Enter your password"
+      },
+      "params": {
+        "value": "secret123"
+      }
+    },
+    {
+      "id": "stp_04",
+      "order": 4,
+      "title": "Click Sign In Button",
+      "action": "click",
+      "target": {
+        "type": "role_name",
+        "role": "button",
+        "name": "Sign In",
+        "value": "Sign In"
+      }
+    },
+    {
+      "id": "stp_05",
+      "order": 5,
+      "title": "Assert Dashboard Heading Visible",
+      "action": "assert_text",
+      "target": {
+        "type": "css",
+        "value": "h1.dashboard-title"
+      },
+      "params": {
+        "expectedText": "Welcome to Your Dashboard",
+        "matchMode": "exact"
+      }
+    }
+  ],
+  "tags": ["smoke", "auth", "onboarding"],
+  "createdAt": "2026-10-19T05:00:00.000Z",
+  "updatedAt": "2026-10-19T05:00:00.000Z"
+}

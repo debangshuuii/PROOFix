@@ -11,6 +11,7 @@ import { VerificationRun, TestResult, Finding, Project } from '@/lib/types';
 import { FixProposal } from '@/lib/types/proposal';
 import { ViewportMatrixReport } from '@/components/viewport/ViewportMatrixReport';
 import { deriveViewportRecordsFromResults } from '@/lib/viewport/derive-records';
+import { VideoPlayer } from '@/components/video/VideoPlayer';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -33,6 +34,7 @@ import {
   Activity,
   Globe,
   Sliders,
+  Film,
 } from 'lucide-react';
 
 function VerificationRunContent() {
@@ -46,7 +48,7 @@ function VerificationRunContent() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'ai' | 'errors' | 'logs' | 'coverage'>('tests');
+  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'ai' | 'errors' | 'logs' | 'coverage'>('tests');
   const [testFilter, setTestFilter] = useState<'all' | 'passed' | 'failed' | 'inconclusive'>('all');
   const [expandedTests, setExpandedTests] = useState<Record<string, boolean>>({});
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
@@ -405,6 +407,18 @@ function VerificationRunContent() {
           </button>
 
           <button
+            onClick={() => setActiveTab('videos')}
+            className={`pb-3 flex items-center gap-2 transition-colors relative ${
+              activeTab === 'videos'
+                ? 'text-sky-400 border-b-2 border-sky-400 font-semibold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Film className="w-3.5 h-3.5 text-rose-400" />
+            Session Replays ({testResults.filter((t) => t.evidence?.videoPath || t.evidence?.videoArtifactId).length})
+          </button>
+
+          <button
             onClick={() => setActiveTab('ai')}
             className={`pb-3 flex items-center gap-2 transition-colors relative ${
               activeTab === 'ai'
@@ -629,6 +643,48 @@ function VerificationRunContent() {
                   </div>
                 ))}
             </div>
+          </div>
+        )}
+
+        {/* TAB: PLAYWRIGHT VIDEO REPLAYS */}
+        {activeTab === 'videos' && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-sm font-bold text-white mb-1">Playwright Browser Session Replays</h3>
+              <p className="text-xs text-slate-400">
+                Visual session recordings captured during automated browser execution for deterministic replay and failure inspection.
+              </p>
+            </div>
+
+            {testResults.filter((t) => t.evidence?.videoPath || t.evidence?.videoArtifactId).length === 0 ? (
+              <div className="rounded-xl border border-dashed border-slate-800 p-12 text-center text-xs text-slate-400 space-y-3">
+                <Film className="w-8 h-8 text-slate-600 mx-auto" />
+                <h4 className="text-sm font-semibold text-slate-300">No Video Recordings Retained for this Run</h4>
+                <p className="max-w-md mx-auto text-slate-500">
+                  Recordings are configured to retain failures under the default retention policy, or recording mode is currently disabled in project settings.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {testResults
+                  .filter((t) => t.evidence?.videoPath || t.evidence?.videoArtifactId)
+                  .map((test) => (
+                    <div key={test.id} className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-slate-200">{test.name}</span>
+                        <StatusBadge status={test.status} />
+                      </div>
+                      <VideoPlayer
+                        videoUrl={test.evidence.videoPath}
+                        title={test.name}
+                        durationMs={test.durationMs}
+                        resolution={test.evidence.viewport || { width: 1280, height: 720 }}
+                        downloadUrl={`/api/v1/projects/${projectId}/runs/${runId}/videos/${test.evidence.videoArtifactId || test.id}/download`}
+                      />
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
         )}
 

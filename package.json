@@ -17,7 +17,8 @@
     "test:action": "npx tsx tests/verify-action-ci.mjs",
     "test:viewport": "npx tsx tests/verify-viewport-ci.mjs",
     "test:journey": "npx tsx tests/verify-journey-ci.mjs",
-    "test:video": "node tests/verify-video-recording-ci.mjs"
+    "test:video": "node tests/verify-video-recording-ci.mjs",
+    "test:security": "node tests/verify-security-preflight-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

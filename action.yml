@@ -1,0 +1,68 @@
+name: 'PROOFix Verification Action'
+description: "Automated verification, visual regression testing, and root-cause failure diagnosis for web applications."
+author: 'PROOFix Team'
+branding:
+  icon: 'shield-check'
+  color: 'blue'
+
+inputs:
+  project-path:
+    description: 'Relative or absolute directory path to the target application workspace.'
+    required: false
+    default: '.'
+  verification-profile:
+    description: 'Execution profile: "smoke" (quick availability checks), "full" (comprehensive tests + route discovery), "visual" (visual regression slider & pixel diffs), or "fast" (shallow health probe).'
+    required: false
+    default: 'full'
+  report-output:
+    description: 'Output directory where test reports, logs, and diff artifacts will be written.'
+    required: false
+    default: 'proofix-reports'
+  fail-on-regression:
+    description: 'Whether newly introduced failures or test regressions trigger a non-zero exit code (failing the job).'
+    required: false
+    default: 'true'
+  timeout-minutes:
+    description: 'Maximum permitted execution duration in minutes before aborting the run.'
+    required: false
+    default: '15'
+  retries:
+    description: 'Maximum retry attempts for transient server startup or port binding probes.'
+    required: false
+    default: '2'
+  generate-summary:
+    description: 'Whether to write a rich markdown summary into $GITHUB_STEP_SUMMARY.'
+    required: false
+    default: 'true'
+  upload-artifacts:
+    description: 'Whether to package test artifacts (screenshots, logs, diffs, reports) for workflow post-run review.'
+    required: false
+    default: 'true'
+  github-token:
+    description: 'Optional GITHUB_TOKEN used for authorized PR generation or baseline commit annotations.'
+    required: false
+    default: ''
+
+outputs:
+  run-id:
+    description: 'Unique execution run identifier assigned by PROOFix.'
+  status:
+    description: 'Final execution status: "passed", "failed", or "error".'
+  exit-code:
+    description: 'Process exit code: 0 (Success), 1 (Verification Failures), 2 (Execution Error).'
+  passed-checks:
+    description: 'Count of checks that passed successfully.'
+  failed-checks:
+    description: 'Count of checks that failed.'
+  total-checks:
+    description: 'Total number of checks evaluated.'
+  report-path:
+    description: 'File path to the primary JSON verification report.'
+  summary-markdown:
+    description: 'Markdown formatted summary table of verification findings.'
+  artifacts-bundle:
+    description: 'Directory path containing all collected evidence artifacts.'
+
+runs:
+  using: 'node20'
+  main: 'src/action/index.js'

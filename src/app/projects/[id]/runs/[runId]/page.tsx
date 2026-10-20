@@ -12,6 +12,7 @@ import { FixProposal } from '@/lib/types/proposal';
 import { ViewportMatrixReport } from '@/components/viewport/ViewportMatrixReport';
 import { deriveViewportRecordsFromResults } from '@/lib/viewport/derive-records';
 import { VideoPlayer } from '@/components/video/VideoPlayer';
+import { PerformanceAuditReport } from '@/components/performance/PerformanceAuditReport';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -35,6 +36,7 @@ import {
   Globe,
   Sliders,
   Film,
+  Gauge,
 } from 'lucide-react';
 
 function VerificationRunContent() {
@@ -48,7 +50,7 @@ function VerificationRunContent() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'ai' | 'errors' | 'logs' | 'coverage'>('tests');
+  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'performance' | 'ai' | 'errors' | 'logs' | 'coverage'>('tests');
   const [testFilter, setTestFilter] = useState<'all' | 'passed' | 'failed' | 'inconclusive'>('all');
   const [expandedTests, setExpandedTests] = useState<Record<string, boolean>>({});
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
@@ -419,6 +421,18 @@ function VerificationRunContent() {
           </button>
 
           <button
+            onClick={() => setActiveTab('performance')}
+            className={`pb-3 flex items-center gap-2 transition-colors relative ${
+              activeTab === 'performance'
+                ? 'text-sky-400 border-b-2 border-sky-400 font-semibold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Gauge className="w-3.5 h-3.5 text-amber-400" />
+            Performance & Vitals
+          </button>
+
+          <button
             onClick={() => setActiveTab('ai')}
             className={`pb-3 flex items-center gap-2 transition-colors relative ${
               activeTab === 'ai'
@@ -705,6 +719,11 @@ function VerificationRunContent() {
               </div>
             )}
           </div>
+        )}
+
+        {/* TAB: PERFORMANCE & CORE WEB VITALS */}
+        {activeTab === 'performance' && (
+          <PerformanceAuditReport />
         )}
 
         {/* TAB 3: AI DIAGNOSIS & PATCH PREVIEWS */}

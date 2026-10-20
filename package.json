@@ -20,7 +20,8 @@
     "test:video": "node tests/verify-video-recording-ci.mjs",
     "test:security": "node tests/verify-security-preflight-ci.mjs",
     "test:notifications": "node tests/verify-notifications-ci.mjs",
-    "test:performance": "node tests/verify-performance-ci.mjs"
+    "test:performance": "node tests/verify-performance-ci.mjs",
+    "test:a11y": "node tests/verify-accessibility-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

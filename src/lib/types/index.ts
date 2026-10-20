@@ -298,3 +298,4 @@ export * from './performance.ts';
 export * from './accessibility.ts';
 export * from './self-healing.ts';
 export * from './semantic-vision.ts';
+export * from './live-companion.ts';

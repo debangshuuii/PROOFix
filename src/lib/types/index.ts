@@ -29,7 +29,8 @@ export type TestCategory =
   | 'error_boundary'
   | 'responsive_layout'
   | 'api_health'
-  | 'performance_audit';
+  | 'performance_audit'
+  | 'accessibility_audit';
 
 export type FailureCategory =
   | 'uncaught_js_exception'
@@ -42,7 +43,8 @@ export type FailureCategory =
   | 'build_error'
   | 'startup_error'
   | 'performance_budget_exceeded'
-  | 'performance_regression';
+  | 'performance_regression'
+  | 'accessibility_violation';
 
 export type SeverityLevel = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
@@ -293,3 +295,4 @@ export * from './video.ts';
 export * from './security.ts';
 export * from './notification.ts';
 export * from './performance.ts';
+export * from './accessibility.ts';

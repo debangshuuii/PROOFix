@@ -28,7 +28,8 @@ export type TestCategory =
   | 'form_validation'
   | 'error_boundary'
   | 'responsive_layout'
-  | 'api_health';
+  | 'api_health'
+  | 'performance_audit';
 
 export type FailureCategory =
   | 'uncaught_js_exception'
@@ -39,7 +40,9 @@ export type FailureCategory =
   | 'readiness_failed'
   | 'layout_overflow'
   | 'build_error'
-  | 'startup_error';
+  | 'startup_error'
+  | 'performance_budget_exceeded'
+  | 'performance_regression';
 
 export type SeverityLevel = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
@@ -289,3 +292,4 @@ export * from './journey.ts';
 export * from './video.ts';
 export * from './security.ts';
 export * from './notification.ts';
+export * from './performance.ts';

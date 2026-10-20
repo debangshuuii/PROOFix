@@ -3,8 +3,8 @@ const SENSITIVE_PATTERNS = [
   /AIza[0-9A-Za-z-_]{30,40}/g,                  // Google Gemini / Cloud API keys
   /sk-[a-zA-Z0-9_\-]{20,}/g,                    // OpenAI API keys
   /AKIA[0-9A-Z]{16}/g,                          // AWS Access Key ID
-  /ghp_[a-zA-Z0-9]{36}/g,                       // GitHub Personal Access Tokens
-  /gho_[a-zA-Z0-9]{36}/g,                       // GitHub OAuth Access Tokens
+  /ghp_[a-zA-Z0-9]{20,}/g,                       // GitHub Personal Access Tokens
+  /gho_[a-zA-Z0-9]{20,}/g,                       // GitHub OAuth Access Tokens
   /xox[baprs]-[0-9A-Za-z-]{10,}/g,              // Slack tokens
   /bearer\s+[a-zA-Z0-9_\-\.]{20,}/gi,          // Bearer tokens
   /password\s*[:=]\s*["']?[^"'\s,;&]+/gi,       // Password fields

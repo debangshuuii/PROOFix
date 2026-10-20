@@ -296,3 +296,4 @@ export * from './security.ts';
 export * from './notification.ts';
 export * from './performance.ts';
 export * from './accessibility.ts';
+export * from './self-healing.ts';

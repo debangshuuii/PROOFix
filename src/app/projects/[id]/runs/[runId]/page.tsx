@@ -15,6 +15,7 @@ import { VideoPlayer } from '@/components/video/VideoPlayer';
 import { PerformanceAuditReport } from '@/components/performance/PerformanceAuditReport';
 import { AccessibilityAuditReport } from '@/components/accessibility/AccessibilityAuditReport';
 import { SelfHealingDashboard } from '@/components/repair/SelfHealingDashboard';
+import { SemanticVisionReport } from '@/components/vision/SemanticVisionReport';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -54,7 +55,7 @@ function VerificationRunContent() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'performance' | 'accessibility' | 'ai' | 'self-healing' | 'errors' | 'logs' | 'coverage'>('tests');
+  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'performance' | 'accessibility' | 'ai' | 'self-healing' | 'semantic-vision' | 'errors' | 'logs' | 'coverage'>('tests');
   const [testFilter, setTestFilter] = useState<'all' | 'passed' | 'failed' | 'inconclusive'>('all');
   const [expandedTests, setExpandedTests] = useState<Record<string, boolean>>({});
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
@@ -470,6 +471,18 @@ function VerificationRunContent() {
           >
             <RotateCcw className="w-3.5 h-3.5 text-emerald-400" />
             Self-Healing PRs
+          </button>
+
+          <button
+            onClick={() => setActiveTab('semantic-vision')}
+            className={`pb-3 flex items-center gap-2 transition-colors relative ${
+              activeTab === 'semantic-vision'
+                ? 'text-indigo-400 border-b-2 border-indigo-400 font-semibold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Eye className="w-3.5 h-3.5 text-indigo-400" />
+            Vision AI Regressions
           </button>
 
           <button
@@ -990,6 +1003,13 @@ function VerificationRunContent() {
         {activeTab === 'self-healing' && (
           <div className="space-y-4">
             <SelfHealingDashboard />
+          </div>
+        )}
+
+        {/* TAB: SEMANTIC VISION-AI REGRESSIONS */}
+        {activeTab === 'semantic-vision' && (
+          <div className="space-y-4">
+            <SemanticVisionReport />
           </div>
         )}
       </main>

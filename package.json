@@ -22,7 +22,8 @@
     "test:notifications": "node tests/verify-notifications-ci.mjs",
     "test:performance": "node tests/verify-performance-ci.mjs",
     "test:a11y": "node tests/verify-accessibility-ci.mjs",
-    "test:self-healing": "node tests/verify-self-healing-ci.mjs"
+    "test:self-healing": "node tests/verify-self-healing-ci.mjs",
+    "test:vision": "node tests/verify-semantic-vision-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

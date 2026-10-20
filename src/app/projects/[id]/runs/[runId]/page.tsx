@@ -14,6 +14,7 @@ import { deriveViewportRecordsFromResults } from '@/lib/viewport/derive-records'
 import { VideoPlayer } from '@/components/video/VideoPlayer';
 import { PerformanceAuditReport } from '@/components/performance/PerformanceAuditReport';
 import { AccessibilityAuditReport } from '@/components/accessibility/AccessibilityAuditReport';
+import { SelfHealingDashboard } from '@/components/repair/SelfHealingDashboard';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -39,6 +40,7 @@ import {
   Film,
   Gauge,
   Eye,
+  RotateCcw,
 } from 'lucide-react';
 
 function VerificationRunContent() {
@@ -52,7 +54,7 @@ function VerificationRunContent() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'performance' | 'accessibility' | 'ai' | 'errors' | 'logs' | 'coverage'>('tests');
+  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'performance' | 'accessibility' | 'ai' | 'self-healing' | 'errors' | 'logs' | 'coverage'>('tests');
   const [testFilter, setTestFilter] = useState<'all' | 'passed' | 'failed' | 'inconclusive'>('all');
   const [expandedTests, setExpandedTests] = useState<Record<string, boolean>>({});
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
@@ -456,6 +458,18 @@ function VerificationRunContent() {
           >
             <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
             AI Diagnosis & Patch Previews ({findings.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab('self-healing')}
+            className={`pb-3 flex items-center gap-2 transition-colors relative ${
+              activeTab === 'self-healing'
+                ? 'text-emerald-400 border-b-2 border-emerald-400 font-semibold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-emerald-400" />
+            Self-Healing PRs
           </button>
 
           <button
@@ -969,6 +983,13 @@ function VerificationRunContent() {
                 </span>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* TAB: SELF-HEALING PRs */}
+        {activeTab === 'self-healing' && (
+          <div className="space-y-4">
+            <SelfHealingDashboard />
           </div>
         )}
       </main>

@@ -305,3 +305,4 @@ export * from './sandbox-isolation.ts';
 export * from './queue-database.ts';
 export * from './governance-compliance.ts';
 export * from './navigation-palette.ts';
+export * from './git-integrations.ts';

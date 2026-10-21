@@ -307,3 +307,4 @@ export * from './governance-compliance.ts';
 export * from './navigation-palette.ts';
 export * from './git-integrations.ts';
 export * from './otel-tracing.ts';
+export * from './database-adapters.ts';

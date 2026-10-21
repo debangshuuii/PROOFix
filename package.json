@@ -34,7 +34,8 @@
     "test:git": "node tests/verify-git-integrations-ci.mjs",
     "test:otel": "node tests/verify-distributed-tracing-ci.mjs",
     "test:db": "node tests/verify-database-adapters-ci.mjs",
-    "test:crawler": "node tests/verify-chaos-crawler-ci.mjs"
+    "test:crawler": "node tests/verify-chaos-crawler-ci.mjs",
+    "test:transport": "node tests/verify-live-transport-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

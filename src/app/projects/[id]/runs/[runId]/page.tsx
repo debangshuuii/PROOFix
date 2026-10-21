@@ -18,9 +18,11 @@ import { SelfHealingDashboard } from '@/components/repair/SelfHealingDashboard';
 import { SemanticVisionReport } from '@/components/vision/SemanticVisionReport';
 import { LiveCompanionDashboard } from '@/components/companion/LiveCompanionDashboard';
 import { ApiFuzzingReportView } from '@/components/fuzzing/ApiFuzzingReport';
+import { MockReplayDashboard } from '@/components/replay/MockReplayDashboard';
 import {
   ShieldCheck,
   ShieldAlert,
+  Database,
   CheckCircle2,
   XCircle,
   AlertTriangle,
@@ -59,7 +61,7 @@ function VerificationRunContent() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'performance' | 'accessibility' | 'ai' | 'self-healing' | 'semantic-vision' | 'live-companion' | 'api-fuzzing' | 'errors' | 'logs' | 'coverage'>('tests');
+  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'performance' | 'accessibility' | 'ai' | 'self-healing' | 'semantic-vision' | 'live-companion' | 'api-fuzzing' | 'mock-replay' | 'errors' | 'logs' | 'coverage'>('tests');
   const [testFilter, setTestFilter] = useState<'all' | 'passed' | 'failed' | 'inconclusive'>('all');
   const [expandedTests, setExpandedTests] = useState<Record<string, boolean>>({});
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
@@ -511,6 +513,18 @@ function VerificationRunContent() {
           >
             <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
             API Fuzzing & Contracts
+          </button>
+
+          <button
+            onClick={() => setActiveTab('mock-replay')}
+            className={`pb-3 flex items-center gap-2 transition-colors relative ${
+              activeTab === 'mock-replay'
+                ? 'text-emerald-400 border-b-2 border-emerald-400 font-semibold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Database className="w-3.5 h-3.5 text-emerald-400" />
+            Mocks & Replay
           </button>
 
           <button
@@ -1052,6 +1066,13 @@ function VerificationRunContent() {
         {activeTab === 'api-fuzzing' && (
           <div className="space-y-4">
             <ApiFuzzingReportView runId={runId} />
+          </div>
+        )}
+
+        {/* TAB: MOCK SERVICE & DETERMINISTIC REPLAY */}
+        {activeTab === 'mock-replay' && (
+          <div className="space-y-4">
+            <MockReplayDashboard runId={runId} />
           </div>
         )}
       </main>

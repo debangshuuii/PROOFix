@@ -30,7 +30,8 @@
     "test:sandbox": "node tests/verify-sandbox-isolation-ci.mjs",
     "test:queue": "node tests/verify-distributed-queue-ci.mjs",
     "test:governance": "node tests/verify-enterprise-governance-ci.mjs",
-    "test:navigation": "node tests/verify-unified-navigation-ci.mjs"
+    "test:navigation": "node tests/verify-unified-navigation-ci.mjs",
+    "test:git": "node tests/verify-git-integrations-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

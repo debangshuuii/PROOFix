@@ -71,10 +71,10 @@ export const ENTERPRISE_PORTAL_METADATA: PortalMetadata[] = [
     id: 'portal-companion',
     title: 'Real-Time Interactive Companion',
     description: 'Live browser viewport canvas mirroring, execution steppers, and breakpoints',
-    href: '/projects',
-    badge: 'Live Stream',
+    href: '/companion/mirror',
+    badge: 'WebRTC 60 FPS',
     metricLabel: 'Latency',
-    metricValue: '<50ms Streaming',
+    metricValue: '<50ms Interactive',
   },
   {
     id: 'portal-healing',

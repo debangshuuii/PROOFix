@@ -16,6 +16,7 @@ import { PerformanceAuditReport } from '@/components/performance/PerformanceAudi
 import { AccessibilityAuditReport } from '@/components/accessibility/AccessibilityAuditReport';
 import { SelfHealingDashboard } from '@/components/repair/SelfHealingDashboard';
 import { SemanticVisionReport } from '@/components/vision/SemanticVisionReport';
+import { LiveCompanionDashboard } from '@/components/companion/LiveCompanionDashboard';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -42,6 +43,7 @@ import {
   Gauge,
   Eye,
   RotateCcw,
+  Radio,
 } from 'lucide-react';
 
 function VerificationRunContent() {
@@ -55,7 +57,7 @@ function VerificationRunContent() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'performance' | 'accessibility' | 'ai' | 'self-healing' | 'semantic-vision' | 'errors' | 'logs' | 'coverage'>('tests');
+  const [activeTab, setActiveTab] = useState<'tests' | 'viewport' | 'evidence' | 'videos' | 'performance' | 'accessibility' | 'ai' | 'self-healing' | 'semantic-vision' | 'live-companion' | 'errors' | 'logs' | 'coverage'>('tests');
   const [testFilter, setTestFilter] = useState<'all' | 'passed' | 'failed' | 'inconclusive'>('all');
   const [expandedTests, setExpandedTests] = useState<Record<string, boolean>>({});
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
@@ -483,6 +485,18 @@ function VerificationRunContent() {
           >
             <Eye className="w-3.5 h-3.5 text-indigo-400" />
             Vision AI Regressions
+          </button>
+
+          <button
+            onClick={() => setActiveTab('live-companion')}
+            className={`pb-3 flex items-center gap-2 transition-colors relative ${
+              activeTab === 'live-companion'
+                ? 'text-rose-400 border-b-2 border-rose-400 font-semibold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Radio className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+            Live Companion & Mirror
           </button>
 
           <button
@@ -1010,6 +1024,13 @@ function VerificationRunContent() {
         {activeTab === 'semantic-vision' && (
           <div className="space-y-4">
             <SemanticVisionReport />
+          </div>
+        )}
+
+        {/* TAB: LIVE COMPANION & BROWSER MIRROR */}
+        {activeTab === 'live-companion' && (
+          <div className="space-y-4">
+            <LiveCompanionDashboard runId={runId} />
           </div>
         )}
       </main>

@@ -29,7 +29,8 @@
     "test:replay": "node tests/verify-mock-replay-ci.mjs",
     "test:sandbox": "node tests/verify-sandbox-isolation-ci.mjs",
     "test:queue": "node tests/verify-distributed-queue-ci.mjs",
-    "test:governance": "node tests/verify-enterprise-governance-ci.mjs"
+    "test:governance": "node tests/verify-enterprise-governance-ci.mjs",
+    "test:navigation": "node tests/verify-unified-navigation-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

@@ -55,7 +55,7 @@ export class TenantPartitioningRouter {
    */
   public getTenantSchemaName(tenantId: string): string {
     const sanitized = tenantId.replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase();
-    return `tenant_${sanitized}`;
+    return sanitized.startsWith('tenant_') ? sanitized : `tenant_${sanitized}`;
   }
 
   /**

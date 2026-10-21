@@ -24,6 +24,7 @@ export function Navbar() {
   const coreLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/projects', label: 'Projects', icon: FolderGit2 },
+    { href: '/hub', label: 'Operations Hub', icon: Cpu },
   ];
 
   const enterpriseLinks = [

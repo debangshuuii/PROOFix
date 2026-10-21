@@ -9,6 +9,25 @@
   ],
   "projects": [
     {
+      "id": "proj_1792569519341_vp46",
+      "ownerId": "usr_default",
+      "name": "Aasra",
+      "description": "",
+      "repoUrl": "https://github.com/debangshuuii/Aasra",
+      "repoProvider": "github",
+      "defaultBranch": "main",
+      "config": {
+        "startupCommand": "npm run dev",
+        "buildCommand": "npm run build",
+        "installCommand": "npm install",
+        "port": 3000,
+        "readinessPath": "/",
+        "timeoutSecs": 45
+      },
+      "createdAt": "2026-10-21T07:58:39.341Z",
+      "updatedAt": "2026-10-21T07:58:43.489Z"
+    },
+    {
       "id": "proj_fixture_01",
       "ownerId": "usr_default",
       "name": "PROOFix Verification Testbed",
@@ -30,6 +49,518 @@
     }
   ],
   "projectVersions": [
+    {
+      "id": "ver_1792569633776_3y0g",
+      "projectId": "proj_1792569519341_vp46",
+      "commitHash": "head-mvhtodm8",
+      "branch": "main",
+      "analysis": {
+        "framework": "Next.js",
+        "runtime": "Node.js",
+        "packageManager": "npm",
+        "scripts": {
+          "dev": "next dev",
+          "build": "next build",
+          "start": "next start",
+          "lint": "eslint",
+          "typecheck": "tsc --noEmit",
+          "test": "node tests/verify-proofix.mjs",
+          "test:repair": "npx tsx tests/verify-repair-workflow.mjs",
+          "test:visual": "npx tsx tests/verify-visual-regression-ci.mjs",
+          "test:action": "npx tsx tests/verify-action-ci.mjs",
+          "test:viewport": "npx tsx tests/verify-viewport-ci.mjs",
+          "test:journey": "npx tsx tests/verify-journey-ci.mjs",
+          "test:video": "node tests/verify-video-recording-ci.mjs",
+          "test:security": "node tests/verify-security-preflight-ci.mjs",
+          "test:notifications": "node tests/verify-notifications-ci.mjs",
+          "test:performance": "node tests/verify-performance-ci.mjs",
+          "test:a11y": "node tests/verify-accessibility-ci.mjs",
+          "test:self-healing": "node tests/verify-self-healing-ci.mjs",
+          "test:vision": "node tests/verify-semantic-vision-ci.mjs",
+          "test:companion": "node tests/verify-live-companion-ci.mjs",
+          "test:fuzzing": "node tests/verify-api-fuzzing-ci.mjs",
+          "test:replay": "node tests/verify-mock-replay-ci.mjs",
+          "test:sandbox": "node tests/verify-sandbox-isolation-ci.mjs",
+          "test:queue": "node tests/verify-distributed-queue-ci.mjs",
+          "test:governance": "node tests/verify-enterprise-governance-ci.mjs",
+          "test:navigation": "node tests/verify-unified-navigation-ci.mjs",
+          "test:git": "node tests/verify-git-integrations-ci.mjs",
+          "test:otel": "node tests/verify-distributed-tracing-ci.mjs",
+          "test:db": "node tests/verify-database-adapters-ci.mjs",
+          "test:crawler": "node tests/verify-chaos-crawler-ci.mjs",
+          "test:transport": "node tests/verify-live-transport-ci.mjs"
+        },
+        "entryPoints": [
+          "src/app/page.tsx"
+        ],
+        "routes": [
+          {
+            "path": "/api/v1/companion/transport",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/companion/transport/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/companion/webrtc/signal",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/companion/webrtc/signal/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/crawler/chaos",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/crawler/chaos/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/fuzzing",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/fuzzing/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/governance",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/governance/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/health",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/health/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/integrations/github/webhook",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/integrations/github/webhook/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/integrations/gitlab/webhook",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/integrations/gitlab/webhook/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/projects",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/projects/[id]/analyze",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/analyze/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/badge",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/badge/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/baseline/approve",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/baseline/approve/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/baseline/audit-trail",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/baseline/audit-trail/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/baseline",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/baseline/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/compare/diff",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/compare/diff/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/compare/pairs",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/compare/pairs/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/compare",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/compare/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/imports/archive",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/imports/archive/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/imports/github",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/imports/github/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/masks",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/masks/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/notifications",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/notifications/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/notifications/test",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/notifications/test/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/runs",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/runs/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/runs/[runId]/videos/[videoId]/download",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/runs/[runId]/videos/[videoId]/download/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/projects/[id]/screenshots",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/projects/[id]/screenshots/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/proposals/[id]/apply",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/proposals/[id]/apply/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/proposals/[id]/create-pr",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/proposals/[id]/create-pr/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/proposals/[id]/export",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/proposals/[id]/export/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/proposals/[id]/review",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/proposals/[id]/review/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/proposals/[id]/rollback",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/proposals/[id]/rollback/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/proposals/[id]/verify",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/proposals/[id]/verify/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/ready",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/ready/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/replay",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/replay/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/runs/[id]/cancel",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/runs/[id]/cancel/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/runs/[id]/control",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/runs/[id]/control/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/runs/[id]/export",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/runs/[id]/export/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/runs/[id]/findings",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/runs/[id]/findings/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/runs/[id]/live",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/runs/[id]/live/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/runs/[id]/rerun-failed",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/runs/[id]/rerun-failed/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/runs/[id]",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/runs/[id]/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/runs/[id]/stream",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/runs/[id]/stream/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/runs/[id]/tests",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/runs/[id]/tests/route.ts",
+            "isDynamic": true
+          },
+          {
+            "path": "/api/v1/sandbox",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/sandbox/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/settings",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/settings/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/telemetry/otlp/v1/traces",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/telemetry/otlp/v1/traces/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/api/v1/webhooks/github",
+            "type": "api",
+            "method": "GET",
+            "fileSource": "src/app/api/v1/webhooks/github/route.ts",
+            "isDynamic": false
+          },
+          {
+            "path": "/companion/mirror",
+            "type": "page",
+            "fileSource": "src/app/companion/mirror/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/crawler",
+            "type": "page",
+            "fileSource": "src/app/crawler/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/dashboard",
+            "type": "page",
+            "fileSource": "src/app/dashboard/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/database",
+            "type": "page",
+            "fileSource": "src/app/database/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/governance",
+            "type": "page",
+            "fileSource": "src/app/governance/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/hub",
+            "type": "page",
+            "fileSource": "src/app/hub/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/integrations/git",
+            "type": "page",
+            "fileSource": "src/app/integrations/git/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/",
+            "type": "page",
+            "fileSource": "src/app/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/projects",
+            "type": "page",
+            "fileSource": "src/app/projects/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/projects/[id]/compare",
+            "type": "page",
+            "fileSource": "src/app/projects/[id]/compare/page.tsx",
+            "isDynamic": true
+          },
+          {
+            "path": "/projects/[id]/journeys/[journeyId]",
+            "type": "page",
+            "fileSource": "src/app/projects/[id]/journeys/[journeyId]/page.tsx",
+            "isDynamic": true
+          },
+          {
+            "path": "/projects/[id]",
+            "type": "page",
+            "fileSource": "src/app/projects/[id]/page.tsx",
+            "isDynamic": true
+          },
+          {
+            "path": "/projects/[id]/runs/[runId]",
+            "type": "page",
+            "fileSource": "src/app/projects/[id]/runs/[runId]/page.tsx",
+            "isDynamic": true
+          },
+          {
+            "path": "/queue",
+            "type": "page",
+            "fileSource": "src/app/queue/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/sandbox",
+            "type": "page",
+            "fileSource": "src/app/sandbox/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/settings",
+            "type": "page",
+            "fileSource": "src/app/settings/page.tsx",
+            "isDynamic": false
+          },
+          {
+            "path": "/telemetry",
+            "type": "page",
+            "fileSource": "src/app/telemetry/page.tsx",
+            "isDynamic": false
+          }
+        ],
+        "envVarsDetected": [
+          "PORT",
+          "NODE_ENV",
+          "GEMINI_API_KEY",
+          "OPENAI_API_KEY",
+          "ANTHROPIC_API_KEY",
+          "GITHUB_TOKEN",
+          "PROOFix_MAX_TIMEOUT_SECS",
+          "PROOFix_MEMORY_LIMIT_MB",
+          "PROOFix_ALLOW_OUTBOUND_NETWORK"
+        ],
+        "existingTests": [
+          "Playwright"
+        ],
+        "dockerConfig": {
+          "hasDockerfile": true,
+          "hasDockerCompose": true
+        },
+        "inferredStartup": {
+          "command": "npm run dev",
+          "port": 3000,
+          "readinessPath": "/",
+          "confidence": "high",
+          "rationale": "Detected standard \"npm run dev\" script in package.json."
+        },
+        "blockers": [
+          {
+            "severity": "warning",
+            "message": "Project references 9 environment variables (PORT, NODE_ENV, GEMINI_API_KEY, ...).",
+            "suggestedResolution": "Verify necessary mock or test environment variables are configured before verification."
+          }
+        ]
+      },
+      "createdAt": "2026-10-21T08:00:33.776Z"
+    },
     {
       "id": "ver_fixture_01",
       "projectId": "proj_fixture_01",
@@ -112,6 +643,199 @@
     }
   ],
   "runs": [
+    {
+      "id": "run_action_1792572778539",
+      "projectId": "proj_fixture_01",
+      "projectVersionId": "ver_action",
+      "runNumber": 348,
+      "status": "completed",
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "startedAt": "2026-10-21T08:52:58.537Z",
+      "completedAt": "2026-10-21T08:52:58.543Z",
+      "durationMs": 6,
+      "commitHash": "ci_commit_local",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 4173,
+        "timeoutMs": 900000
+      },
+      "isolationDisclaimer": "Executed in isolated GitHub Action workflow container environment.",
+      "summary": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "logs": [
+        "[PROOFix Action 08:52:58] Initializing PROOFix Action runner with profile \"smoke\"...",
+        "[PROOFix Action 08:52:58] Target workspace verified at: D:\\Coding\\PROOFix\\src\\fixtures\\sample-app",
+        "[PROOFix Action 08:52:58] Inspecting repository framework, routes, and package manifest...",
+        "[PROOFix Action 08:52:58] Framework: Next.js | Discovered 4 route(s).",
+        "[PROOFix Action 08:52:58] Created verification run context: run_action_1792572778539 (Commit: ci_comm)",
+        "[PROOFix Action 08:52:58] Evaluating Check 1: Root Route Availability...",
+        "[PROOFix Action 08:52:58] Evaluating Check 2: Route Navigation & Integrity...",
+        "[PROOFix Action 08:52:58] Verification finished in 0.01s: 2 Passed, 0 Failed."
+      ],
+      "createdAt": "2026-10-21T08:52:58.543Z"
+    },
+    {
+      "id": "run_action_1792572778479",
+      "projectId": "proj_fixture_01",
+      "projectVersionId": "ver_action",
+      "runNumber": 282,
+      "status": "failed",
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "startedAt": "2026-10-21T08:52:58.475Z",
+      "completedAt": "2026-10-21T08:52:58.491Z",
+      "durationMs": 16,
+      "commitHash": "ci_commit_local",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 4173,
+        "timeoutMs": 300000
+      },
+      "isolationDisclaimer": "Executed in isolated GitHub Action workflow container environment.",
+      "summary": {
+        "total": 4,
+        "passed": 3,
+        "failed": 1,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "errorSummary": "1 checks failed verification.",
+      "logs": [
+        "[PROOFix Action 08:52:58] Initializing PROOFix Action runner with profile \"full\"...",
+        "[PROOFix Action 08:52:58] Target workspace verified at: D:\\Coding\\PROOFix\\src\\fixtures\\sample-app",
+        "[PROOFix Action 08:52:58] Inspecting repository framework, routes, and package manifest...",
+        "[PROOFix Action 08:52:58] Framework: Next.js | Discovered 4 route(s).",
+        "[PROOFix Action 08:52:58] Created verification run context: run_action_1792572778479 (Commit: ci_comm)",
+        "[PROOFix Action 08:52:58] Evaluating Check 1: Root Route Availability...",
+        "[PROOFix Action 08:52:58] Evaluating Check 2: Route Navigation & Integrity...",
+        "[PROOFix Action 08:52:58] Evaluating Check 3: Dead Link & 404 Prevention...",
+        "[PROOFix Action 08:52:58] Evaluating Check 4: Visual Layout Consistency...",
+        "[PROOFix Action 08:52:58] Verification finished in 0.02s: 3 Passed, 1 Failed."
+      ],
+      "createdAt": "2026-10-21T08:52:58.491Z"
+    },
+    {
+      "id": "run_1792569555521_gy5h",
+      "projectId": "proj_1792569519341_vp46",
+      "projectVersionId": "ver_auto_1792569555521",
+      "runNumber": 2,
+      "status": "completed",
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "startedAt": "2026-10-21T07:59:15.521Z",
+      "commitHash": "head",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 45000
+      },
+      "isolationDisclaimer": "Local Process Sandbox: Process isolation with secret sanitization and allocated port. Container cgroup isolation requires Docker daemon.",
+      "summary": {
+        "total": 5,
+        "passed": 4,
+        "failed": 1,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "logs": [
+        "[PROOFix 1:29:16 pm] Importing source for project \"Aasra\" (github)...",
+        "[PROOFix 1:29:16 pm] Resolved local target workspace: D:\\Coding\\PROOFix",
+        "[PROOFix 1:29:16 pm] Inspecting project structure, dependencies, and route manifests...",
+        "[PROOFix 1:29:16 pm] Detected Framework: Next.js | Runtime: Node.js",
+        "[PROOFix 1:29:16 pm] Discovered 64 route(s): /api/v1/companion/transport, /api/v1/companion/webrtc/signal, /api/v1/crawler/chaos, /api/v1/fuzzing, /api/v1/governance, /api/v1/health, /api/v1/integrations/github/webhook, /api/v1/integrations/gitlab/webhook, /api/v1/projects, /api/v1/projects/[id]/analyze, /api/v1/projects/[id]/badge, /api/v1/projects/[id]/baseline/approve, /api/v1/projects/[id]/baseline/audit-trail, /api/v1/projects/[id]/baseline, /api/v1/projects/[id]/compare/diff, /api/v1/projects/[id]/compare/pairs, /api/v1/projects/[id]/compare, /api/v1/projects/[id]/imports/archive, /api/v1/projects/[id]/imports/github, /api/v1/projects/[id]/masks, /api/v1/projects/[id]/notifications, /api/v1/projects/[id]/notifications/test, /api/v1/projects/[id], /api/v1/projects/[id]/runs, /api/v1/projects/[id]/runs/[runId]/videos/[videoId]/download, /api/v1/projects/[id]/screenshots, /api/v1/proposals/[id]/apply, /api/v1/proposals/[id]/create-pr, /api/v1/proposals/[id]/export, /api/v1/proposals/[id]/review, /api/v1/proposals/[id]/rollback, /api/v1/proposals/[id]/verify, /api/v1/ready, /api/v1/replay, /api/v1/runs/[id]/cancel, /api/v1/runs/[id]/control, /api/v1/runs/[id]/export, /api/v1/runs/[id]/findings, /api/v1/runs/[id]/live, /api/v1/runs/[id]/rerun-failed, /api/v1/runs/[id], /api/v1/runs/[id]/stream, /api/v1/runs/[id]/tests, /api/v1/sandbox, /api/v1/settings, /api/v1/telemetry/otlp/v1/traces, /api/v1/webhooks/github, /companion/mirror, /crawler, /dashboard, /database, /governance, /hub, /integrations/git, /, /projects, /projects/[id]/compare, /projects/[id]/journeys/[journeyId], /projects/[id], /projects/[id]/runs/[runId], /queue, /sandbox, /settings, /telemetry",
+        "[PROOFix 1:29:16 pm] Preparing execution environment...",
+        "[PROOFix 1:29:16 pm] Assigned port: 3000 | Execution timeout: 45s",
+        "[PROOFix 1:29:16 pm] Security Policy: Unprivileged process context, environmental secret sanitization, restricted child process tree.",
+        "[PROOFix 1:29:16 pm] Starting application server on port 3000...",
+        "[PROOFix 1:29:17 pm] Existing server detected active on port 3000. Attaching for verification...",
+        "[PROOFix 1:29:17 pm] Application server verified READY at http://localhost:3000/.",
+        "[PROOFix 1:29:17 pm] Launching Playwright Chromium browser tests...",
+        "[PROOFix 1:29:17 pm] [Playwright] Launching Chromium headless engine for http://localhost:3000...",
+        "[PROOFix 1:29:32 pm] [Playwright] Executing Check 1: Root URL Health Check...",
+        "[PROOFix 1:29:33 pm] [Playwright] Executing Check 3: Internal Link Integrity & Dead Link Audit...",
+        "[PROOFix 1:29:36 pm] [Playwright] Executing Check 4: Backend API Health Check (/api/v1/companion/transport)...",
+        "[PROOFix 1:29:36 pm] [Playwright] Executing Check 5: Interactive Elements & UI Hydration Check...",
+        "[PROOFix 1:29:37 pm] [Playwright] Executing Check 6: Responsive Viewport & Layout Overflow Audit...",
+        "[PROOFix 1:29:38 pm] [Playwright] Verification complete. Executed 5 checks.",
+        "[PROOFix 1:29:38 pm] Completed 5 Playwright verification checks.",
+        "[PROOFix 1:29:38 pm] Analyzing failure evidence and formulating repair hypotheses...",
+        "[PROOFix 1:29:38 pm] Diagnosing failure: \"Responsive Viewport & Layout Overflow Audit\"...",
+        "[PROOFix 1:29:38 pm] Generated finding: \"Responsive Layout Horizontal Overflow Detected\" (Confidence: 88%)",
+        "[PROOFix 1:29:38 pm] Verification completed: 4 Passed, 1 Failed, 0 Inconclusive."
+      ],
+      "createdAt": "2026-10-21T07:59:15.521Z",
+      "completedAt": "2026-10-21T07:59:38.285Z",
+      "durationMs": 22764,
+      "errorSummary": "1 check(s) failed. Evidence and fix recommendations generated."
+    },
+    {
+      "id": "run_1792569543629_2v7c",
+      "projectId": "proj_1792569519341_vp46",
+      "projectVersionId": "ver_auto_1792569543629",
+      "runNumber": 1,
+      "status": "completed",
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "startedAt": "2026-10-21T07:59:03.629Z",
+      "commitHash": "head",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 45000
+      },
+      "isolationDisclaimer": "Local Process Sandbox: Process isolation with secret sanitization and allocated port. Container cgroup isolation requires Docker daemon.",
+      "summary": {
+        "total": 5,
+        "passed": 4,
+        "failed": 1,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "logs": [
+        "[PROOFix 1:29:03 pm] Importing source for project \"Aasra\" (github)...",
+        "[PROOFix 1:29:03 pm] Resolved local target workspace: D:\\Coding\\PROOFix",
+        "[PROOFix 1:29:03 pm] Inspecting project structure, dependencies, and route manifests...",
+        "[PROOFix 1:29:03 pm] Detected Framework: Next.js | Runtime: Node.js",
+        "[PROOFix 1:29:03 pm] Discovered 64 route(s): /api/v1/companion/transport, /api/v1/companion/webrtc/signal, /api/v1/crawler/chaos, /api/v1/fuzzing, /api/v1/governance, /api/v1/health, /api/v1/integrations/github/webhook, /api/v1/integrations/gitlab/webhook, /api/v1/projects, /api/v1/projects/[id]/analyze, /api/v1/projects/[id]/badge, /api/v1/projects/[id]/baseline/approve, /api/v1/projects/[id]/baseline/audit-trail, /api/v1/projects/[id]/baseline, /api/v1/projects/[id]/compare/diff, /api/v1/projects/[id]/compare/pairs, /api/v1/projects/[id]/compare, /api/v1/projects/[id]/imports/archive, /api/v1/projects/[id]/imports/github, /api/v1/projects/[id]/masks, /api/v1/projects/[id]/notifications, /api/v1/projects/[id]/notifications/test, /api/v1/projects/[id], /api/v1/projects/[id]/runs, /api/v1/projects/[id]/runs/[runId]/videos/[videoId]/download, /api/v1/projects/[id]/screenshots, /api/v1/proposals/[id]/apply, /api/v1/proposals/[id]/create-pr, /api/v1/proposals/[id]/export, /api/v1/proposals/[id]/review, /api/v1/proposals/[id]/rollback, /api/v1/proposals/[id]/verify, /api/v1/ready, /api/v1/replay, /api/v1/runs/[id]/cancel, /api/v1/runs/[id]/control, /api/v1/runs/[id]/export, /api/v1/runs/[id]/findings, /api/v1/runs/[id]/live, /api/v1/runs/[id]/rerun-failed, /api/v1/runs/[id], /api/v1/runs/[id]/stream, /api/v1/runs/[id]/tests, /api/v1/sandbox, /api/v1/settings, /api/v1/telemetry/otlp/v1/traces, /api/v1/webhooks/github, /companion/mirror, /crawler, /dashboard, /database, /governance, /hub, /integrations/git, /, /projects, /projects/[id]/compare, /projects/[id]/journeys/[journeyId], /projects/[id], /projects/[id]/runs/[runId], /queue, /sandbox, /settings, /telemetry",
+        "[PROOFix 1:29:03 pm] Preparing execution environment...",
+        "[PROOFix 1:29:03 pm] Assigned port: 3000 | Execution timeout: 45s",
+        "[PROOFix 1:29:03 pm] Security Policy: Unprivileged process context, environmental secret sanitization, restricted child process tree.",
+        "[PROOFix 1:29:03 pm] Starting application server on port 3000...",
+        "[PROOFix 1:29:04 pm] Existing server detected active on port 3000. Attaching for verification...",
+        "[PROOFix 1:29:04 pm] Application server verified READY at http://localhost:3000/.",
+        "[PROOFix 1:29:04 pm] Launching Playwright Chromium browser tests...",
+        "[PROOFix 1:29:04 pm] [Playwright] Launching Chromium headless engine for http://localhost:3000...",
+        "[PROOFix 1:29:26 pm] [Playwright] Executing Check 1: Root URL Health Check...",
+        "[PROOFix 1:29:27 pm] [Playwright] Executing Check 3: Internal Link Integrity & Dead Link Audit...",
+        "[PROOFix 1:29:32 pm] [Playwright] Executing Check 4: Backend API Health Check (/api/v1/companion/transport)...",
+        "[PROOFix 1:29:32 pm] [Playwright] Executing Check 5: Interactive Elements & UI Hydration Check...",
+        "[PROOFix 1:29:33 pm] [Playwright] Executing Check 6: Responsive Viewport & Layout Overflow Audit...",
+        "[PROOFix 1:29:34 pm] [Playwright] Verification complete. Executed 5 checks.",
+        "[PROOFix 1:29:36 pm] Completed 5 Playwright verification checks.",
+        "[PROOFix 1:29:36 pm] Analyzing failure evidence and formulating repair hypotheses...",
+        "[PROOFix 1:29:36 pm] Diagnosing failure: \"Responsive Viewport & Layout Overflow Audit\"...",
+        "[PROOFix 1:29:36 pm] Generated finding: \"Responsive Layout Horizontal Overflow Detected\" (Confidence: 88%)",
+        "[PROOFix 1:29:36 pm] Verification completed: 4 Passed, 1 Failed, 0 Inconclusive."
+      ],
+      "createdAt": "2026-10-21T07:59:03.629Z",
+      "completedAt": "2026-10-21T07:59:36.722Z",
+      "durationMs": 33093,
+      "errorSummary": "1 check(s) failed. Evidence and fix recommendations generated."
+    },
     {
       "id": "run_fixture_baseline",
       "projectId": "proj_fixture_01",
@@ -402,6 +1126,561 @@
       },
       "startedAt": "2026-10-17T20:26:47.390Z",
       "completedAt": "2026-10-17T20:26:48.280Z"
+    },
+    {
+      "id": "res_run_1792569543629_2v7c_01",
+      "runId": "run_1792569543629_2v7c",
+      "name": "Root Application Availability & Readiness Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 640,
+      "actualResult": "Root URL responded HTTP 200 and rendered expected DOM elements.",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569543629_2v7c/test_1_root.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Navigate to http://localhost:3000",
+            "status": "passed",
+            "durationMs": 367
+          },
+          {
+            "name": "Verify page title (PROOFix — Don't just generate code. Prove that it works.)",
+            "status": "passed",
+            "durationMs": 10
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:26.548Z",
+      "completedAt": "2026-10-21T07:59:27.188Z"
+    },
+    {
+      "id": "res_run_1792569543629_2v7c_03",
+      "runId": "run_1792569543629_2v7c",
+      "name": "Internal Link Integrity & Dead Link Audit",
+      "category": "route_discovery",
+      "status": "passed",
+      "durationMs": 5192,
+      "actualResult": "All discovered anchor links resolved with valid HTTP status codes.",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569543629_2v7c/test_3_broken.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Discovered 11 internal navigation link(s)",
+            "status": "passed",
+            "durationMs": 30
+          },
+          {
+            "name": "Verify target / (200 OK)",
+            "status": "passed",
+            "durationMs": 128
+          },
+          {
+            "name": "Verify target /dashboard (200 OK)",
+            "status": "passed",
+            "durationMs": 223
+          },
+          {
+            "name": "Verify target /projects (200 OK)",
+            "status": "passed",
+            "durationMs": 566
+          },
+          {
+            "name": "Verify target /sandbox (200 OK)",
+            "status": "passed",
+            "durationMs": 457
+          },
+          {
+            "name": "Verify target /queue (200 OK)",
+            "status": "passed",
+            "durationMs": 405
+          },
+          {
+            "name": "Verify target /governance (200 OK)",
+            "status": "passed",
+            "durationMs": 477
+          },
+          {
+            "name": "Verify target /settings (200 OK)",
+            "status": "passed",
+            "durationMs": 536
+          },
+          {
+            "name": "Verify target /dashboard (200 OK)",
+            "status": "passed",
+            "durationMs": 91
+          },
+          {
+            "name": "Verify target /dashboard (200 OK)",
+            "status": "passed",
+            "durationMs": 86
+          },
+          {
+            "name": "Verify target /projects/proj_fixture_01/runs/run_fixture_baseline (200 OK)",
+            "status": "passed",
+            "durationMs": 1781
+          },
+          {
+            "name": "Verify target /projects/proj_fixture_01/runs/run_fixture_baseline (200 OK)",
+            "status": "passed",
+            "durationMs": 82
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:27.188Z",
+      "completedAt": "2026-10-21T07:59:32.380Z"
+    },
+    {
+      "id": "res_run_1792569543629_2v7c_04",
+      "runId": "run_1792569543629_2v7c",
+      "name": "Backend API Health Check (/api/v1/companion/transport)",
+      "category": "api_health",
+      "status": "passed",
+      "durationMs": 465,
+      "actualResult": "Endpoint /api/v1/companion/transport responded successfully with HTTP 200.",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569543629_2v7c/test_4_api.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Send GET /api/v1/companion/transport",
+            "status": "passed",
+            "durationMs": 362
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:32.380Z",
+      "completedAt": "2026-10-21T07:59:32.845Z"
+    },
+    {
+      "id": "res_run_1792569543629_2v7c_05",
+      "runId": "run_1792569543629_2v7c",
+      "name": "Interactive UI Elements & Event Dispatch Check",
+      "category": "user_flow",
+      "status": "passed",
+      "durationMs": 499,
+      "actualResult": "Interactive UI elements responded cleanly without throwing exceptions.",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569543629_2v7c/test_5_interactive.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Scan for interactive buttons/inputs",
+            "status": "passed",
+            "durationMs": 40
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:32.845Z",
+      "completedAt": "2026-10-21T07:59:33.344Z"
+    },
+    {
+      "id": "res_run_1792569543629_2v7c_06",
+      "runId": "run_1792569543629_2v7c",
+      "name": "Responsive Viewport & Layout Overflow Audit",
+      "category": "responsive_layout",
+      "status": "failed",
+      "durationMs": 1235,
+      "actualResult": "Horizontal layout overflow detected at Tablet viewport (768px).",
+      "failureCategory": "layout_overflow",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569543629_2v7c/test_6_mobile.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Audit Mobile viewport (375x667)",
+            "status": "passed",
+            "durationMs": 443
+          },
+          {
+            "name": "Audit Tablet viewport (768x1024)",
+            "status": "failed",
+            "durationMs": 288,
+            "error": "Content exceeds viewport width"
+          },
+          {
+            "name": "Audit Desktop viewport (1280x720)",
+            "status": "passed",
+            "durationMs": 356
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:33.344Z",
+      "completedAt": "2026-10-21T07:59:34.579Z"
+    },
+    {
+      "id": "res_run_1792569555521_gy5h_01",
+      "runId": "run_1792569555521_gy5h",
+      "name": "Root Application Availability & Readiness Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 720,
+      "actualResult": "Root URL responded HTTP 200 and rendered expected DOM elements.",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569555521_gy5h/test_1_root.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Navigate to http://localhost:3000",
+            "status": "passed",
+            "durationMs": 349
+          },
+          {
+            "name": "Verify page title (PROOFix — Don't just generate code. Prove that it works.)",
+            "status": "passed",
+            "durationMs": 10
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:32.461Z",
+      "completedAt": "2026-10-21T07:59:33.181Z"
+    },
+    {
+      "id": "res_run_1792569555521_gy5h_03",
+      "runId": "run_1792569555521_gy5h",
+      "name": "Internal Link Integrity & Dead Link Audit",
+      "category": "route_discovery",
+      "status": "passed",
+      "durationMs": 3645,
+      "actualResult": "All discovered anchor links resolved with valid HTTP status codes.",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569555521_gy5h/test_3_broken.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Discovered 11 internal navigation link(s)",
+            "status": "passed",
+            "durationMs": 30
+          },
+          {
+            "name": "Verify target / (200 OK)",
+            "status": "passed",
+            "durationMs": 223
+          },
+          {
+            "name": "Verify target /dashboard (200 OK)",
+            "status": "passed",
+            "durationMs": 125
+          },
+          {
+            "name": "Verify target /projects (200 OK)",
+            "status": "passed",
+            "durationMs": 90
+          },
+          {
+            "name": "Verify target /sandbox (200 OK)",
+            "status": "passed",
+            "durationMs": 89
+          },
+          {
+            "name": "Verify target /queue (200 OK)",
+            "status": "passed",
+            "durationMs": 183
+          },
+          {
+            "name": "Verify target /governance (200 OK)",
+            "status": "passed",
+            "durationMs": 101
+          },
+          {
+            "name": "Verify target /settings (200 OK)",
+            "status": "passed",
+            "durationMs": 186
+          },
+          {
+            "name": "Verify target /dashboard (200 OK)",
+            "status": "passed",
+            "durationMs": 122
+          },
+          {
+            "name": "Verify target /dashboard (200 OK)",
+            "status": "passed",
+            "durationMs": 118
+          },
+          {
+            "name": "Verify target /projects/proj_fixture_01/runs/run_fixture_baseline (200 OK)",
+            "status": "passed",
+            "durationMs": 1859
+          },
+          {
+            "name": "Verify target /projects/proj_fixture_01/runs/run_fixture_baseline (200 OK)",
+            "status": "passed",
+            "durationMs": 125
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:33.181Z",
+      "completedAt": "2026-10-21T07:59:36.826Z"
+    },
+    {
+      "id": "res_run_1792569555521_gy5h_04",
+      "runId": "run_1792569555521_gy5h",
+      "name": "Backend API Health Check (/api/v1/companion/transport)",
+      "category": "api_health",
+      "status": "passed",
+      "durationMs": 118,
+      "actualResult": "Endpoint /api/v1/companion/transport responded successfully with HTTP 200.",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569555521_gy5h/test_4_api.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Send GET /api/v1/companion/transport",
+            "status": "passed",
+            "durationMs": 29
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:36.826Z",
+      "completedAt": "2026-10-21T07:59:36.944Z"
+    },
+    {
+      "id": "res_run_1792569555521_gy5h_05",
+      "runId": "run_1792569555521_gy5h",
+      "name": "Interactive UI Elements & Event Dispatch Check",
+      "category": "user_flow",
+      "status": "passed",
+      "durationMs": 379,
+      "actualResult": "Interactive UI elements responded cleanly without throwing exceptions.",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569555521_gy5h/test_5_interactive.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Scan for interactive buttons/inputs",
+            "status": "passed",
+            "durationMs": 40
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:36.944Z",
+      "completedAt": "2026-10-21T07:59:37.323Z"
+    },
+    {
+      "id": "res_run_1792569555521_gy5h_06",
+      "runId": "run_1792569555521_gy5h",
+      "name": "Responsive Viewport & Layout Overflow Audit",
+      "category": "responsive_layout",
+      "status": "failed",
+      "durationMs": 807,
+      "actualResult": "Horizontal layout overflow detected at Tablet viewport (768px).",
+      "failureCategory": "layout_overflow",
+      "evidence": {
+        "screenshotPath": "/artifacts/runs/run_1792569555521_gy5h/test_6_mobile.png",
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Audit Mobile viewport (375x667)",
+            "status": "passed",
+            "durationMs": 330
+          },
+          {
+            "name": "Audit Tablet viewport (768x1024)",
+            "status": "failed",
+            "durationMs": 188,
+            "error": "Content exceeds viewport width"
+          },
+          {
+            "name": "Audit Desktop viewport (1280x720)",
+            "status": "passed",
+            "durationMs": 206
+          }
+        ]
+      },
+      "startedAt": "2026-10-21T07:59:37.323Z",
+      "completedAt": "2026-10-21T07:59:38.130Z"
+    },
+    {
+      "id": "res_run_action_1792572778479_01",
+      "runId": "run_action_1792572778479",
+      "name": "Root Application Availability Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 420,
+      "actualResult": "Root page route located in manifest and verified.",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Inspect / route manifest",
+            "status": "passed",
+            "durationMs": 420
+          }
+        ],
+        "screenshotPath": "/artifacts/baseline_home.png",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "startedAt": "2026-10-21T08:52:57.979Z",
+      "completedAt": "2026-10-21T08:52:58.479Z"
+    },
+    {
+      "id": "res_run_action_1792572778479_02",
+      "runId": "run_action_1792572778479",
+      "name": "About Page & Sub-Route Flow",
+      "category": "user_flow",
+      "status": "passed",
+      "durationMs": 650,
+      "actualResult": "Sub-route flow validated cleanly without errors.",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Validate sub-route hierarchy",
+            "status": "passed",
+            "durationMs": 650
+          }
+        ],
+        "screenshotPath": "/artifacts/baseline_about.png",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "startedAt": "2026-10-21T08:52:57.829Z",
+      "completedAt": "2026-10-21T08:52:58.479Z"
+    },
+    {
+      "id": "res_run_action_1792572778479_03",
+      "runId": "run_action_1792572778479",
+      "name": "Internal Link Integrity & 404 Prevention",
+      "category": "route_discovery",
+      "status": "failed",
+      "durationMs": 820,
+      "actualResult": "Target route \"/broken-route\" does not exist in routes manifest (HTTP 404 Not Found).",
+      "failureCategory": "navigation_failed",
+      "errorDetails": {
+        "message": "Target route \"/broken-route\" returned HTTP 404 Not Found.",
+        "url": "http://localhost:4173/broken-route",
+        "stepFailed": "Verify navigation target returns HTTP < 400"
+      },
+      "evidence": {
+        "consoleErrors": [
+          {
+            "timestamp": "09:00:00",
+            "type": "error",
+            "text": "404 Not Found on /broken-route"
+          }
+        ],
+        "networkFailures": [
+          {
+            "url": "http://localhost:4173/broken-route",
+            "method": "GET",
+            "status": 404,
+            "statusText": "Not Found"
+          }
+        ],
+        "steps": [
+          {
+            "name": "Verify link target status < 400",
+            "status": "failed",
+            "durationMs": 820
+          }
+        ],
+        "screenshotPath": "/artifacts/baseline_broken.png",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "startedAt": "2026-10-21T08:52:57.659Z",
+      "completedAt": "2026-10-21T08:52:58.479Z"
+    },
+    {
+      "id": "res_run_action_1792572778479_04",
+      "runId": "run_action_1792572778479",
+      "name": "Visual Layout & Responsive Checkpoint",
+      "category": "responsive_layout",
+      "status": "passed",
+      "durationMs": 780,
+      "actualResult": "Visual layout matches baseline within configured comparison tolerance.",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Capture viewport visual checkpoint",
+            "status": "passed",
+            "durationMs": 780
+          }
+        ],
+        "screenshotPath": "/artifacts/baseline_home.png",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "startedAt": "2026-10-21T08:52:57.699Z",
+      "completedAt": "2026-10-21T08:52:58.479Z"
+    },
+    {
+      "id": "res_run_action_1792572778539_01",
+      "runId": "run_action_1792572778539",
+      "name": "Root Application Availability Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 420,
+      "actualResult": "Root page route located in manifest and verified.",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Inspect / route manifest",
+            "status": "passed",
+            "durationMs": 420
+          }
+        ],
+        "screenshotPath": "/artifacts/baseline_home.png",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "startedAt": "2026-10-21T08:52:58.039Z",
+      "completedAt": "2026-10-21T08:52:58.539Z"
+    },
+    {
+      "id": "res_run_action_1792572778539_02",
+      "runId": "run_action_1792572778539",
+      "name": "About Page & Sub-Route Flow",
+      "category": "user_flow",
+      "status": "passed",
+      "durationMs": 650,
+      "actualResult": "Sub-route flow validated cleanly without errors.",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": [
+          {
+            "name": "Validate sub-route hierarchy",
+            "status": "passed",
+            "durationMs": 650
+          }
+        ],
+        "screenshotPath": "/artifacts/baseline_about.png",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "startedAt": "2026-10-21T08:52:57.889Z",
+      "completedAt": "2026-10-21T08:52:58.539Z"
     }
   ],
   "findings": [
@@ -444,6 +1723,62 @@
       "confidenceScore": 92,
       "reviewStatus": "pending",
       "createdAt": "2026-10-17T20:26:51.390Z"
+    },
+    {
+      "id": "fnd_1792569576708_y39f8",
+      "runId": "run_1792569543629_2v7c",
+      "testResultId": "res_run_1792569543629_2v7c_06",
+      "severity": "medium",
+      "title": "Responsive Layout Horizontal Overflow Detected",
+      "description": "The application page width exceeds the viewport width on mobile screen dimensions (375px), causing unintentional horizontal scrolling.",
+      "observedEvidence": "Observed document.documentElement.scrollWidth > window.innerWidth at mobile viewport.",
+      "aiHypothesis": "Probable causes: (1) Elements with fixed pixel widths (e.g., width: 600px instead of max-w-full), (2) Negative margins or unconstrained pre/code tags without overflow-x-auto, or (3) Images missing responsive max-width rules.",
+      "suggestedFix": "Replace fixed pixel widths with responsive Tailwind classes (w-full, max-w-full, overflow-x-hidden, or overflow-x-auto on tables/code blocks).",
+      "patchPreview": "--- a/src/app/globals.css\n+++ b/src/app/globals.css\n@@ -20,2 +20,4 @@\n+html, body {\n+  overflow-x: hidden;\n+}",
+      "affectedFiles": [
+        "src/app/globals.css",
+        "src/app/page.tsx"
+      ],
+      "sideEffects": "Eliminates unexpected horizontal scroll on mobile devices.",
+      "verificationStep": "Re-run PROOFix Responsive Viewport Audit.",
+      "confidenceScore": 88,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-21T07:59:36.708Z"
+    },
+    {
+      "id": "fnd_1792569578264_5rxl6",
+      "runId": "run_1792569555521_gy5h",
+      "testResultId": "res_run_1792569555521_gy5h_06",
+      "severity": "medium",
+      "title": "Responsive Layout Horizontal Overflow Detected",
+      "description": "The application page width exceeds the viewport width on mobile screen dimensions (375px), causing unintentional horizontal scrolling.",
+      "observedEvidence": "Observed document.documentElement.scrollWidth > window.innerWidth at mobile viewport.",
+      "aiHypothesis": "Probable causes: (1) Elements with fixed pixel widths (e.g., width: 600px instead of max-w-full), (2) Negative margins or unconstrained pre/code tags without overflow-x-auto, or (3) Images missing responsive max-width rules.",
+      "suggestedFix": "Replace fixed pixel widths with responsive Tailwind classes (w-full, max-w-full, overflow-x-hidden, or overflow-x-auto on tables/code blocks).",
+      "patchPreview": "--- a/src/app/globals.css\n+++ b/src/app/globals.css\n@@ -20,2 +20,4 @@\n+html, body {\n+  overflow-x: hidden;\n+}",
+      "affectedFiles": [
+        "src/app/globals.css",
+        "src/app/page.tsx"
+      ],
+      "sideEffects": "Eliminates unexpected horizontal scroll on mobile devices.",
+      "verificationStep": "Re-run PROOFix Responsive Viewport Audit.",
+      "confidenceScore": 88,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-21T07:59:38.264Z"
+    },
+    {
+      "id": "fnd_run_action_1792572778479_01",
+      "runId": "run_action_1792572778479",
+      "testResultId": "res_run_action_1792572778479_03",
+      "severity": "high",
+      "title": "Broken Route: /broken-route returned HTTP 404",
+      "description": "Dead link detected in page navigation pointing to a non-existent route.",
+      "observedEvidence": "Source file page.tsx links to missing destination /broken-route",
+      "aiHypothesis": "Route may have been deleted, moved, or misspelled.",
+      "suggestedFix": "Update link in src/app/page.tsx or create missing route at src/app/broken-route/page.tsx",
+      "confidenceScore": 96,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-21T08:52:58.479Z"
     }
   ],
   "artifacts": [],

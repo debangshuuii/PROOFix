@@ -299,3 +299,4 @@ export * from './accessibility.ts';
 export * from './self-healing.ts';
 export * from './semantic-vision.ts';
 export * from './live-companion.ts';
+export * from './api-fuzzing.ts';

@@ -26,7 +26,8 @@
     "test:vision": "node tests/verify-semantic-vision-ci.mjs",
     "test:companion": "node tests/verify-live-companion-ci.mjs",
     "test:fuzzing": "node tests/verify-api-fuzzing-ci.mjs",
-    "test:replay": "node tests/verify-mock-replay-ci.mjs"
+    "test:replay": "node tests/verify-mock-replay-ci.mjs",
+    "test:sandbox": "node tests/verify-sandbox-isolation-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

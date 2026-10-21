@@ -31,7 +31,8 @@
     "test:queue": "node tests/verify-distributed-queue-ci.mjs",
     "test:governance": "node tests/verify-enterprise-governance-ci.mjs",
     "test:navigation": "node tests/verify-unified-navigation-ci.mjs",
-    "test:git": "node tests/verify-git-integrations-ci.mjs"
+    "test:git": "node tests/verify-git-integrations-ci.mjs",
+    "test:otel": "node tests/verify-distributed-tracing-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

@@ -5,6 +5,8 @@
  */
 
 import type { HttpMethod } from './api-fuzzing.ts';
+export type { HttpMethod };
+
 
 export interface ApiEndpointConfig {
   path: string;

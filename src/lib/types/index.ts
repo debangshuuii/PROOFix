@@ -324,3 +324,4 @@ export * from './patch-proposal.ts';
 export * from './repair-workspace.ts';
 export * from './patch-prover.ts';
 export * from './patch-transaction.ts';
+export * from './self-healing-policy.ts';

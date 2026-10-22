@@ -313,5 +313,6 @@ export * from './live-transport.ts';
 export * from './execution.ts';
 export * from './navigation-crawler.ts';
 export * from './api-endpoint-agent.ts';
+export * from './interactive-ui-agent.ts';
 
 

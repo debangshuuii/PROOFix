@@ -14,6 +14,7 @@ export interface VerificationCheckResult {
   name: string;
   category?: string;
   passed: boolean;
+  status?: 'passed' | 'failed';
   durationMs: number;
   stdout?: string;
   stderr?: string;

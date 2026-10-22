@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import { parseUnifiedDiff, validatePatchIntegrity } from './patch-validator';
-import { verifyPathSecurity } from './ephemeral-workspace-manager';
+import { parseUnifiedDiff, validatePatchIntegrity } from './patch-validator.ts';
+import { verifyPathSecurity } from './ephemeral-workspace-manager.ts';
 
 const execAsync = promisify(exec);
 const WORKSPACES_BASE = path.join(process.cwd(), 'data', 'workspaces');

@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 import { parseUnifiedDiff, validatePatchIntegrity } from './patch-validator';
+import { verifyPathSecurity } from './ephemeral-workspace-manager';
 
+const execAsync = promisify(exec);
 const WORKSPACES_BASE = path.join(process.cwd(), 'data', 'workspaces');
 
 /**
@@ -27,7 +31,7 @@ export async function createDisposableWorkspace(
   fs.mkdirSync(targetDir, { recursive: true });
 
   // Fast recursive copy excluding bulky build directories
-  copyDirRecursive(sourceDir, targetDir, ['node_modules', '.git', '.next', 'out', 'dist']);
+  copyDirRecursive(sourceDir, targetDir, ['node_modules', '.git', '.next', 'out', 'dist', '.proofix-cgroups-simulated']);
 
   // Link node_modules if present in sourceDir for zero-overhead dependencies
   const srcNodeModules = path.join(sourceDir, 'node_modules');
@@ -46,6 +50,49 @@ export async function createDisposableWorkspace(
   }
 
   return targetDir;
+}
+
+/**
+ * Provisions a git worktree sandbox if source is a git repository
+ */
+export async function createGitWorktreeWorkspace(
+  repoRoot: string,
+  targetBranch: string = `proofix-eval-${Date.now()}`
+): Promise<{ worktreePath: string; cleanup: () => Promise<void> }> {
+  const sanitizedBranch = targetBranch.replace(/[^a-zA-Z0-9_\-]/g, '_');
+  const worktreePath = path.join(WORKSPACES_BASE, `worktree_${sanitizedBranch}`);
+
+  if (!fs.existsSync(WORKSPACES_BASE)) {
+    fs.mkdirSync(WORKSPACES_BASE, { recursive: true });
+  }
+
+  try {
+    await execAsync(`git worktree add -B "${sanitizedBranch}" "${worktreePath}" HEAD`, {
+      cwd: repoRoot,
+    });
+
+    const cleanup = async () => {
+      try {
+        await execAsync(`git worktree remove --force "${worktreePath}"`, { cwd: repoRoot });
+        await execAsync(`git branch -D "${sanitizedBranch}"`, { cwd: repoRoot });
+      } catch {
+        if (fs.existsSync(worktreePath)) {
+          fs.rmSync(worktreePath, { recursive: true, force: true });
+        }
+      }
+    };
+
+    return { worktreePath, cleanup };
+  } catch {
+    // If git worktree fails (e.g. shallow clone or bare repo), fallback to disposable workspace copy
+    const fallbackDir = await createDisposableWorkspace(repoRoot, sanitizedBranch);
+    return {
+      worktreePath: fallbackDir,
+      cleanup: async () => {
+        await cleanupDisposableWorkspace(fallbackDir);
+      },
+    };
+  }
 }
 
 function copyDirRecursive(src: string, dest: string, ignoreNames: string[]) {
@@ -74,7 +121,12 @@ function copyDirRecursive(src: string, dest: string, ignoreNames: string[]) {
 export async function applyPatchToWorkspace(
   workspaceDir: string,
   diffText: string
-): Promise<{ success: boolean; error?: string; modifiedFiles: string[] }> {
+): Promise<{
+  success: boolean;
+  error?: string;
+  modifiedFiles: string[];
+  totalHunksApplied?: number;
+}> {
   // Validate patch first
   const validation = validatePatchIntegrity(diffText, workspaceDir);
   if (!validation.valid) {
@@ -82,16 +134,24 @@ export async function applyPatchToWorkspace(
       success: false,
       error: `Patch validation failed: ${validation.errors.join('; ')}`,
       modifiedFiles: [],
+      totalHunksApplied: 0,
     };
   }
 
   const fileBackups = new Map<string, string>();
   const modifiedFiles: string[] = [];
+  let totalHunksApplied = 0;
 
   try {
     for (const filePatch of validation.patches) {
       const relPath = filePatch.newPath || filePatch.oldPath;
       const targetFilePath = path.resolve(workspaceDir, relPath);
+
+      // Verify directory jail boundaries
+      const secCheck = verifyPathSecurity(workspaceDir, targetFilePath);
+      if (!secCheck.safe) {
+        throw new Error(secCheck.violation?.message || `Forbidden write target: ${relPath}`);
+      }
 
       if (!fs.existsSync(targetFilePath)) {
         throw new Error(`Target file does not exist: ${relPath}`);
@@ -114,13 +174,14 @@ export async function applyPatchToWorkspace(
         // Line 1-based index in hunk.oldStart -> 0-based index
         const spliceIndex = Math.max(0, hunk.oldStart - 1);
         targetLines.splice(spliceIndex, removeCount, ...newLines);
+        totalHunksApplied++;
       }
 
       fs.writeFileSync(targetFilePath, targetLines.join('\n'), 'utf-8');
       modifiedFiles.push(relPath);
     }
 
-    return { success: true, modifiedFiles };
+    return { success: true, modifiedFiles, totalHunksApplied };
   } catch (err: any) {
     // Atomic rollback: restore all original file contents
     for (const [filePath, backupContent] of fileBackups.entries()) {
@@ -133,6 +194,7 @@ export async function applyPatchToWorkspace(
       success: false,
       error: `Patch application failed and was rolled back: ${err.message}`,
       modifiedFiles: [],
+      totalHunksApplied: 0,
     };
   }
 }
@@ -141,7 +203,7 @@ export async function applyPatchToWorkspace(
  * Removes the disposable workspace directory.
  */
 export async function cleanupDisposableWorkspace(workspaceDir: string): Promise<void> {
-  if (workspaceDir && workspaceDir.includes('disposable_') && fs.existsSync(workspaceDir)) {
+  if (workspaceDir && (workspaceDir.includes('disposable_') || workspaceDir.includes('worktree_')) && fs.existsSync(workspaceDir)) {
     try {
       fs.rmSync(workspaceDir, { recursive: true, force: true });
     } catch {}

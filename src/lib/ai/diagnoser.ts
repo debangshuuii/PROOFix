@@ -1,4 +1,4 @@
-import { TestResult, Finding, SystemSettings } from '../types/index.ts';
+import type { TestResult, Finding, SystemSettings } from '../types/index.ts';
 import type { StructuredDiagnosisPayload } from '../types/ai-diagnosis.ts';
 import { LlmJsonExtractor } from './llm-json-extractor.ts';
 import { callAnthropicDiagnosis } from './anthropic-diagnoser.ts';

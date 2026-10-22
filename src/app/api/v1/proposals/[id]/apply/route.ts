@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
-import fs from 'fs';
 import { db } from '@/lib/db';
 import { proposalsRegistry } from '../review/route';
-import { createDisposableWorkspace, applyPatchToWorkspace } from '@/lib/repair/workspace-isolation';
+import { createDisposableWorkspace } from '@/lib/repair/workspace-isolation';
+import { applyPatchWithJournal } from '@/lib/repair/atomic-patch-applier';
+import { PatchSyntaxValidator } from '@/lib/repair/patch-syntax-validator';
+import { SecurityPatchGuard } from '@/lib/repair/security-patch-guard';
 
 export async function POST(
   req: NextRequest,
@@ -43,6 +45,28 @@ export async function POST(
       );
     }
 
+    // AST and Security Pre-check
+    const primaryFile = proposal.affectedFiles[0] || 'page.tsx';
+    const syntaxReport = PatchSyntaxValidator.validate(proposal.proposedChanges, primaryFile);
+    if (!syntaxReport.valid) {
+      return NextResponse.json(
+        {
+          error: `Patch contains syntax errors: ${syntaxReport.errors.map((e: { message: string }) => e.message).join('; ')}`,
+        },
+        { status: 422 }
+      );
+    }
+
+    const secCheck = SecurityPatchGuard.scanPatch(proposal.proposedChanges, proposal.affectedFiles);
+    if (!secCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: `Patch contains prohibited security patterns: ${secCheck.violations.map((v: { message: string }) => v.message).join('; ')}`,
+        },
+        { status: 403 }
+      );
+    }
+
     const project = await db.getProjectById(proposal.projectId);
     const sourceDir = project?.localPath
       ? path.resolve(process.cwd(), project.localPath)
@@ -57,8 +81,12 @@ export async function POST(
       diff = diff.replace(/src\/fixtures\/sample-app\//g, '');
     }
 
-    // 3. Apply patch inside isolated workspace
-    const applyResult = await applyPatchToWorkspace(disposableWorkspace, diff);
+    // 3. Apply patch inside isolated workspace with transaction journal
+    const applyResult = await applyPatchWithJournal({
+      workspacePath: disposableWorkspace,
+      diffText: diff,
+      proposalId: id,
+    });
 
     if (!applyResult.success) {
       return NextResponse.json(
@@ -74,9 +102,10 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: 'Patch applied successfully in disposable workspace.',
+      message: 'Patch applied successfully in disposable workspace with transaction journal.',
       proposal,
       modifiedFiles: applyResult.modifiedFiles,
+      transactionId: applyResult.transactionId,
       workspacePath: disposableWorkspace,
     });
   } catch (err: any) {

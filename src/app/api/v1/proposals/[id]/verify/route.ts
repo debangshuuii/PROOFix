@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
-import path from 'path';
-import { db } from '@/lib/db';
 import { proposalsRegistry } from '../review/route';
+import { proveCandidatePatch } from '@/lib/repair/patch-prover';
+import { PatchSyntaxValidator } from '@/lib/repair/patch-syntax-validator';
+import { SecurityPatchGuard } from '@/lib/repair/security-patch-guard';
 
 export async function POST(
   req: NextRequest,
@@ -26,55 +27,34 @@ export async function POST(
     const start = Date.now();
     const workspace = proposal.appliedWorkspacePath;
 
-    // Read patched files to verify syntax and patched routes
-    let allChecksPassed = true;
-    let regressionDetected = false;
-    let verifiedChanges = 0;
+    // 1. AST Syntax Pre-validation
+    const primaryFile = proposal.affectedFiles[0] || 'page.tsx';
+    const syntaxReport = PatchSyntaxValidator.validate(proposal.proposedChanges, primaryFile);
+    const securityCheck = SecurityPatchGuard.scanPatch(proposal.proposedChanges, proposal.affectedFiles);
 
-    for (const relFile of proposal.affectedFiles) {
-      const cleanRel = relFile.replace('src/fixtures/sample-app/', '');
-      const filePath = path.join(workspace, cleanRel);
+    // 2. Execute isolated patch prover
+    const provingReport = await proveCandidatePatch({
+      proposal,
+      workspacePath: workspace,
+      targetCheckName: 'Route Link Integrity',
+      regressionCheckNames: ['Accessibility Audit', 'Layout Overflow', 'Syntax Compilation'],
+    });
 
-      if (!fs.existsSync(filePath)) {
-        allChecksPassed = false;
-        break;
-      }
+    const durationMs = Date.now() - start;
 
-      const content = fs.readFileSync(filePath, 'utf-8');
-
-      // Verification checks based on patch content
-      if (proposal.proposedChanges.includes('href="/about"')) {
-        if (content.includes('href="/about"') && !content.includes('href="/broken-route"')) {
-          verifiedChanges++;
-        } else {
-          allChecksPassed = false;
-        }
-      } else if (proposal.proposedChanges.includes('try {')) {
-        if (content.includes('try {') && content.includes('catch')) {
-          verifiedChanges++;
-        } else {
-          allChecksPassed = false;
-        }
-      } else {
-        verifiedChanges++;
-      }
-    }
-
-    const durationMs = Date.now() - start + 45; // Simulated execution latency
-
-    if (allChecksPassed && !regressionDetected) {
+    if (provingReport.outcome === 'verified_fix' && syntaxReport.valid && securityCheck.allowed) {
       proposal.validationStatus = 'verified';
       proposal.verificationOutcome = {
         status: 'passed',
-        summary: `Verified Fix: Target failure resolved across ${verifiedChanges} affected file(s). Zero regressions detected.`,
+        summary: `Verified Fix: Target failure resolved with zero regressions. AST syntax valid.`,
         durationMs,
         testedAt: new Date().toISOString(),
       };
-    } else if (regressionDetected) {
+    } else if (provingReport.outcome === 'regression_detected') {
       proposal.validationStatus = 'regression_detected';
       proposal.verificationOutcome = {
         status: 'partial',
-        summary: 'Partial improvement: Original check fixed, but secondary regression detected.',
+        summary: `Partial improvement: Target check resolved, but ${provingReport.regressionsCount} regression(s) detected in adjacent tests.`,
         durationMs,
         testedAt: new Date().toISOString(),
       };
@@ -82,7 +62,7 @@ export async function POST(
       proposal.validationStatus = 'invalid';
       proposal.verificationOutcome = {
         status: 'failed',
-        summary: 'Unsuccessful attempt: Original test failure persists in patched workspace.',
+        summary: provingReport.diagnostics || 'Unsuccessful attempt: Original test failure persists in patched workspace.',
         durationMs,
         testedAt: new Date().toISOString(),
       };
@@ -95,6 +75,9 @@ export async function POST(
       success: true,
       proposal,
       outcome: proposal.verificationOutcome,
+      astValid: syntaxReport.valid,
+      securitySafe: securityCheck.allowed,
+      provingReport,
     });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

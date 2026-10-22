@@ -315,5 +315,6 @@ export * from './navigation-crawler.ts';
 export * from './api-endpoint-agent.ts';
 export * from './interactive-ui-agent.ts';
 export * from './quality-auditing.ts';
+export * from './viewport-matrix-agent.ts';
 
 

@@ -320,3 +320,4 @@ export * from './interactive-ui-agent.ts';
 export * from './quality-auditing.ts';
 export * from './viewport-matrix-agent.ts';
 export * from './ai-diagnosis.ts';
+export * from './patch-proposal.ts';

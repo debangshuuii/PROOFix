@@ -1,12 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import {
+import type {
   EphemeralWorkspaceSnapshot,
   IsolationViolation,
   WorkspaceCleanupResult,
   WorkspaceSecurityPolicy,
-  DEFAULT_WORKSPACE_SECURITY_POLICY,
-} from '../types/repair-workspace';
+} from '../types/repair-workspace.ts';
+import { DEFAULT_WORKSPACE_SECURITY_POLICY } from '../types/repair-workspace.ts';
 
 const WORKSPACE_DATA_DIR = path.join(process.cwd(), 'data', 'ephemeral_workspaces');
 

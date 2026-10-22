@@ -12,6 +12,9 @@ import { extractInternalAnchors } from './route-crawler-agent';
 import { auditInternalRoute } from './dead-link-auditor';
 import { synthesizeDynamicRoute, isDynamicRoute } from './dynamic-route-synthesizer';
 import { captureNavigationTiming } from './navigation-timing-monitor';
+import { discoverApiEndpoints } from './api-endpoint-discoverer';
+import { validateApiResponse } from './api-response-validator';
+import { generateSyntheticPayload } from './api-payload-generator';
 
 
 export interface VerificationOptions {
@@ -351,61 +354,107 @@ export async function runPlaywrightVerification(
   });
 
   // -------------------------------------------------------------
-  // Test 4: API Endpoint Health Check (/api/data)
+  // Test 4: Backend Multi-Endpoint API Health & Contract Checks
   // -------------------------------------------------------------
-  const apiRoute = routes.find((r) => r.type === 'api' || r.path.startsWith('/api'));
-  if (apiRoute) {
+  const discoveredEndpoints = discoverApiEndpoints(routes);
+  const endpointsToCheck = discoveredEndpoints.length > 0
+    ? discoveredEndpoints.slice(0, 3)
+    : [
+        {
+          path: '/api/data',
+          methods: ['GET' as const],
+          timeoutMs: 8000,
+          expectedStatusMin: 200,
+          expectedStatusMax: 499,
+          allowEmptyBody: true,
+          detectStackTraces: true,
+          detectDatabaseErrors: true,
+          headers: { Accept: 'application/json, text/plain, */*' },
+        },
+      ];
+
+  if (endpointsToCheck.length > 0) {
     const t4Start = Date.now();
     const t4Steps: TestStep[] = [];
     let t4Status: 'passed' | 'failed' = 'passed';
-    let t4Actual = `Endpoint ${apiRoute.path} responded successfully with HTTP 200.`;
+    let t4Actual = 'Discovered backend API endpoints responded without crashing or leaking stack traces.';
     const t4Screenshot = `/artifacts/runs/${runId}/test_4_api.png`;
     let t4ErrorDetails: any = undefined;
 
-    log(`Executing Check 4: Backend API Health Check (${apiRoute.path})...`);
+    log(`Executing Check 4: Backend API Health Check (${endpointsToCheck.map((e) => e.path).join(', ')})...`);
 
-    try {
+    for (const ep of endpointsToCheck) {
+      const method = ep.methods[0] || 'GET';
+      const apiUrl = `${baseUrl}${ep.path.startsWith('/') ? ep.path : `/${ep.path}`}`;
+      const payload = generateSyntheticPayload(ep.path, method);
       const sStart = Date.now();
-      const apiUrl = `${baseUrl}${apiRoute.path}`;
-      const apiRes = await page.request.get(apiUrl);
-      const statusCode = apiRes.status();
 
-      t4Steps.push({
-        name: `Send GET ${apiRoute.path}`,
-        status: statusCode < 400 ? 'passed' : 'failed',
-        durationMs: Date.now() - sStart,
-      });
+      try {
+        const apiRes = await page.request.fetch(apiUrl, {
+          method,
+          headers: payload.headers,
+          data: payload.body,
+          timeout: ep.timeoutMs,
+        });
 
-      if (statusCode >= 400) {
-        t4Status = 'failed';
+        const statusCode = apiRes.status();
+        const statusText = apiRes.statusText();
         let bodyText = '';
         try {
           bodyText = await apiRes.text();
         } catch {}
 
-        t4Actual = `Endpoint ${apiRoute.path} returned HTTP ${statusCode} (${bodyText.slice(0, 100)})`;
-        t4ErrorDetails = {
-          message: `API request failed with HTTP ${statusCode}: ${bodyText.slice(0, 150)}`,
-          url: apiUrl,
-          stepFailed: `Send GET ${apiRoute.path}`,
-        };
-      }
+        const durationMs = Date.now() - sStart;
+        const validation = validateApiResponse(
+          ep.path,
+          method,
+          statusCode,
+          statusText,
+          bodyText,
+          durationMs
+        );
 
-      await page.screenshot({ path: path.join(artifactsDir, 'test_4_api.png') });
-    } catch (err: any) {
-      t4Status = 'failed';
-      t4Actual = `API request failed: ${err.message}`;
-      t4ErrorDetails = {
-        message: err.message,
-        url: `${baseUrl}${apiRoute.path}`,
-        stepFailed: `Send GET ${apiRoute.path}`,
-      };
+        t4Steps.push({
+          name: `Send ${method} ${ep.path} [${statusCode} ${statusText}]`,
+          status: validation.passed ? 'passed' : 'failed',
+          durationMs,
+          error: validation.error,
+        });
+
+        if (!validation.passed) {
+          t4Status = 'failed';
+          t4Actual = `Endpoint ${ep.path} returned HTTP ${statusCode} (${bodyText.slice(0, 100)})`;
+          t4ErrorDetails = {
+            message: validation.error || `API request failed with HTTP ${statusCode}: ${bodyText.slice(0, 150)}`,
+            url: apiUrl,
+            stepFailed: `Send ${method} ${ep.path}`,
+          };
+        }
+      } catch (err: any) {
+        t4Status = 'failed';
+        t4Actual = `API request to ${ep.path} failed: ${err.message}`;
+        t4ErrorDetails = {
+          message: err.message,
+          url: apiUrl,
+          stepFailed: `Send ${method} ${ep.path}`,
+        };
+        t4Steps.push({
+          name: `Send ${method} ${ep.path}`,
+          status: 'failed',
+          durationMs: Date.now() - sStart,
+          error: err.message,
+        });
+      }
     }
+
+    try {
+      await page.screenshot({ path: path.join(artifactsDir, 'test_4_api.png') }).catch(() => {});
+    } catch {}
 
     results.push({
       id: `res_${runId}_04`,
       runId,
-      name: `Backend API Health Check (${apiRoute.path})`,
+      name: `Backend API Health Check (${endpointsToCheck[0]?.path || '/api'})`,
       category: 'api_health',
       status: t4Status,
       durationMs: Date.now() - t4Start,

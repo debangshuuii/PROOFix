@@ -6,6 +6,14 @@ import { analyzeRepository } from '../analyzer';
 import { runPlaywrightVerification } from '../testing/playwright-engine';
 import { diagnoseFailure } from '../ai/diagnoser';
 import { VerificationRun, RunStatus } from '../types';
+import {
+  detectFramework,
+  detectPackageManager,
+  resolveSpawnConfig,
+} from './framework-resolver';
+import { allocatePort } from './port-allocator';
+import { awaitServerReadiness } from './readiness-probe';
+import { globalProcessWatchdog } from './process-watchdog';
 
 // Map of active execution runs and their child processes
 const activeProcesses = new Map<string, ChildProcess>();
@@ -40,17 +48,8 @@ function broadcastRunEvent(runId: string, event: any) {
 }
 
 export async function cancelExecutionRun(runId: string): Promise<boolean> {
-  const proc = activeProcesses.get(runId);
-  if (proc) {
-    try {
-      if (process.platform === 'win32' && proc.pid) {
-        spawn('taskkill', ['/pid', proc.pid.toString(), '/f', '/t']);
-      } else {
-        proc.kill('SIGTERM');
-      }
-    } catch {}
-    activeProcesses.delete(runId);
-  }
+  await globalProcessWatchdog.terminateTree(runId);
+  activeProcesses.delete(runId);
 
   const run = await db.getRunById(runId);
   if (run && (run.status === 'starting' || run.status === 'testing' || run.status === 'pending')) {
@@ -115,7 +114,16 @@ export async function executeVerificationRun(runId: string): Promise<void> {
     // -------------------------------------------------------------
     await setStatus('preparing');
     await log('Preparing execution environment...');
-    await log(`Assigned port: ${assignedPort} | Execution timeout: ${timeoutMs / 1000}s`);
+
+    const preferredPort = project.config.port || 4173;
+    const portAlloc = await allocatePort(preferredPort);
+    const assignedPort = portAlloc.allocatedPort;
+
+    if (portAlloc.reassigned) {
+      await log(`Port ${preferredPort} was occupied. Reassigned to available port ${assignedPort}.`);
+    } else {
+      await log(`Assigned port: ${assignedPort} | Execution timeout: ${timeoutMs / 1000}s`);
+    }
     await log('Security Policy: Unprivileged process context, environmental secret sanitization, restricted child process tree.');
 
     // -------------------------------------------------------------
@@ -127,53 +135,73 @@ export async function executeVerificationRun(runId: string): Promise<void> {
     let serverProcess: ChildProcess | null = null;
     let isServerReady = false;
 
-    // Check if port is already active (e.g. if developer is running dev server)
+    // Detect framework & resolve exact launcher parameters
+    const framework = detectFramework(targetDir);
+    const packageManager = detectPackageManager(targetDir);
+    const spawnConfig = resolveSpawnConfig({
+      workspaceDir: targetDir,
+      framework,
+      packageManager,
+      customStartupCommand: project.config.startupCommand,
+      customBuildCommand: project.config.buildCommand,
+      customInstallCommand: project.config.installCommand,
+      targetPort: assignedPort,
+      readinessPath: project.config.readinessPath || '/',
+      readinessTimeoutMs: Math.min(timeoutMs, 30000),
+      maxRetries: project.config.maxRetries || 2,
+    });
+
+    // Check if port is already active
     const alreadyActive = await checkPortReadiness('localhost', assignedPort, 1000);
 
     if (alreadyActive) {
       await log(`Existing server detected active on port ${assignedPort}. Attaching for verification...`);
       isServerReady = true;
     } else {
-      // Spawn application server process
-      await log(`Spawning process: npx next dev -p ${assignedPort}...`);
-      serverProcess = spawn(
-        process.platform === 'win32' ? 'npx.cmd' : 'npx',
-        ['next', 'dev', '-p', assignedPort.toString()],
+      await log(`Launching runtime (${spawnConfig.framework}): ${spawnConfig.executable} ${spawnConfig.args.join(' ')}`);
+      const child = spawn(
+        spawnConfig.executable,
+        spawnConfig.args,
         {
-          cwd: targetDir,
-          env: {
-            ...process.env,
-            PORT: assignedPort.toString(),
-            NODE_ENV: 'development',
-          },
-          shell: true,
+          cwd: spawnConfig.cwd,
+          env: spawnConfig.env as NodeJS.ProcessEnv,
+          shell: spawnConfig.shell,
         }
       );
+      serverProcess = child;
 
-      activeProcesses.set(runId, serverProcess);
+      activeProcesses.set(runId, child);
+      globalProcessWatchdog.register(
+        runId,
+        child,
+        spawnConfig.framework,
+        assignedPort,
+        `${spawnConfig.executable} ${spawnConfig.args.join(' ')}`,
+        timeoutMs
+      );
 
-      serverProcess.stdout?.on('data', (d) => {
+      child.stdout?.on('data', (d) => {
         const str = d.toString().trim();
         if (str) log(`[App Stdout] ${str}`);
       });
 
-      serverProcess.stderr?.on('data', (d) => {
+      child.stderr?.on('data', (d) => {
         const str = d.toString().trim();
         if (str) log(`[App Stderr] ${str}`);
       });
 
-      // Poll readiness probe
-      await log(`Awaiting readiness probe at http://localhost:${assignedPort}/...`);
-      const readyStart = Date.now();
 
-      while (Date.now() - readyStart < 25000) {
-        const ok = await checkPortReadiness('localhost', assignedPort, 1500);
-        if (ok) {
-          isServerReady = true;
-          break;
-        }
-        await new Promise((r) => setTimeout(r, 1000));
-      }
+      // Poll readiness probe using adaptive readiness probe
+      await log(`Awaiting readiness probe at http://localhost:${assignedPort}${spawnConfig.readinessPath}...`);
+      const probeResult = await awaitServerReadiness({
+        host: 'localhost',
+        port: assignedPort,
+        path: spawnConfig.readinessPath,
+        timeoutMs: Math.min(timeoutMs, 30000),
+        pollIntervalMs: 800,
+      });
+
+      isServerReady = probeResult.ready;
     }
 
     if (!isServerReady) {
@@ -294,15 +322,8 @@ function checkPortReadiness(host: string, port: number, timeoutMs: number): Prom
   });
 }
 
-function cleanupServer(runId: string, proc: ChildProcess | null) {
-  if (proc) {
-    try {
-      if (process.platform === 'win32' && proc.pid) {
-        spawn('taskkill', ['/pid', proc.pid.toString(), '/f', '/t']);
-      } else {
-        proc.kill('SIGTERM');
-      }
-    } catch {}
-    activeProcesses.delete(runId);
-  }
+async function cleanupServer(runId: string, proc: ChildProcess | null) {
+  await globalProcessWatchdog.terminateTree(runId);
+  activeProcesses.delete(runId);
 }
+

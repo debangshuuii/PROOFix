@@ -8,6 +8,11 @@ import {
   TestStep,
   DiscoveredRoute,
 } from '../types';
+import { extractInternalAnchors } from './route-crawler-agent';
+import { auditInternalRoute } from './dead-link-auditor';
+import { synthesizeDynamicRoute, isDynamicRoute } from './dynamic-route-synthesizer';
+import { captureNavigationTiming } from './navigation-timing-monitor';
+
 
 export interface VerificationOptions {
   runId: string;
@@ -168,67 +173,84 @@ export async function runPlaywrightVerification(
   });
 
   // -------------------------------------------------------------
-  // Test 2: Discovered Secondary Page Navigation (/about)
+  // Test 2: Discovered Secondary Page Navigation & Parameter Synthesis
   // -------------------------------------------------------------
-  const aboutRoute = routes.find((r) => r.path === '/about');
-  if (aboutRoute) {
-    const t2Start = Date.now();
-    const t2Steps: TestStep[] = [];
-    let t2Status: 'passed' | 'failed' = 'passed';
-    let t2Actual = 'Navigation to /about succeeded with 200 OK.';
-    const t2Screenshot = `/artifacts/runs/${runId}/test_2_about.png`;
+  const pageRoutes = routes.filter((r) => r.type === 'page' && r.path !== '/');
+  // Ensure we at least check /about or the primary discovered page
+  const targetRoutesToCheck = pageRoutes.length > 0
+    ? pageRoutes.slice(0, 4)
+    : [{ path: '/about', type: 'page' as const, fileSource: 'src/app/about/page.tsx', isDynamic: false }];
 
-    log('Executing Check 2: Route Navigation (/about)...');
+  const t2Start = Date.now();
+  const t2Steps: TestStep[] = [];
+  let t2Status: 'passed' | 'failed' = 'passed';
+  let t2Actual = 'Navigation to discovered route(s) succeeded with valid HTTP 200.';
+  const t2Screenshot = `/artifacts/runs/${runId}/test_2_about.png`;
+
+  log(`Executing Check 2: Dynamic Route Navigation (${targetRoutesToCheck.map((r) => r.path).join(', ')})...`);
+
+  for (const r of targetRoutesToCheck) {
+    const rawPath = r.path;
+    const { synthesizedRoute, substitutedTokens } = isDynamicRoute(rawPath)
+      ? synthesizeDynamicRoute(rawPath)
+      : { synthesizedRoute: rawPath, substitutedTokens: [] };
+
+    const targetUrl = `${baseUrl}${synthesizedRoute.startsWith('/') ? synthesizedRoute : `/${synthesizedRoute}`}`;
+    const sStart = Date.now();
 
     try {
-      const sStart = Date.now();
-      const targetUrl = `${baseUrl}/about`;
       const res = await page.goto(targetUrl, { timeout: 10000, waitUntil: 'domcontentloaded' });
+      const navTiming = await captureNavigationTiming(page, sStart);
+      const isOk = Boolean(res && res.status() < 400);
+
       t2Steps.push({
-        name: `Navigate to ${targetUrl}`,
-        status: res && res.status() < 400 ? 'passed' : 'failed',
+        name: `Navigate to ${synthesizedRoute}${substitutedTokens.length > 0 ? ` (Synthesized: ${substitutedTokens.join(', ')})` : ''} [${navTiming.domContentLoadedMs}ms]`,
+        status: isOk ? 'passed' : 'failed',
         durationMs: Date.now() - sStart,
       });
 
-      if (!res || res.status() >= 400) {
+      if (!isOk) {
         t2Status = 'failed';
-        t2Actual = `Route /about returned HTTP ${res?.status() || 'No Response'}`;
+        t2Actual = `Route ${synthesizedRoute} returned HTTP ${res?.status() || 'No Response'}`;
       }
 
-      await page.screenshot({ path: path.join(artifactsDir, 'test_2_about.png') });
+      // If this is the about route or first route, capture screenshot
+      if (rawPath === '/about' || r === targetRoutesToCheck[0]) {
+        await page.screenshot({ path: path.join(artifactsDir, 'test_2_about.png') }).catch(() => {});
+      }
     } catch (err: any) {
       t2Status = 'failed';
-      t2Actual = `Navigation to /about failed: ${err.message}`;
+      t2Actual = `Navigation to ${synthesizedRoute} failed: ${err.message}`;
       t2Steps.push({
-        name: 'Navigate to /about',
+        name: `Navigate to ${synthesizedRoute}`,
         status: 'failed',
-        durationMs: Date.now() - t2Start,
+        durationMs: Date.now() - sStart,
         error: err.message,
       });
     }
-
-    results.push({
-      id: `res_${runId}_02`,
-      runId,
-      name: 'Secondary Route Navigation (/about)',
-      category: 'route_discovery',
-      status: t2Status,
-      durationMs: Date.now() - t2Start,
-      actualResult: t2Actual,
-      failureCategory: t2Status === 'failed' ? 'navigation_failed' : undefined,
-      evidence: {
-        screenshotPath: t2Screenshot,
-        consoleErrors: [...globalConsoleErrors],
-        networkFailures: [...globalNetworkFailures],
-        steps: t2Steps,
-      },
-      startedAt: new Date(t2Start).toISOString(),
-      completedAt: new Date().toISOString(),
-    });
   }
 
+  results.push({
+    id: `res_${runId}_02`,
+    runId,
+    name: 'Secondary Route Navigation & Route Discovery',
+    category: 'route_discovery',
+    status: t2Status,
+    durationMs: Date.now() - t2Start,
+    actualResult: t2Actual,
+    failureCategory: t2Status === 'failed' ? 'navigation_failed' : undefined,
+    evidence: {
+      screenshotPath: t2Screenshot,
+      consoleErrors: [...globalConsoleErrors],
+      networkFailures: [...globalNetworkFailures],
+      steps: t2Steps,
+    },
+    startedAt: new Date(t2Start).toISOString(),
+    completedAt: new Date().toISOString(),
+  });
+
   // -------------------------------------------------------------
-  // Test 3: Dead Link & 404 Detection Check
+  // Test 3: Dead Link & 404 Detection Check with DOM Crawler Agent
   // -------------------------------------------------------------
   const t3Start = Date.now();
   const t3Steps: TestStep[] = [];
@@ -242,51 +264,48 @@ export async function runPlaywrightVerification(
   try {
     await page.goto(baseUrl, { timeout: 10000, waitUntil: 'domcontentloaded' });
 
-    // Collect all internal links
-    const links = await page.$$eval('a[href]', (anchors) =>
-      anchors.map((a) => a.getAttribute('href')).filter((h): h is string => Boolean(h && h.startsWith('/')))
-    );
+    // Use route crawler agent to extract valid internal anchor hyperlinks
+    const discoveredAnchors = await extractInternalAnchors(page, baseUrl);
 
     t3Steps.push({
-      name: `Discovered ${links.length} internal navigation link(s)`,
+      name: `Discovered ${discoveredAnchors.length} internal navigation link(s)`,
       status: 'passed',
       durationMs: 30,
     });
 
-    let foundBrokenLink: { link: string; status: number } | null = null;
+    let foundBrokenLink: { link: string; status: number; text?: string } | null = null;
 
-    for (const link of links) {
-      const targetUrl = `${baseUrl}${link}`;
+    for (const anchor of discoveredAnchors) {
       const linkCheckStart = Date.now();
-      try {
-        const linkRes = await page.request.get(targetUrl);
-        const code = linkRes.status();
+      const auditResult = await auditInternalRoute({
+        page,
+        baseUrl,
+        targetRoute: anchor.href,
+        sourceUrl: baseUrl,
+        anchorText: anchor.text,
+        artifactsDir,
+        timeoutMs: 6000,
+      });
 
-        if (code >= 400) {
-          foundBrokenLink = { link, status: code };
-          t3Steps.push({
-            name: `Verify target ${link}`,
-            status: 'failed',
-            durationMs: Date.now() - linkCheckStart,
-            error: `Target returned HTTP ${code} ${linkRes.statusText()}`,
-          });
-          break;
-        } else {
-          t3Steps.push({
-            name: `Verify target ${link} (${code} OK)`,
-            status: 'passed',
-            durationMs: Date.now() - linkCheckStart,
-          });
-        }
-      } catch (reqErr: any) {
-        foundBrokenLink = { link, status: 0 };
+      if (auditResult.check.isDeadLink) {
+        foundBrokenLink = {
+          link: anchor.href,
+          status: auditResult.check.httpStatus,
+          text: anchor.text,
+        };
         t3Steps.push({
-          name: `Verify target ${link}`,
+          name: `Verify target ${anchor.href}`,
           status: 'failed',
           durationMs: Date.now() - linkCheckStart,
-          error: reqErr.message,
+          error: `Target returned HTTP ${auditResult.check.httpStatus} ${auditResult.check.statusText}`,
         });
-        break;
+        break; // Trapped broken link!
+      } else {
+        t3Steps.push({
+          name: `Verify target ${anchor.href} (${auditResult.check.httpStatus} OK)`,
+          status: 'passed',
+          durationMs: Date.now() - linkCheckStart,
+        });
       }
     }
 
@@ -299,13 +318,12 @@ export async function runPlaywrightVerification(
         stepFailed: `Verify target ${foundBrokenLink.link}`,
       };
 
-      // Navigate to the broken link to capture screenshot of error state
       try {
         await page.goto(`${baseUrl}${foundBrokenLink.link}`, { timeout: 5000 }).catch(() => {});
-        await page.screenshot({ path: path.join(artifactsDir, 'test_3_broken.png') });
+        await page.screenshot({ path: path.join(artifactsDir, 'test_3_broken.png') }).catch(() => {});
       } catch {}
     } else {
-      await page.screenshot({ path: path.join(artifactsDir, 'test_3_broken.png') });
+      await page.screenshot({ path: path.join(artifactsDir, 'test_3_broken.png') }).catch(() => {});
     }
   } catch (err: any) {
     t3Status = 'failed';

@@ -277,10 +277,13 @@ export interface RunComparison {
 }
 
 export interface SystemSettings {
-  aiProvider: 'gemini' | 'openai' | 'anthropic' | 'offline';
+  aiProvider: 'gemini' | 'openai' | 'anthropic' | 'offline' | 'local_ollama' | 'local_vllm';
   geminiApiKey?: string;
   openaiApiKey?: string;
   anthropicApiKey?: string;
+  anthropicModel?: string;
+  localAiBaseUrl?: string;
+  localAiModel?: string;
   githubToken?: string;
   sandboxMemoryLimitMb: number;
   sandboxTimeoutSecs: number;

@@ -1,37 +1,84 @@
-import { TestResult, Finding, SystemSettings } from '../types';
+import { TestResult, Finding, SystemSettings } from '../types/index.ts';
+import type { StructuredDiagnosisPayload } from '../types/ai-diagnosis.ts';
+import { LlmJsonExtractor } from './llm-json-extractor.ts';
+import { callAnthropicDiagnosis } from './anthropic-diagnoser.ts';
+import { callLocalAiDiagnosis } from './local-ai-diagnoser.ts';
 
 export interface DiagnosisRequest {
   runId: string;
   testResult: TestResult;
   projectStack?: string;
   settings: SystemSettings;
+  mockFetch?: typeof fetch;
 }
 
 export async function diagnoseFailure(request: DiagnosisRequest): Promise<Finding> {
-  const { runId, testResult, projectStack = 'Next.js', settings } = request;
+  const { runId, testResult, projectStack = 'Next.js', settings, mockFetch } = request;
+  const fetchImpl = mockFetch || fetch;
 
-  // If an external AI provider key is configured, we can query it with strict schemas
-  if (settings.aiProvider === 'gemini' && settings.geminiApiKey) {
+  // 1. Anthropic Claude Diagnosis
+  if (settings.aiProvider === 'anthropic' && settings.anthropicApiKey) {
     try {
-      return await callGeminiDiagnosis(request);
+      return await callAnthropicDiagnosis({
+        runId,
+        testResult,
+        config: {
+          apiKey: settings.anthropicApiKey,
+          model: settings.anthropicModel || 'claude-3-5-sonnet-20241022',
+          maxTokens: 2500,
+          temperature: 0.1,
+        },
+        fetchImpl,
+      });
     } catch (err: any) {
-      console.warn('Gemini diagnosis failed, falling back to deterministic rule engine:', err.message);
-    }
-  } else if (settings.aiProvider === 'openai' && settings.openaiApiKey) {
-    try {
-      return await callOpenAIDiagnosis(request);
-    } catch (err: any) {
-      console.warn('OpenAI diagnosis failed, falling back to deterministic rule engine:', err.message);
+      console.warn('Anthropic diagnosis failed, attempting provider fallback:', err.message);
     }
   }
 
-  // Built-in Deterministic Rule-Based Evidence Diagnoser (Offline Fallback)
+  // 2. Google Gemini Diagnosis
+  if (settings.aiProvider === 'gemini' && settings.geminiApiKey) {
+    try {
+      return await callGeminiDiagnosis(request, fetchImpl);
+    } catch (err: any) {
+      console.warn('Gemini diagnosis failed, attempting provider fallback:', err.message);
+    }
+  }
+
+  // 3. OpenAI Diagnosis
+  if (settings.aiProvider === 'openai' && settings.openaiApiKey) {
+    try {
+      return await callOpenAIDiagnosis(request, fetchImpl);
+    } catch (err: any) {
+      console.warn('OpenAI diagnosis failed, attempting provider fallback:', err.message);
+    }
+  }
+
+  // 4. Local Air-Gapped AI (Ollama / vLLM)
+  if (settings.aiProvider === ('local_ollama' as any) || settings.aiProvider === ('local_vllm' as any)) {
+    try {
+      return await callLocalAiDiagnosis({
+        runId,
+        testResult,
+        config: {
+          baseUrl: settings.localAiBaseUrl || 'http://localhost:11434/v1',
+          modelName: settings.localAiModel || 'llama3.2:latest',
+          timeoutMs: 30000,
+          temperature: 0.1,
+        },
+        fetchImpl,
+      });
+    } catch (err: any) {
+      console.warn('Local AI diagnosis failed, falling back to deterministic rule engine:', err.message);
+    }
+  }
+
+  // 5. Built-in Deterministic Rule-Based Evidence Diagnoser (Zero-Dependency Offline Fallback)
   // This engine inspects the actual observed evidence (status, URL, error message, console logs)
   // and generates factual, reliable diagnoses without hallucinations.
   return generateDeterministicFinding(runId, testResult, projectStack);
 }
 
-function generateDeterministicFinding(
+export function generateDeterministicFinding(
   runId: string,
   test: TestResult,
   projectStack: string
@@ -104,61 +151,53 @@ function generateDeterministicFinding(
 
   // 3. Uncaught JavaScript Exception
   if (test.failureCategory === 'uncaught_js_exception' || test.evidence.consoleErrors.some((e) => e.type === 'exception')) {
-    const firstErr = test.evidence.consoleErrors.find((e) => e.type === 'exception') || test.evidence.consoleErrors[0];
+    const exceptionText = test.evidence.consoleErrors.find((e) => e.type === 'exception')?.text || test.actualResult;
+    const location = test.evidence.consoleErrors.find((e) => e.type === 'exception')?.location || 'Unknown component';
+
     return {
       id: findingId,
       runId,
       testResultId: test.id,
       severity: 'critical',
-      title: `Uncaught Client-Side JavaScript Exception`,
-      description: `The browser encountered an unhandled JavaScript exception during execution.`,
-      observedEvidence: `Observed uncaught error: "${firstErr?.text || 'Uncaught TypeError'}". Location: ${firstErr?.location || 'unknown'}.`,
-      aiHypothesis: `Probable causes: (1) Attempting to access properties or methods on an undefined object, (2) Failing to check if third-party SDKs or window globals are initialized before calling them, or (3) Missing optional chaining (?.) on nullable props.`,
-      suggestedFix: `Add defensive null-checks or optional chaining (?.) before accessing nested properties, and wrap risky browser-only integrations inside React useEffect or typeof window !== 'undefined' checks.`,
-      patchPreview: `--- a/src/components/ClientWidget.tsx
-+++ b/src/components/ClientWidget.tsx
-@@ -14,3 +14,3 @@
--  window.targetSdk.initialize();
-+  if (typeof window !== 'undefined' && window.targetSdk) {
-+    window.targetSdk.initialize?.();
-+  }`,
-      affectedFiles: ['src/components/ClientWidget.tsx'],
-      sideEffects: 'Guards against fatal white-screen application crashes.',
-      verificationStep: 'Re-run PROOFix Console & JS Exception Watchdog check.',
-      confidenceScore: 96,
+      title: `Uncaught Client-Side Exception in ${location}`,
+      description: `A JavaScript runtime exception caused rendering to abort or triggered an error boundary.`,
+      observedEvidence: `Browser captured uncaught error: "${exceptionText}" at ${location}.`,
+      aiHypothesis: `Probable causes: (1) Null or undefined property dereference during component mounting, (2) Failure to check API response structure before accessing nested properties, or (3) Server-Side Rendering hydration mismatch.`,
+      suggestedFix: `Use optional chaining (e.g. data?.user?.name) and provide explicit fallback states for asynchronous data. Implement React Error Boundaries around volatile components.`,
+      patchPreview: `--- a/src/components/UserProfile.tsx
++++ b/src/components/UserProfile.tsx
+@@ -12,3 +12,3 @@
+-<span>{profile.user.displayName}</span>
++<span>{profile?.user?.displayName || 'Anonymous Guest'}</span>`,
+      affectedFiles: ['src/components/UserProfile.tsx', 'src/app/page.tsx'],
+      sideEffects: 'Prevents blank white-screen crashes when profile data is incomplete.',
+      verificationStep: 'Re-run PROOFix User Flow suite to verify smooth rendering.',
+      confidenceScore: 95,
       reviewStatus: 'pending',
       createdAt: now,
     };
   }
 
-  // 4. Responsive / Layout Overflow
-  if (test.failureCategory === 'layout_overflow' || test.actualResult.includes('overflow')) {
+  // 4. Responsive Layout Overflow
+  if (test.failureCategory === 'layout_overflow') {
     return {
       id: findingId,
       runId,
       testResultId: test.id,
       severity: 'medium',
-      title: `Responsive Layout Horizontal Overflow Detected`,
-      description: `The application page width exceeds the viewport width on mobile screen dimensions (375px), causing unintentional horizontal scrolling.`,
-      observedEvidence: `Observed document.documentElement.scrollWidth > window.innerWidth at mobile viewport.`,
-      aiHypothesis: `Probable causes: (1) Elements with fixed pixel widths (e.g., width: 600px instead of max-w-full), (2) Negative margins or unconstrained pre/code tags without overflow-x-auto, or (3) Images missing responsive max-width rules.`,
-      suggestedFix: `Replace fixed pixel widths with responsive Tailwind classes (w-full, max-w-full, overflow-x-hidden, or overflow-x-auto on tables/code blocks).`,
-      patchPreview: `--- a/src/app/globals.css
-+++ b/src/app/globals.css
-@@ -20,2 +20,4 @@
-+html, body {
-+  overflow-x: hidden;
-+}`,
+      title: `Horizontal Scroll Overflow on Viewport`,
+      description: `DOM elements exceed the viewport width, creating unintended horizontal scrolling.`,
+      observedEvidence: test.actualResult,
+      aiHypothesis: `Probable causes: (1) Hardcoded pixel widths (e.g. w-[600px]) on containers without max-width constraints, or (2) Unwrapped pre/code blocks with long lines.`,
+      suggestedFix: `Apply max-w-full and overflow-x-hidden to outer wrappers, and use relative flex or grid widths.`,
       affectedFiles: ['src/app/globals.css', 'src/app/page.tsx'],
-      sideEffects: 'Eliminates unexpected horizontal scroll on mobile devices.',
-      verificationStep: 'Re-run PROOFix Responsive Viewport Audit.',
       confidenceScore: 88,
       reviewStatus: 'pending',
       createdAt: now,
     };
   }
 
-  // Generic fallback
+  // 5. Default General Failure Diagnosis
   return {
     id: findingId,
     runId,
@@ -175,7 +214,10 @@ function generateDeterministicFinding(
   };
 }
 
-async function callGeminiDiagnosis(request: DiagnosisRequest): Promise<Finding> {
+async function callGeminiDiagnosis(
+  request: DiagnosisRequest,
+  fetchImpl: typeof fetch
+): Promise<Finding> {
   const { runId, testResult, settings } = request;
   const apiKey = settings.geminiApiKey;
 
@@ -205,7 +247,7 @@ Provide your analysis in JSON with these keys:
   "confidenceScore": number (0 to 100)
 }`;
 
-  const response = await fetch(
+  const response = await fetchImpl(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
     {
       method: 'POST',
@@ -223,10 +265,17 @@ Provide your analysis in JSON with these keys:
 
   const json = await response.json();
   const rawText = json.candidates?.[0]?.content?.parts?.[0]?.text;
-  const parsed = JSON.parse(rawText);
+
+  // Use resilient JSON extraction to defend against markdown fences
+  const extraction = LlmJsonExtractor.extract<StructuredDiagnosisPayload>(rawText);
+  if (!extraction.success || !extraction.data) {
+    throw new Error(`Failed to extract valid JSON from Gemini output: ${extraction.parseError}`);
+  }
+
+  const parsed = extraction.data;
 
   return {
-    id: `fnd_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    id: `fnd_gemini_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
     runId,
     testResultId: testResult.id,
     severity: parsed.severity || 'high',
@@ -245,7 +294,10 @@ Provide your analysis in JSON with these keys:
   };
 }
 
-async function callOpenAIDiagnosis(request: DiagnosisRequest): Promise<Finding> {
+async function callOpenAIDiagnosis(
+  request: DiagnosisRequest,
+  fetchImpl: typeof fetch
+): Promise<Finding> {
   const { runId, testResult, settings } = request;
   const apiKey = settings.openaiApiKey;
 
@@ -255,7 +307,7 @@ ACTUAL: ${testResult.actualResult}
 ERROR: ${JSON.stringify(testResult.errorDetails || {})}
 CONSOLE: ${JSON.stringify(testResult.evidence.consoleErrors || [])}`;
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+  const response = await fetchImpl('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -277,10 +329,17 @@ CONSOLE: ${JSON.stringify(testResult.evidence.consoleErrors || [])}`;
 
   const json = await response.json();
   const content = json.choices?.[0]?.message?.content;
-  const parsed = JSON.parse(content);
+
+  // Use resilient JSON extraction to handle formatting variances
+  const extraction = LlmJsonExtractor.extract<StructuredDiagnosisPayload>(content);
+  if (!extraction.success || !extraction.data) {
+    throw new Error(`Failed to extract valid JSON from OpenAI output: ${extraction.parseError}`);
+  }
+
+  const parsed = extraction.data;
 
   return {
-    id: `fnd_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    id: `fnd_openai_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
     runId,
     testResultId: testResult.id,
     severity: parsed.severity || 'high',

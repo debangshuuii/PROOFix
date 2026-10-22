@@ -14,18 +14,24 @@ import {
   cleanupEphemeralWorkspace,
   type EphemeralWorkspace,
 } from './ephemeral-workspace.ts';
-import { applyPatchAtomically } from './patch-applier.ts';
-import { provePatchFix, type VerificationCheckRunner } from './patch-prover.ts';
+import { applyPatchWithJournal } from './atomic-patch-applier.ts';
+import { rollbackTransaction } from './rollback-manager.ts';
+import { proveCandidatePatch, type VerificationCheckRunner } from './patch-prover.ts';
+import { evaluateSelfHealingGate, recordHealingAttempt } from './policy-gatekeeper.ts';
+import { publishSelfHealingPullRequest } from './github-publisher.ts';
+import type { PatchTransactionJournal } from '../types/patch-transaction.ts';
 
 export interface HealingRunResult {
   session: SelfHealingSession;
   converged: boolean;
   finalPatchDiff?: string;
   verifiedFiles: string[];
+  journal?: PatchTransactionJournal;
 }
 
 /**
- * Orchestrates multi-iteration autonomous self-healing loop.
+ * Orchestrates multi-iteration autonomous self-healing loop with AST verification,
+ * policy gatekeeping, and rollback journal recovery.
  */
 export async function runSelfHealingLoop(
   testResult: TestResult,
@@ -67,6 +73,7 @@ export async function runSelfHealingLoop(
   let workspace: EphemeralWorkspace | null = null;
   let converged = false;
   let finalPatchDiff: string | undefined = undefined;
+  let lastJournal: PatchTransactionJournal | undefined = undefined;
   const verifiedFiles: string[] = [];
 
   try {
@@ -90,7 +97,21 @@ export async function runSelfHealingLoop(
       const proposal = generateSurgicalPatch(failureCtx, projectId, runId, commitSha);
       log(`Generated proposal ${proposal.id} (confidence: ${proposal.confidenceScore}%)`);
 
-      // 3. Policy Check
+      // 3. Evaluate Policy & Risk Gatekeeper
+      const gateResult = evaluateSelfHealingGate({
+        projectId,
+        diffText: proposal.proposedChanges,
+        confidenceScore: proposal.confidenceScore,
+        mode: config.mode,
+      });
+
+      if (gateResult.permitAction === 'blocked') {
+        log(`Gatekeeper blocked patch: ${gateResult.rateLimitStatus.reason || 'Rate limit or policy violation'}`);
+        session.status = 'aborted';
+        session.finalOutcome = 'policy_blocked';
+        break;
+      }
+
       const policyCheck = evaluateSelfHealingEligibility(proposal, config);
       if (!policyCheck.allowed) {
         log(`Policy blocked proposal: ${policyCheck.reasons.join('; ')}`);
@@ -102,24 +123,31 @@ export async function runSelfHealingLoop(
       // 4. Snapshot Workspace
       const snapshot = createWorkspaceSnapshot(workspace.workspacePath, proposal.affectedFiles, `iter_${iter}`);
 
-      // 5. Apply Patch Atomically
+      // 5. Apply Patch Atomically with Transaction Journal
       session.status = 'applying_patch';
-      const applyResult = applyPatchAtomically(workspace.workspacePath, proposal.proposedChanges);
+      const applyResult = await applyPatchWithJournal({
+        workspacePath: workspace.workspacePath,
+        diffText: proposal.proposedChanges,
+        proposalId: proposal.id,
+      });
+
+      lastJournal = applyResult.journal;
+
       if (!applyResult.success) {
-        log(`Patch application failed: ${applyResult.conflictErrors.join('; ')}`);
+        log(`Patch application failed: ${applyResult.error}`);
         rollbackWorkspace(workspace.workspacePath, snapshot);
         continue;
       }
 
-      // 6. Prove Patch Fix
+      // 6. Prove Patch Fix in Isolated Workspace
       session.status = 'verifying_patch';
-      const provingReport = await provePatchFix(
+      const provingReport = await proveCandidatePatch({
         proposal,
-        workspace.workspacePath,
-        testResult.name,
-        adjacentCheckNames,
-        runner
-      );
+        workspacePath: workspace.workspacePath,
+        targetCheckName: testResult.name,
+        regressionCheckNames: adjacentCheckNames,
+        runner,
+      });
 
       log(`Proving outcome: ${provingReport.outcome} (${provingReport.diagnostics})`);
 
@@ -127,10 +155,17 @@ export async function runSelfHealingLoop(
         iterationNumber: iter,
         proposalId: proposal.id,
         diffSummary: proposal.explanation,
-        verificationStatus: provingReport.outcome === 'verified_fix' ? 'passed' : provingReport.outcome === 'regression_detected' ? 'regression' : 'failed',
+        verificationStatus:
+          provingReport.outcome === 'verified_fix'
+            ? 'passed'
+            : provingReport.outcome === 'regression_detected'
+            ? 'regression'
+            : 'failed',
         verificationDurationMs: provingReport.durationMs,
         failingChecksResolved: provingReport.failingCheckResolved ? [testResult.name] : [],
-        newFailuresIntroduced: provingReport.regressionCheckResults.filter((r) => r.status === 'failed').map((r) => r.name),
+        newFailuresIntroduced: provingReport.regressionCheckResults
+          .filter((r) => r.passed === false || r.status === 'failed')
+          .map((r) => r.name),
         diagnostics: provingReport.diagnostics,
         timestamp: new Date().toISOString(),
       };
@@ -139,14 +174,41 @@ export async function runSelfHealingLoop(
       if (provingReport.outcome === 'verified_fix') {
         converged = true;
         finalPatchDiff = proposal.proposedChanges;
-        verifiedFiles.push(...applyResult.appliedFiles);
+        verifiedFiles.push(...applyResult.modifiedFiles, ...applyResult.createdFiles);
         session.status = 'completed';
         session.finalOutcome = 'verified_fix';
+        recordHealingAttempt(projectId, 'success');
         log(`Convergence achieved on iteration ${iter}! Patch verified successfully.`);
+
+        // 7. Auto-Publish Pull Request if fully autonomous mode
+        if (config.mode === 'fully_autonomous' && config.createDraftPullRequest) {
+          session.status = 'publishing_pr';
+          log('Publishing automated verified fix Pull Request to GitHub repository...');
+          const prResult = await publishSelfHealingPullRequest(
+            session,
+            proposal,
+            {
+              repoOwner: 'debangshuuii',
+              repoName: 'PROOFix',
+            },
+            provingReport
+          );
+
+          if (prResult.success) {
+            session.pullRequestUrl = prResult.pullRequestUrl;
+            session.pullRequestNumber = prResult.pullRequestNumber;
+            session.gitBranch = prResult.branchName;
+            log(`Pull request successfully created: ${prResult.pullRequestUrl}`);
+          } else {
+            log(`Note: Pull request could not be opened automatically: ${prResult.error}`);
+          }
+        }
+
         break;
       } else {
         // Rollback workspace for next iteration attempt
-        log(`Reverting workspace to snapshot iter_${iter} for diagnostic refinement.`);
+        log(`Reverting workspace for next iteration refinement.`);
+        await rollbackTransaction(applyResult.journal, 'Verification failed in iteration attempt');
         rollbackWorkspace(workspace.workspacePath, snapshot);
 
         // Feed back diagnostic failure info into currentFailureResult for next iteration
@@ -163,11 +225,11 @@ export async function runSelfHealingLoop(
     if (!converged && session.status !== 'aborted') {
       session.status = 'failed';
       session.finalOutcome = 'unfixable';
+      recordHealingAttempt(projectId, 'failure');
       log(`Self-healing exhausted all ${config.maxIterations} iterations without convergence.`);
     }
   } finally {
     if (workspace && converged === false) {
-      // Clean up workspace if not converged
       await cleanupEphemeralWorkspace(workspace.workspacePath);
     }
     session.updatedAt = new Date().toISOString();
@@ -178,5 +240,6 @@ export async function runSelfHealingLoop(
     converged,
     finalPatchDiff,
     verifiedFiles,
+    journal: lastJournal,
   };
 }

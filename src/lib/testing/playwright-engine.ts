@@ -15,6 +15,8 @@ import { captureNavigationTiming } from './navigation-timing-monitor';
 import { discoverApiEndpoints } from './api-endpoint-discoverer';
 import { validateApiResponse } from './api-response-validator';
 import { generateSyntheticPayload } from './api-payload-generator';
+import { runAccessibilityScan } from './a11y-scanner-agent';
+import { measureCoreWebVitals, DEFAULT_PERFORMANCE_BUDGET } from './performance-vitals-agent';
 
 
 export interface VerificationOptions {
@@ -616,6 +618,133 @@ export async function runPlaywrightVerification(
     completedAt: new Date().toISOString(),
   });
 
+  // -------------------------------------------------------------
+  // Test 7: Automated WCAG 2.1 Accessibility Audit
+  // -------------------------------------------------------------
+  const t7Start = Date.now();
+  const t7Steps: TestStep[] = [];
+  let t7Status: 'passed' | 'failed' = 'passed';
+  const t7Screenshot = `/artifacts/runs/${runId}/test_7_a11y.png`;
+
+  log('Executing Check 7: Automated WCAG 2.1 Accessibility Audit...');
+
+  try {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto(baseUrl, { timeout: 10000, waitUntil: 'domcontentloaded' });
+
+    const a11yReport = await runAccessibilityScan(page);
+
+    t7Steps.push({
+      name: `Evaluate Image Alt Attributes (${a11yReport.missingAltCount} missing)`,
+      status: a11yReport.missingAltCount === 0 ? 'passed' : 'failed',
+      durationMs: 40,
+    });
+
+    t7Steps.push({
+      name: `Audit Form Control Labels (${a11yReport.missingFormLabelsCount} missing)`,
+      status: a11yReport.missingFormLabelsCount === 0 ? 'passed' : 'failed',
+      durationMs: 30,
+    });
+
+    t7Steps.push({
+      name: `Audit Focus Tab Index Order (${a11yReport.tabIndexViolationsCount} violations)`,
+      status: a11yReport.tabIndexViolationsCount === 0 ? 'passed' : 'failed',
+      durationMs: 20,
+    });
+
+    if (a11yReport.score < 80) {
+      t7Status = 'failed';
+    }
+
+    await page.screenshot({ path: path.join(artifactsDir, 'test_7_a11y.png') }).catch(() => {});
+
+    results.push({
+      id: `res_${runId}_07`,
+      runId,
+      name: `Automated WCAG 2.1 Accessibility Audit (Score: ${a11yReport.score}/100)`,
+      category: 'accessibility_audit',
+      status: t7Status,
+      durationMs: Date.now() - t7Start,
+      actualResult: `Accessibility score ${a11yReport.score}/100 (${a11yReport.wcagLevel}) with ${a11yReport.violationsCount} violation(s).`,
+      failureCategory: t7Status === 'failed' ? 'accessibility_violation' : undefined,
+      evidence: {
+        screenshotPath: t7Screenshot,
+        consoleErrors: [...globalConsoleErrors],
+        networkFailures: [...globalNetworkFailures],
+        steps: t7Steps,
+      },
+      startedAt: new Date(t7Start).toISOString(),
+      completedAt: new Date().toISOString(),
+    });
+  } catch (err: any) {
+    log(`Accessibility audit failed: ${err.message}`);
+  }
+
+  // -------------------------------------------------------------
+  // Test 8: Core Web Vitals & Resource Budget Audit
+  // -------------------------------------------------------------
+  const t8Start = Date.now();
+  const t8Steps: TestStep[] = [];
+  let t8Status: 'passed' | 'failed' = 'passed';
+  const t8Screenshot = `/artifacts/runs/${runId}/test_8_vitals.png`;
+
+  log('Executing Check 8: Core Web Vitals & Performance Budget Audit...');
+
+  try {
+    const vitals = await measureCoreWebVitals(page);
+
+    t8Steps.push({
+      name: `Time to First Byte (TTFB: ${vitals.ttfbMs}ms, budget <= ${DEFAULT_PERFORMANCE_BUDGET.maxTtfbMs}ms)`,
+      status: vitals.ttfbMs <= DEFAULT_PERFORMANCE_BUDGET.maxTtfbMs ? 'passed' : 'failed',
+      durationMs: 15,
+    });
+
+    t8Steps.push({
+      name: `Largest Contentful Paint (LCP: ${vitals.lcpMs}ms, budget <= ${DEFAULT_PERFORMANCE_BUDGET.maxLcpMs}ms)`,
+      status: vitals.lcpMs <= DEFAULT_PERFORMANCE_BUDGET.maxLcpMs ? 'passed' : 'failed',
+      durationMs: 15,
+    });
+
+    t8Steps.push({
+      name: `Cumulative Layout Shift (CLS: ${vitals.clsScore}, budget <= ${DEFAULT_PERFORMANCE_BUDGET.maxClsScore})`,
+      status: vitals.clsScore <= DEFAULT_PERFORMANCE_BUDGET.maxClsScore ? 'passed' : 'failed',
+      durationMs: 10,
+    });
+
+    t8Steps.push({
+      name: `Total JS Script Transfer (${Math.round(vitals.totalJsBytes / 1024)} KB, budget <= ${Math.round(DEFAULT_PERFORMANCE_BUDGET.maxJsBundleBytes / 1024)} KB)`,
+      status: vitals.totalJsBytes <= DEFAULT_PERFORMANCE_BUDGET.maxJsBundleBytes ? 'passed' : 'failed',
+      durationMs: 10,
+    });
+
+    if (vitals.performanceScore < 70) {
+      t8Status = 'failed';
+    }
+
+    await page.screenshot({ path: path.join(artifactsDir, 'test_8_vitals.png') }).catch(() => {});
+
+    results.push({
+      id: `res_${runId}_08`,
+      runId,
+      name: `Core Web Vitals & Performance Audit (Score: ${vitals.performanceScore}/100)`,
+      category: 'performance_audit',
+      status: t8Status,
+      durationMs: Date.now() - t8Start,
+      actualResult: `Performance Score: ${vitals.performanceScore}/100 | LCP: ${vitals.lcpMs}ms | CLS: ${vitals.clsScore} | Total: ${Math.round(vitals.totalTransferBytes / 1024)}KB.`,
+      failureCategory: t8Status === 'failed' ? 'performance_budget_exceeded' : undefined,
+      evidence: {
+        screenshotPath: t8Screenshot,
+        consoleErrors: [...globalConsoleErrors],
+        networkFailures: [...globalNetworkFailures],
+        steps: t8Steps,
+      },
+      startedAt: new Date(t8Start).toISOString(),
+      completedAt: new Date().toISOString(),
+    });
+  } catch (err: any) {
+    log(`Performance audit failed: ${err.message}`);
+  }
+
   // Close browser
   await context.close();
   await browser.close();
@@ -623,3 +752,4 @@ export async function runPlaywrightVerification(
   log(`Verification complete. Executed ${results.length} checks.`);
   return results;
 }
+

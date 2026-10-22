@@ -123,38 +123,40 @@ export async function proveCandidatePatch(params: {
   const config = { ...DEFAULT_PROVER_CONFIG, ...params.config };
   const regressionChecks = (params.regressionCheckNames || []).slice(0, config.maxRegressionChecks);
 
+  let report: PatchProvingReport;
+
   // If a custom runner is provided, adapt to provePatchFix
   if (params.runner) {
-    return provePatchFix(
+    report = await provePatchFix(
       params.proposal as FixProposal,
       params.workspacePath,
       params.targetCheckName,
       regressionChecks,
       params.runner
     );
+  } else {
+    // Default isolated execution runner
+    const defaultRunner: VerificationCheckRunner = {
+      runCheck: async (checkName: string, wsPath: string) => {
+        const res = await executeCheckInWorkspace(checkName, wsPath, {
+          timeoutMs: config.maxTimeoutMs,
+        });
+        return {
+          passed: res.passed,
+          message: res.passed ? res.stdout || 'Passed' : res.errorMessage || res.stderr || 'Failed',
+          durationMs: res.durationMs,
+        };
+      },
+    };
+
+    report = await provePatchFix(
+      params.proposal as FixProposal,
+      params.workspacePath,
+      params.targetCheckName,
+      regressionChecks,
+      defaultRunner
+    );
   }
-
-  // Default isolated execution runner
-  const defaultRunner: VerificationCheckRunner = {
-    runCheck: async (checkName: string, wsPath: string) => {
-      const res = await executeCheckInWorkspace(checkName, wsPath, {
-        timeoutMs: config.maxTimeoutMs,
-      });
-      return {
-        passed: res.passed,
-        message: res.passed ? res.stdout || 'Passed' : res.errorMessage || res.stderr || 'Failed',
-        durationMs: res.durationMs,
-      };
-    },
-  };
-
-  const report = await provePatchFix(
-    params.proposal as FixProposal,
-    params.workspacePath,
-    params.targetCheckName,
-    regressionChecks,
-    defaultRunner
-  );
 
   report.candidateId = (params.proposal as any).candidateId;
   report.verifiedWorkspaceId = params.workspacePath;

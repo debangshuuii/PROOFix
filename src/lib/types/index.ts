@@ -322,3 +322,4 @@ export * from './viewport-matrix-agent.ts';
 export * from './ai-diagnosis.ts';
 export * from './patch-proposal.ts';
 export * from './repair-workspace.ts';
+export * from './patch-prover.ts';

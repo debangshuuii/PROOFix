@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CommandAction, NavigationCategory } from '@/lib/types/navigation-palette';
 import { globalCommandIndexer } from '@/lib/navigation/command-indexer';
+import { PaletteApiLoader } from '@/lib/navigation/palette-api-loader';
 import {
   Search,
   LayoutDashboard,
@@ -66,10 +67,20 @@ export function CommandPaletteModal({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<NavigationCategory | undefined>();
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [dataVersion, setDataVersion] = useState<number>(0);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isModalOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+
+  // Refresh dynamic entities from API on open
+  useEffect(() => {
+    if (isModalOpen) {
+      PaletteApiLoader.refreshIfStale().then(() => {
+        setDataVersion((v) => v + 1);
+      });
+    }
+  }, [isModalOpen]);
 
   const handleClose = () => {
     if (controlledOnClose) {
@@ -108,7 +119,9 @@ export function CommandPaletteModal({
     }
   }, [isModalOpen]);
 
-  const actions = globalCommandIndexer.search(searchQuery, selectedCategory);
+  const actions = useMemo(() => {
+    return globalCommandIndexer.search(searchQuery, selectedCategory);
+  }, [searchQuery, selectedCategory, dataVersion]);
 
   // Arrow key & keyboard navigation with Home/End and Tab category cycling
   useEffect(() => {

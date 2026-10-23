@@ -43,6 +43,20 @@ export function MobileNavigationDrawer({
     onClose();
   }, [pathname]);
 
+  // Auto-close drawer on viewport resize to desktop (>= 768px)
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        onClose();
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isOpen, onClose]);
+
   // Lock body scroll when drawer is open
   useEffect(() => {
     if (isOpen) {

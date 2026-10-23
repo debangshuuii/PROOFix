@@ -6,15 +6,14 @@
  * Exposes OpenAPI 3.1 in text/yaml format for Swagger CLI, Spectral, and code generators.
  */
 
-import { NextResponse } from 'next/server';
-import { OpenApiSpecGenerator } from '@/lib/openapi/spec-generator';
-import { OpenApiYamlSerializer } from '@/lib/openapi/yaml-serializer';
+import { OpenApiSpecGenerator } from '../../../../lib/openapi/spec-generator.ts';
+import { OpenApiYamlSerializer } from '../../../../lib/openapi/yaml-serializer.ts';
 
 export async function GET() {
   const spec = OpenApiSpecGenerator.generate();
   const yamlContent = OpenApiYamlSerializer.stringify(spec).trim();
 
-  return new NextResponse(yamlContent, {
+  return new Response(yamlContent, {
     status: 200,
     headers: {
       'Content-Type': 'text/yaml; charset=utf-8',
@@ -27,7 +26,7 @@ export async function GET() {
 }
 
 export async function OPTIONS() {
-  return new NextResponse(null, {
+  return new Response(null, {
     status: 204,
     headers: {
       'Access-Control-Allow-Origin': '*',

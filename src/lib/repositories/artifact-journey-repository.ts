@@ -46,12 +46,12 @@ export class PluggableArtifactJourneyRepository {
       artifact.id,
       artifact.runId,
       ctx.tenantId,
-      artifact.type,
-      artifact.filePath,
+      artifact.artifactType || 'screenshot',
+      artifact.storagePath || artifact.fileName,
       artifact.sizeBytes || 0,
       artifact.mimeType || 'application/octet-stream',
-      artifact.caption || null,
-      JSON.stringify(artifact.metadata || {}),
+      artifact.fileName || null,
+      JSON.stringify({ testResultId: artifact.testResultId }),
       createdAt,
     ]);
 
@@ -126,7 +126,7 @@ export class PluggableArtifactJourneyRepository {
       await this.driver.execute(sql, [
         journey.title,
         journey.description || null,
-        journey.targetUrl,
+        journey.config?.baseUrl || 'http://localhost:3000',
         JSON.stringify(journey.steps || []),
         now,
         journey.id,
@@ -144,7 +144,7 @@ export class PluggableArtifactJourneyRepository {
         journey.ownerId || requesterUserId || ctx.userId,
         journey.title,
         journey.description || null,
-        journey.targetUrl,
+        journey.config?.baseUrl || 'http://localhost:3000',
         JSON.stringify(journey.steps || []),
         journey.createdAt || now,
         now,
@@ -177,12 +177,12 @@ export class PluggableArtifactJourneyRepository {
     return {
       id: row.id,
       runId: row.run_id,
-      type: row.type as any,
-      filePath: row.file_path,
-      sizeBytes: row.size_bytes,
+      testResultId: metadata.testResultId || undefined,
+      artifactType: (row.type as any) || 'screenshot',
+      storagePath: row.file_path,
+      fileName: row.caption || 'artifact.png',
       mimeType: row.mime_type,
-      caption: row.caption || undefined,
-      metadata,
+      sizeBytes: row.size_bytes,
       createdAt: row.created_at,
     };
   }
@@ -195,11 +195,14 @@ export class PluggableArtifactJourneyRepository {
 
     return {
       id: row.id,
+      projectId: 'proj_default',
       ownerId: row.owner_id,
       title: row.title,
       description: row.description || undefined,
-      targetUrl: row.target_url,
+      schemaVersion: '1.0.0',
       steps,
+      config: { baseUrl: row.target_url },
+      tags: [],
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     };

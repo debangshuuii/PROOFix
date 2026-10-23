@@ -48,9 +48,6 @@ export class PluggableSettingsRepository {
     const merged: SystemSettings = {
       ...current,
       ...updates,
-      geminiApiKeyConfigured: updates.geminiApiKey ? true : current.geminiApiKeyConfigured,
-      openaiApiKeyConfigured: updates.openaiApiKey ? true : current.openaiApiKeyConfigured,
-      anthropicApiKeyConfigured: updates.anthropicApiKey ? true : current.anthropicApiKeyConfigured,
     };
 
     const now = new Date().toISOString();
@@ -121,14 +118,10 @@ export class PluggableSettingsRepository {
 
   private getDefaultSettings(): SystemSettings {
     return {
-      activeAiProvider: 'offline_heuristic',
-      geminiApiKeyConfigured: false,
-      openaiApiKeyConfigured: false,
-      anthropicApiKeyConfigured: false,
-      ollamaBaseUrl: 'http://localhost:11434',
-      ollamaModel: 'llama3',
-      defaultExecutionTimeoutSecs: 30,
-      maxConcurrentRuns: 2,
+      aiProvider: 'offline',
+      sandboxMemoryLimitMb: 1024,
+      sandboxTimeoutSecs: 45,
+      allowOutboundNetwork: false,
     };
   }
 }

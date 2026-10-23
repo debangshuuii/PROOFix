@@ -164,13 +164,13 @@ export class PluggableRunRepository {
         tr.runId,
         ctx.tenantId,
         tr.name,
-        tr.type,
+        tr.category || 'smoke',
         tr.status,
         tr.durationMs || 0,
-        tr.errorMessage || null,
-        tr.stackTrace || null,
-        tr.routePath || null,
-        tr.httpStatus || null,
+        tr.errorDetails?.message || null,
+        tr.errorDetails?.stack || null,
+        tr.errorDetails?.url || null,
+        null,
         JSON.stringify(tr.evidence || {}),
         now,
       ]);
@@ -204,18 +204,18 @@ export class PluggableRunRepository {
         f.id,
         f.runId,
         ctx.tenantId,
-        f.category,
+        'code_quality',
         f.severity,
         f.title,
-        f.observedFact,
-        f.inferredHypothesis,
-        f.confidence || 'high',
-        f.suggestedAction,
-        f.affectedFile || null,
-        JSON.stringify(f.affectedLines || []),
-        f.patchPreviewDiff || null,
-        f.ruleId || null,
-        now,
+        f.observedEvidence,
+        f.aiHypothesis,
+        f.confidenceScore >= 80 ? 'high' : 'medium',
+        f.suggestedFix,
+        f.affectedFiles?.[0] || null,
+        JSON.stringify([]),
+        f.patchPreview || null,
+        null,
+        f.createdAt || now,
       ]);
     }
   }
@@ -249,54 +249,61 @@ export class PluggableRunRepository {
       commitHash: row.commit_hash,
       branch: row.branch,
       executionConfig,
-      isolationDisclaimer: row.isolation_disclaimer || undefined,
+      isolationDisclaimer: row.isolation_disclaimer || 'Standard Sandbox Isolation',
       summary,
       errorSummary: row.error_summary || undefined,
       logs,
+      createdAt: row.created_at,
     };
   }
 
   private mapTestResultRowToModel(row: TestResultRow): TestResult {
-    let evidence: any = {};
+    let evidence: any = { consoleErrors: [], networkFailures: [], steps: [] };
     try {
-      evidence = JSON.parse(row.evidence_json);
+      evidence = { ...evidence, ...JSON.parse(row.evidence_json) };
     } catch {}
 
     return {
       id: row.id,
       runId: row.run_id,
       name: row.name,
-      type: row.type as any,
+      category: (row.type || 'smoke') as any,
       status: row.status as any,
       durationMs: row.duration_ms,
-      errorMessage: row.error_message || undefined,
-      stackTrace: row.stack_trace || undefined,
-      routePath: row.route_path || undefined,
-      httpStatus: row.http_status || undefined,
+      actualResult: row.error_message || 'Completed',
+      errorDetails: row.error_message
+        ? {
+            message: row.error_message,
+            stack: row.stack_trace || undefined,
+            url: row.route_path || undefined,
+          }
+        : undefined,
       evidence,
+      startedAt: row.created_at,
+      completedAt: row.created_at,
     };
   }
 
   private mapFindingRowToModel(row: FindingRow): Finding {
-    let affectedLines: number[] = [];
-    try {
-      affectedLines = JSON.parse(row.affected_lines_json || '[]');
-    } catch {}
+    let affectedFiles: string[] = [];
+    if (row.affected_file) {
+      affectedFiles = [row.affected_file];
+    }
 
     return {
       id: row.id,
       runId: row.run_id,
-      category: row.category as any,
       severity: row.severity as any,
       title: row.title,
-      observedFact: row.observed_fact,
-      inferredHypothesis: row.inferred_hypothesis,
-      confidence: row.confidence as any,
-      suggestedAction: row.suggested_action,
-      affectedFile: row.affected_file || undefined,
-      affectedLines,
-      patchPreviewDiff: row.patch_preview_diff || undefined,
-      ruleId: row.rule_id || undefined,
+      description: row.observed_fact,
+      observedEvidence: row.observed_fact,
+      aiHypothesis: row.inferred_hypothesis,
+      suggestedFix: row.suggested_action,
+      patchPreview: row.patch_preview_diff || undefined,
+      affectedFiles,
+      confidenceScore: row.confidence === 'high' ? 90 : 70,
+      reviewStatus: 'pending',
+      createdAt: row.created_at,
     };
   }
 }

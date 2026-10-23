@@ -16,6 +16,8 @@ import type { UserJourney } from '../types/journey.ts';
 import { assertValidJourney } from '../journey/schema-validator.ts';
 import { getDefaultNotificationSettings } from '../notifications/schema.ts';
 import { verifyProjectOwnership } from '../security/ownership.ts';
+import { globalDatabaseFactory, PluggableDatabaseFactory } from '../database/pluggable-database-factory.ts';
+import type { IPhysicalDatabaseDriver } from '../types/pluggable-database.ts';
 
 interface DatabaseSchema {
   users: User[];
@@ -500,6 +502,14 @@ async function persist(): Promise<void> {
 }
 
 export const db = {
+  getFactory(): PluggableDatabaseFactory {
+    return globalDatabaseFactory;
+  },
+
+  getPhysicalDriver(): IPhysicalDatabaseDriver {
+    return globalDatabaseFactory.getDriver();
+  },
+
   async getProjects(): Promise<Project[]> {
     const data = await ensureDataFile();
     return data.projects;

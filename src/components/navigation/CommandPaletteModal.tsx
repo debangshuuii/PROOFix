@@ -223,16 +223,33 @@ export function CommandPaletteModal({
                       <IconComponent className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-semibold text-xs truncate">{action.title}</span>
                         {action.badge && (
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-blue-300 border border-slate-700">
+                          <span
+                            className={`text-[9px] font-mono px-1.5 py-0.5 rounded border uppercase tracking-wider font-semibold ${
+                              action.status === 'passed'
+                                ? 'bg-emerald-950/80 text-emerald-400 border-emerald-800/60'
+                                : action.status === 'failed'
+                                ? 'bg-rose-950/80 text-rose-400 border-rose-800/60'
+                                : action.status === 'running'
+                                ? 'bg-amber-950/80 text-amber-400 border-amber-800/60 animate-pulse'
+                                : action.status === 'proposed'
+                                ? 'bg-violet-950/80 text-violet-400 border-violet-800/60'
+                                : action.status === 'applied'
+                                ? 'bg-sky-950/80 text-sky-400 border-sky-800/60'
+                                : 'bg-slate-800 text-sky-300 border-slate-700'
+                            }`}
+                          >
                             {action.badge}
                           </span>
                         )}
+                        <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-slate-950 text-slate-500 border border-slate-800">
+                          {action.category}
+                        </span>
                       </div>
                       {action.subtitle && (
-                        <p className="text-[11px] text-slate-500 truncate mt-0.5">{action.subtitle}</p>
+                        <p className="text-[11px] text-slate-400 truncate mt-0.5">{action.subtitle}</p>
                       )}
                     </div>
                   </div>

@@ -33,6 +33,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined' && window.matchMedia) {
       const mq = window.matchMedia('(prefers-color-scheme: dark)');
       setSystemIsDark(mq.matches);
+
+      const handler = (e: MediaQueryListEvent) => {
+        setSystemIsDark(e.matches);
+      };
+
+      if (mq.addEventListener) {
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+      } else if ((mq as any).addListener) {
+        (mq as any).addListener(handler);
+        return () => (mq as any).removeListener(handler);
+      }
     }
   }, []);
 

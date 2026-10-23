@@ -8,15 +8,15 @@
 import type {
   CommandAction,
   NavigationCategory,
-} from '../types/navigation-palette';
+} from '../types/navigation-palette.ts';
 import type {
   EntityIndexBundle,
   ProjectIndexItem,
   RunIndexItem,
   FailingTestIndexItem,
   ProposalIndexItem,
-} from '../types/palette-indexing';
-import { EnterpriseEntityIndexer } from './enterprise-entity-indexer';
+} from '../types/palette-indexing.ts';
+import { EnterpriseEntityIndexer } from './enterprise-entity-indexer.ts';
 
 export const DEFAULT_COMMAND_ACTIONS: CommandAction[] = [
   // Core

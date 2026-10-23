@@ -5,8 +5,8 @@
  * with confidence ratings and target file associations.
  */
 
-import type { CommandAction } from '../types/navigation-palette';
-import type { ProposalIndexItem } from '../types/palette-indexing';
+import type { CommandAction } from '../types/navigation-palette.ts';
+import type { ProposalIndexItem } from '../types/palette-indexing.ts';
 
 export class ProposalIndexer {
   /**

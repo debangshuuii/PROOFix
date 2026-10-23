@@ -5,8 +5,8 @@
  * so engineers can jump straight from Cmd+K to the failing step/diff.
  */
 
-import type { CommandAction } from '../types/navigation-palette';
-import type { FailingTestIndexItem } from '../types/palette-indexing';
+import type { CommandAction } from '../types/navigation-palette.ts';
+import type { FailingTestIndexItem } from '../types/palette-indexing.ts';
 
 export class FailureIndexer {
   /**

@@ -5,8 +5,8 @@
  * status badges, pass/fail counts, execution durations, and direct run view routing.
  */
 
-import type { CommandAction } from '../types/navigation-palette';
-import type { RunIndexItem } from '../types/palette-indexing';
+import type { CommandAction } from '../types/navigation-palette.ts';
+import type { RunIndexItem } from '../types/palette-indexing.ts';
 
 export class RunIndexer {
   /**

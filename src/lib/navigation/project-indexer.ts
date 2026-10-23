@@ -5,8 +5,8 @@
  * repository identifiers, status badges, and direct navigation links.
  */
 
-import type { CommandAction } from '../types/navigation-palette';
-import type { ProjectIndexItem } from '../types/palette-indexing';
+import type { CommandAction } from '../types/navigation-palette.ts';
+import type { ProjectIndexItem } from '../types/palette-indexing.ts';
 
 export class ProjectIndexer {
   /**

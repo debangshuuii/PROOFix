@@ -5,18 +5,18 @@
  * failing test cases, and fix proposals into unified CommandAction collections.
  */
 
-import type { CommandAction, NavigationCategory } from '../types/navigation-palette';
+import type { CommandAction, NavigationCategory } from '../types/navigation-palette.ts';
 import type {
   EntityIndexBundle,
   ProjectIndexItem,
   RunIndexItem,
   FailingTestIndexItem,
   ProposalIndexItem,
-} from '../types/palette-indexing';
-import { ProjectIndexer } from './project-indexer';
-import { RunIndexer } from './run-indexer';
-import { FailureIndexer } from './failure-indexer';
-import { ProposalIndexer } from './proposal-indexer';
+} from '../types/palette-indexing.ts';
+import { ProjectIndexer } from './project-indexer.ts';
+import { RunIndexer } from './run-indexer.ts';
+import { FailureIndexer } from './failure-indexer.ts';
+import { ProposalIndexer } from './proposal-indexer.ts';
 
 export class EnterpriseEntityIndexer {
   private projectsMap: Map<string, CommandAction> = new Map();

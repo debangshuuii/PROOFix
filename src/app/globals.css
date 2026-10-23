@@ -1,8 +1,22 @@
 @import "tailwindcss";
 
-:root {
+:root,
+html.dark {
   --background: #090d16;
   --foreground: #f1f5f9;
+  --card-bg: #0f172a;
+  --card-border: #1e293b;
+  --muted: #94a3b8;
+  color-scheme: dark;
+}
+
+html.light {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --muted: #64748b;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -17,6 +31,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Custom technical scrollbar */

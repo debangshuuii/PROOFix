@@ -8,7 +8,15 @@
 import type {
   CommandAction,
   NavigationCategory,
-} from '../types/navigation-palette.ts';
+} from '../types/navigation-palette';
+import type {
+  EntityIndexBundle,
+  ProjectIndexItem,
+  RunIndexItem,
+  FailingTestIndexItem,
+  ProposalIndexItem,
+} from '../types/palette-indexing';
+import { EnterpriseEntityIndexer } from './enterprise-entity-indexer';
 
 export const DEFAULT_COMMAND_ACTIONS: CommandAction[] = [
   // Core
@@ -133,11 +141,42 @@ export const DEFAULT_COMMAND_ACTIONS: CommandAction[] = [
 
 export class CommandIndexer {
   private actions: Map<string, CommandAction> = new Map();
+  private entityIndexer: EnterpriseEntityIndexer = new EnterpriseEntityIndexer();
 
   constructor(initialActions: CommandAction[] = DEFAULT_COMMAND_ACTIONS) {
     for (const action of initialActions) {
       this.actions.set(action.id, action);
     }
+  }
+
+  /**
+   * Returns the dynamic entity indexer.
+   */
+  public getEntityIndexer(): EnterpriseEntityIndexer {
+    return this.entityIndexer;
+  }
+
+  /**
+   * Ingests a bundle of projects, runs, failures, and proposals.
+   */
+  public ingestBundle(bundle: EntityIndexBundle): void {
+    this.entityIndexer.indexBundle(bundle);
+  }
+
+  public indexProjects(projects: ProjectIndexItem[]): void {
+    this.entityIndexer.indexProjects(projects);
+  }
+
+  public indexRuns(runs: RunIndexItem[]): void {
+    this.entityIndexer.indexRuns(runs);
+  }
+
+  public indexFailures(failures: FailingTestIndexItem[]): void {
+    this.entityIndexer.indexFailures(failures);
+  }
+
+  public indexProposals(proposals: ProposalIndexItem[]): void {
+    this.entityIndexer.indexProposals(proposals);
   }
 
   /**
@@ -152,7 +191,9 @@ export class CommandIndexer {
    */
   public search(query: string, categoryFilter?: NavigationCategory): CommandAction[] {
     const trimmed = query.trim().toLowerCase();
-    const allActions = Array.from(this.actions.values());
+    const staticActions = Array.from(this.actions.values());
+    const dynamicActions = this.entityIndexer.getAllActions();
+    const allActions = [...staticActions, ...dynamicActions];
 
     const candidateActions = categoryFilter
       ? allActions.filter((a) => a.category === categoryFilter)

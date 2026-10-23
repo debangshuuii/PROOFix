@@ -19,6 +19,7 @@ import { SemanticVisionReport } from '@/components/vision/SemanticVisionReport';
 import { LiveCompanionDashboard } from '@/components/companion/LiveCompanionDashboard';
 import { ApiFuzzingReportView } from '@/components/fuzzing/ApiFuzzingReport';
 import { MockReplayDashboard } from '@/components/replay/MockReplayDashboard';
+import { StreamingTerminal } from '@/components/terminal/StreamingTerminal';
 import {
   ShieldCheck,
   ShieldAlert,
@@ -983,21 +984,14 @@ function VerificationRunContent() {
           </div>
         )}
 
-        {/* TAB 5: EXECUTION LOGS */}
+        {/* TAB 5: EXECUTION LOGS (STREAMING VIRTUALIZED TERMINAL) */}
         {activeTab === 'logs' && (
-          <div className="rounded-xl border border-slate-800 bg-slate-950 overflow-hidden font-mono text-xs">
-            <div className="bg-slate-900 px-4 py-2 border-b border-slate-800 flex items-center justify-between text-slate-400">
-              <span>Recorded Stdout & Stderr Logs</span>
-              <span>{logs.length} line(s)</span>
-            </div>
-            <div className="p-4 max-h-[600px] overflow-y-auto space-y-1 text-slate-300">
-              {logs.map((log, idx) => (
-                <div key={idx} className="whitespace-pre-wrap">
-                  {log}
-                </div>
-              ))}
-            </div>
-          </div>
+          <StreamingTerminal
+            logs={logs}
+            runId={runId}
+            isRunning={run?.status === 'running'}
+            initialLogLevel="ALL"
+          />
         )}
 
         {/* TAB 6: COVERAGE & LIMITATIONS */}

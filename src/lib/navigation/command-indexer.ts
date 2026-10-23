@@ -218,7 +218,7 @@ export class CommandIndexer {
   }
 
   /**
-   * Internal fuzzy matching scoring algorithm.
+   * Enhanced fuzzy matching and relevance scoring algorithm.
    */
   private calculateMatchScore(action: CommandAction, query: string): number {
     const titleLower = action.title.toLowerCase();
@@ -228,26 +228,53 @@ export class CommandIndexer {
     if (titleLower === query) return 100;
 
     // 2. Title starts with query
-    if (titleLower.startsWith(query)) return 80;
+    if (titleLower.startsWith(query)) return 85;
 
     // 3. Keyword exact match
-    if (action.keywords.some((kw) => kw.toLowerCase() === query)) return 70;
+    if (action.keywords.some((kw) => kw.toLowerCase() === query)) return 75;
 
-    // 4. Title contains query
-    if (titleLower.includes(query)) return 50;
-
-    // 5. Keyword contains query
-    if (action.keywords.some((kw) => kw.toLowerCase().includes(query))) return 40;
-
-    // 6. Subtitle contains query
-    if (subtitleLower.includes(query)) return 20;
-
-    // 7. Acronym match (e.g. "dlq" matches "Dead-Letter Queue")
+    // 4. Acronym match (e.g. "dlq" matches "Dead-Letter Queue")
     const words = titleLower.split(/[\s-]+/);
     const acronym = words.map((w) => w[0]).join('');
-    if (acronym.includes(query)) return 60;
+    if (acronym.length >= 2 && acronym.includes(query)) return 65;
+
+    // 5. Title contains query
+    if (titleLower.includes(query)) return 55;
+
+    // 6. Keyword contains query
+    if (action.keywords.some((kw) => kw.toLowerCase().includes(query))) return 45;
+
+    // 7. Metadata inspection (e.g. commitHash, runId, targetFile, failureId)
+    if (action.metadata) {
+      for (const val of Object.values(action.metadata)) {
+        if (typeof val === 'string' && val.toLowerCase().includes(query)) {
+          return 40;
+        }
+      }
+    }
+
+    // 8. Subtitle contains query
+    if (subtitleLower.includes(query)) return 30;
+
+    // 9. Subsequence fuzzy match (e.g. "prfx" matches "proofix")
+    if (query.length >= 3 && this.isSubsequence(query, titleLower)) {
+      return 20;
+    }
 
     return 0;
+  }
+
+  /**
+   * Helper to determine if query is a contiguous or dispersed subsequence of target.
+   */
+  private isSubsequence(query: string, target: string): boolean {
+    let qIdx = 0;
+    for (let tIdx = 0; tIdx < target.length && qIdx < query.length; tIdx++) {
+      if (query[qIdx] === target[tIdx]) {
+        qIdx++;
+      }
+    }
+    return qIdx === query.length;
   }
 
   public getAction(id: string): CommandAction | undefined {

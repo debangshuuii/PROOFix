@@ -20,6 +20,13 @@ import {
   ArrowRight,
   Command,
   X,
+  Sparkles,
+  Bug,
+  AlertCircle,
+  FileCode,
+  CheckCircle2,
+  XCircle,
+  Clock,
 } from 'lucide-react';
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -34,6 +41,13 @@ const ICON_MAP: Record<string, React.ElementType> = {
   RotateCcw,
   Download,
   Flame,
+  Sparkles,
+  Bug,
+  AlertCircle,
+  FileCode,
+  CheckCircle2,
+  XCircle,
+  Clock,
 };
 
 interface CommandPaletteModalProps {

@@ -7,13 +7,12 @@
  * Swagger/Scalar reference renderers, and CLI integration.
  */
 
-import { NextResponse } from 'next/server';
-import { OpenApiSpecGenerator } from '@/lib/openapi/spec-generator';
+import { OpenApiSpecGenerator } from '../../../../lib/openapi/spec-generator.ts';
 
 export async function GET() {
   const spec = OpenApiSpecGenerator.generate();
 
-  return NextResponse.json(spec, {
+  return Response.json(spec, {
     status: 200,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -26,7 +25,7 @@ export async function GET() {
 }
 
 export async function OPTIONS() {
-  return new NextResponse(null, {
+  return new Response(null, {
     status: 204,
     headers: {
       'Access-Control-Allow-Origin': '*',

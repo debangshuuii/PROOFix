@@ -104,12 +104,13 @@ export function MobileNavigationDrawer({
       id="mobile-nav-drawer"
       role="dialog"
       aria-modal="true"
-      aria-label="Mobile Navigation Menu"
+      aria-labelledby="mobile-nav-title"
       className="fixed inset-0 z-50 md:hidden"
     >
       {/* Backdrop */}
       <div
         onClick={onClose}
+        aria-hidden="true"
         className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity animate-in fade-in"
       />
 
@@ -121,7 +122,7 @@ export function MobileNavigationDrawer({
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
               <ShieldCheck className="w-4 h-4 text-white" />
             </div>
-            <div className="font-bold text-base tracking-tight text-white flex items-center gap-1.5">
+            <div id="mobile-nav-title" className="font-bold text-base tracking-tight text-white flex items-center gap-1.5">
               PROOF<span className="text-sky-400">ix</span>
               <span className="text-[9px] uppercase font-semibold tracking-wider px-1.5 py-0.2 rounded bg-sky-950 text-sky-400 border border-sky-800/50">
                 Mobile

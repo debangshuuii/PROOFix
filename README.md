@@ -139,11 +139,24 @@ PROOFix/
 
 ## 📄 Documentation
 
+- [Enterprise UI/UX & Developer Experience](docs/ENTERPRISE_UI_UX_DEVELOPER_EXPERIENCE.md)
+- [Interactive OpenAPI 3.1 Reference](/docs)
 - [Architecture & Subsystems](docs/architecture.md)
 - [Pluggable Production Database Engine](docs/PLUGGABLE_PRODUCTION_DATABASE_ENGINE.md)
 - [AI Diagnosis & Self-Repair Loop](docs/AI_DIAGNOSIS_AND_SELF_REPAIR_LOOP.md)
 - [Security Model & Threat Boundaries](docs/security.md)
 - [Development & Operations Guide](docs/development.md)
+
+---
+
+## 🎨 Enterprise UI/UX & Developer Experience
+
+- **Responsive Mobile Navigation**: Slide-out animated drawer on viewports `< 768px` with accessible focus traps and Escape key dismissal.
+- **Theme Switcher**: Zero-FOUC persistence with dark, light, and OS system media query synchronization.
+- **Global Command Palette (`Cmd+K` / `Ctrl+K`)**: Universal fuzzy search indexing across active projects, recent execution runs, failing tests, and AI fix proposals with Tab category cycling.
+- **Streaming Virtualized Terminal**: High-performance interactive log viewer with ANSI color tokenization, log severity filtering (DEBUG, INFO, WARN, ERROR), regex search, and auto-scroll lock.
+- **Interactive OpenAPI Reference (`/docs`)**: Scalar/Swagger reference hub with live Try-It-Out console and multi-language snippets (cURL, JavaScript, Python, Node.js).
+
 
 ---
 

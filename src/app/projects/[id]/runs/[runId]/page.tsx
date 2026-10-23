@@ -126,20 +126,23 @@ function VerificationRunContent() {
     };
 
     eventSource.onerror = () => {
+      // Fallback to polling if SSE connection drops or is buffered
+      const pollTimer = setInterval(() => {
+        if (!isLiveRunning) {
+          clearInterval(pollTimer);
+          return;
+        }
+        fetchRunData();
+      }, 2500);
+
       eventSource.close();
+      return () => clearInterval(pollTimer);
     };
 
     return () => {
       eventSource.close();
     };
   }, [runId, isLiveRunning]);
-
-  // Auto-scroll terminal
-  useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
-  }, [logs]);
 
   const handleCancel = async () => {
     try {

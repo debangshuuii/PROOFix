@@ -60,8 +60,8 @@ export class MigrationVersionTracker {
       // Execute each statement in UP script
       const statements = script.upSql
         .split(';')
-        .map((s) => s.trim())
-        .filter((s) => s.length > 0 && !s.startsWith('--'));
+        .map((s) => s.split('\n').filter((l) => !l.trim().startsWith('--')).join('\n').trim())
+        .filter((s) => s.length > 0);
 
       for (const stmt of statements) {
         await tx.execute(stmt);

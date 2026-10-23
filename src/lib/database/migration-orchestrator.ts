@@ -109,8 +109,8 @@ export class MigrationOrchestrator {
         try {
           const stmts = script.downSql
             .split(';')
-            .map((s) => s.trim())
-            .filter((s) => s.length > 0 && !s.startsWith('--'));
+            .map((s) => s.split('\n').filter((l) => !l.trim().startsWith('--')).join('\n').trim())
+            .filter((s) => s.length > 0);
 
           for (const stmt of stmts) {
             await tx.execute(stmt);

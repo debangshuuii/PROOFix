@@ -57,13 +57,24 @@ export class SqliteTransactionSession implements ITransactionSession {
   public async execute(sql: string, params: unknown[] = []): Promise<StatementExecutionResult> {
     this.assertActive();
     const start = Date.now();
-    const stmt = this.stmtCache.get(sql);
-    const res = stmt.run(...(params as any[]));
-    const durationMs = Date.now() - start;
+    const trimmed = sql.trim();
+    let changes = 0;
+    let lastInsertRowId: number | bigint | undefined;
 
+    if (params.length === 0) {
+      this.db.exec(trimmed.endsWith(';') ? trimmed : `${trimmed};`);
+      changes = 1;
+    } else {
+      const stmt = this.stmtCache.get(trimmed);
+      const res = stmt.run(...(params as any[]));
+      changes = Number(res.changes);
+      lastInsertRowId = res.lastInsertRowid;
+    }
+
+    const durationMs = Date.now() - start;
     return {
-      changes: Number(res.changes),
-      lastInsertRowId: res.lastInsertRowid,
+      changes,
+      lastInsertRowId,
       durationMs,
     };
   }

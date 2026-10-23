@@ -165,11 +165,34 @@ export function CommandPaletteModal({
 
   const executeCommand = (action: CommandAction) => {
     handleClose();
+
+    // Notify custom listeners
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('proofix:command-action', {
+          detail: { action },
+        })
+      );
+    }
+
     if (onExecuteAction) {
       onExecuteAction(action);
     }
-    if (action.href) {
+
+    if (action.actionType === 'navigate' && action.href) {
       router.push(action.href);
+    } else if (action.actionType === 'execute') {
+      if (action.handlerId === 'trigger_run') {
+        router.push('/projects?action=trigger_run');
+      } else if (action.handlerId === 'api_fuzz') {
+        router.push('/hub?tab=fuzzing');
+      } else if (action.handlerId === 'redrive_dlq') {
+        router.push('/queue?action=redrive_dlq');
+      } else if (action.handlerId === 'export_evidence') {
+        router.push('/governance?action=export_evidence');
+      } else if (action.href) {
+        router.push(action.href);
+      }
     }
   };
 

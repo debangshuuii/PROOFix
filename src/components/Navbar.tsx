@@ -18,6 +18,7 @@ import {
 import { CommandPaletteModal } from './navigation/CommandPaletteModal';
 import { HamburgerButton } from './navigation/HamburgerButton';
 import { MobileNavigationDrawer } from './navigation/MobileNavigationDrawer';
+import { ThemeSwitcher } from './theme/ThemeSwitcher';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -114,8 +115,8 @@ export function Navbar() {
             </nav>
           </div>
 
-          {/* Right Actions: Cmd+K Search Button & Launch */}
-          <div className="flex items-center gap-3">
+          {/* Right Actions: Cmd+K Search Button, ThemeSwitcher & Launch */}
+          <div className="flex items-center gap-2.5">
             <button
               onClick={() => setPaletteOpen(true)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 text-xs transition"
@@ -126,6 +127,11 @@ export function Navbar() {
                 <Command className="w-2.5 h-2.5" />K
               </kbd>
             </button>
+
+            {/* Desktop Theme Switcher */}
+            <div className="hidden sm:block">
+              <ThemeSwitcher />
+            </div>
 
             <Link
               href="/dashboard"

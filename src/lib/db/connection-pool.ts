@@ -131,9 +131,10 @@ export class DatabaseConnectionPool {
    */
   public async query<TRow = Record<string, unknown>>(
     sql: string,
-    params: unknown[] = []
+    params: unknown[] = [],
+    existingConnection?: DbConnection
   ): Promise<QueryResult<TRow>> {
-    const conn = await this.acquire();
+    const conn = existingConnection || (await this.acquire());
     const startTime = Date.now();
 
     try {
@@ -149,7 +150,9 @@ export class DatabaseConnectionPool {
       this.totalErrors++;
       throw err;
     } finally {
-      this.release(conn);
+      if (!existingConnection) {
+        this.release(conn);
+      }
     }
   }
 

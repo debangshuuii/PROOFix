@@ -140,6 +140,8 @@ PROOFix/
 ## 📄 Documentation
 
 - [Architecture & Subsystems](docs/architecture.md)
+- [Pluggable Production Database Engine](docs/PLUGGABLE_PRODUCTION_DATABASE_ENGINE.md)
+- [AI Diagnosis & Self-Repair Loop](docs/AI_DIAGNOSIS_AND_SELF_REPAIR_LOOP.md)
 - [Security Model & Threat Boundaries](docs/security.md)
 - [Development & Operations Guide](docs/development.md)
 

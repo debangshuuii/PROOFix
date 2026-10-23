@@ -36,8 +36,13 @@ yarn-error.log*
 
 # data workspaces & tmp
 /data/workspaces
+/data/ephemeral_workspaces
+/data/patch_transactions
+/.proofix-cgroups-simulated
 /data/*.tmp
 /data/*.json
+/public/artifacts/runs
+/public/artifacts/test_lifecycle
 
 
 # vercel

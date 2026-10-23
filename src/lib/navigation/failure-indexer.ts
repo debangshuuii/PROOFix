@@ -37,10 +37,15 @@ export class FailureIndexer {
 
     // Extract key tokens from error message (e.g. locator, timeout, expected vs received)
     const errorWords = cleanError
-      .split(/[^a-zA-Z0-9_]+/)
+      .toLowerCase()
+      .split(/[^a-z0-9_]+/)
       .filter((w) => w.length > 3)
-      .slice(0, 8);
+      .slice(0, 12);
     keywords.push(...errorWords);
+
+    if (cleanError.toLowerCase().includes('timed out') || cleanError.toLowerCase().includes('timeout')) {
+      keywords.push('timeout', 'timed out');
+    }
 
     return {
       id: `failure-${failure.id}`,

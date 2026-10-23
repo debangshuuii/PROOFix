@@ -235,9 +235,10 @@ export function MobileNavigationDrawer({
         </div>
 
         {/* Drawer Footer with Theme Switcher */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950/40 flex items-center justify-between">
-          <div className="text-xs text-slate-400">
-            <span className="text-slate-200 font-medium">Appearance</span>
+        <div className="p-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="text-xs text-slate-200 font-medium">Appearance</span>
+            <span className="text-[10px] text-slate-500">Dark, Light, or System</span>
           </div>
           <ThemeSwitcher />
         </div>

@@ -153,18 +153,22 @@ export function MobileNavigationDrawer({
             <div className="space-y-1">
               {coreNav.map((item) => {
                 const Icon = item.icon;
-                const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
+                const isActive = pathname === item.href || (item.href !== '/' && item.href !== '/dashboard' && pathname.startsWith(item.href));
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={onClose}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-colors ${
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
                       isActive
-                        ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20'
+                        ? 'bg-sky-500/15 text-sky-400 font-semibold border border-sky-500/30 shadow-sm shadow-sky-500/10'
                         : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                     }`}
                   >
+                    {isActive && (
+                      <span className="absolute left-1 top-2 bottom-2 w-0.5 rounded-full bg-sky-400" />
+                    )}
                     <Icon className="w-4 h-4" />
                     <span>{item.label}</span>
                   </Link>
@@ -181,18 +185,22 @@ export function MobileNavigationDrawer({
             <div className="space-y-1">
               {enterpriseNav.map((item) => {
                 const Icon = item.icon;
-                const isActive = pathname === item.href || pathname.startsWith(item.href);
+                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={onClose}
-                    className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-colors ${
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`relative flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
                       isActive
-                        ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20'
+                        ? 'bg-sky-500/15 text-sky-400 font-semibold border border-sky-500/30 shadow-sm shadow-sky-500/10'
                         : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                     }`}
                   >
+                    {isActive && (
+                      <span className="absolute left-1 top-2 bottom-2 w-0.5 rounded-full bg-sky-400" />
+                    )}
                     <div className="flex items-center gap-3">
                       <Icon className="w-4 h-4" />
                       <span>{item.label}</span>

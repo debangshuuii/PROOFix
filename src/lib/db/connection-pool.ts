@@ -202,6 +202,9 @@ export class DatabaseConnectionPool {
     }
 
     if (upper.startsWith('SELECT')) {
+      if (upper.includes('HEALTH_CHECK') || upper.includes('SELECT 1')) {
+        return [{ health_check: 1 }] as unknown as TRow[];
+      }
       const match = trimmed.match(/FROM\s+([a-zA-Z0-9_]+)/i);
       const tableName = match ? match[1].toLowerCase() : 'default';
       const rows = this.tables.get(tableName) || [];

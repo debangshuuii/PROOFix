@@ -127,17 +127,19 @@ export function MobileNavigationDrawer({
         {/* Search Bar Trigger */}
         <div className="p-3 border-b border-slate-800/60">
           <button
+            type="button"
+            aria-label="Open command palette search"
             onClick={() => {
               onClose();
               onOpenSearch();
             }}
-            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-slate-950/80 hover:bg-slate-800/80 border border-slate-800 text-slate-400 text-xs transition"
+            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-slate-950/80 hover:bg-slate-800/80 focus-visible:ring-2 focus-visible:ring-sky-500 border border-slate-800 text-slate-400 hover:text-slate-200 text-xs transition active:scale-[0.98]"
           >
             <div className="flex items-center gap-2">
               <Search className="w-3.5 h-3.5 text-sky-400" />
               <span>Search commands, runs...</span>
             </div>
-            <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400">
+            <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-slate-400">
               Cmd+K
             </kbd>
           </button>

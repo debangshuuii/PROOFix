@@ -7,7 +7,11 @@ export type NavigationCategory =
   | 'enterprise'
   | 'testing'
   | 'security'
-  | 'operations';
+  | 'operations'
+  | 'projects'
+  | 'runs'
+  | 'failures'
+  | 'proposals';
 
 export interface CommandAction {
   id: string;
@@ -21,6 +25,8 @@ export interface CommandAction {
   badge?: string;
   actionType: 'navigate' | 'execute' | 'filter';
   handlerId?: string;
+  status?: 'passed' | 'failed' | 'running' | 'pending' | 'proposed' | 'applied';
+  metadata?: Record<string, string | number>;
 }
 
 export interface RecentVisitItem {

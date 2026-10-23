@@ -110,10 +110,33 @@ export function CommandPaletteModal({
 
   const actions = globalCommandIndexer.search(searchQuery, selectedCategory);
 
-  // Arrow key navigation
+  // Arrow key & keyboard navigation with Home/End and Tab category cycling
   useEffect(() => {
     const handleNavigationKeys = (e: KeyboardEvent) => {
-      if (!isModalOpen || actions.length === 0) return;
+      if (!isModalOpen) return;
+
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const catList: Array<NavigationCategory | undefined> = [
+          undefined,
+          'projects',
+          'runs',
+          'failures',
+          'proposals',
+          'enterprise',
+          'testing',
+          'security',
+        ];
+        const currentIdx = catList.indexOf(selectedCategory);
+        const nextIdx = e.shiftKey
+          ? (currentIdx - 1 + catList.length) % catList.length
+          : (currentIdx + 1) % catList.length;
+        setSelectedCategory(catList[nextIdx]);
+        setSelectedIndex(0);
+        return;
+      }
+
+      if (actions.length === 0) return;
 
       if (e.key === 'ArrowDown') {
         e.preventDefault();
@@ -121,6 +144,12 @@ export function CommandPaletteModal({
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         setSelectedIndex((prev) => (prev - 1 + actions.length) % actions.length);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        setSelectedIndex(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        setSelectedIndex(actions.length - 1);
       } else if (e.key === 'Enter') {
         e.preventDefault();
         const selected = actions[selectedIndex];
@@ -132,7 +161,7 @@ export function CommandPaletteModal({
 
     window.addEventListener('keydown', handleNavigationKeys);
     return () => window.removeEventListener('keydown', handleNavigationKeys);
-  }, [isModalOpen, actions, selectedIndex]);
+  }, [isModalOpen, actions, selectedIndex, selectedCategory]);
 
   const executeCommand = (action: CommandAction) => {
     handleClose();

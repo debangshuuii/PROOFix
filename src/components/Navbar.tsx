@@ -16,10 +16,13 @@ import {
   Command,
 } from 'lucide-react';
 import { CommandPaletteModal } from './navigation/CommandPaletteModal';
+import { HamburgerButton } from './navigation/HamburgerButton';
+import { MobileNavigationDrawer } from './navigation/MobileNavigationDrawer';
 
 export function Navbar() {
   const pathname = usePathname();
   const [paletteOpen, setPaletteOpen] = useState<boolean>(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState<boolean>(false);
 
   const coreLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -38,8 +41,13 @@ export function Navbar() {
     <>
       <header className="sticky top-0 z-40 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Brand */}
-          <div className="flex items-center gap-5">
+          {/* Brand & Mobile Hamburger */}
+          <div className="flex items-center gap-3 sm:gap-5">
+            <HamburgerButton
+              isOpen={mobileDrawerOpen}
+              onClick={() => setMobileDrawerOpen((prev) => !prev)}
+              ariaLabel="Toggle mobile navigation menu"
+            />
             <Link href="/" className="flex items-center gap-2.5 group shrink-0">
               <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 group-hover:scale-105 transition-transform">
                 <ShieldCheck className="w-5 h-5 text-white" />
@@ -128,6 +136,13 @@ export function Navbar() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Navigation Drawer */}
+      <MobileNavigationDrawer
+        isOpen={mobileDrawerOpen}
+        onClose={() => setMobileDrawerOpen(false)}
+        onOpenSearch={() => setPaletteOpen(true)}
+      />
 
       {/* Global Command Palette Modal */}
       <CommandPaletteModal isOpen={paletteOpen} onClose={() => setPaletteOpen(false)} />

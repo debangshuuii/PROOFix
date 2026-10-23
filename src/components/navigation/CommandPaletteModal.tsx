@@ -134,10 +134,13 @@ export function CommandPaletteModal({
 
   const categories: Array<{ id?: NavigationCategory; label: string }> = [
     { label: 'All' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'runs', label: 'Runs' },
+    { id: 'failures', label: 'Failing Tests' },
+    { id: 'proposals', label: 'Fix Proposals' },
     { id: 'enterprise', label: 'Enterprise' },
     { id: 'testing', label: 'Testing' },
     { id: 'security', label: 'Security' },
-    { id: 'operations', label: 'Operations' },
   ];
 
   return (

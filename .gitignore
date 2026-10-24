@@ -39,6 +39,7 @@ yarn-error.log*
 /data/ephemeral_workspaces
 /data/patch_transactions
 /.proofix-cgroups-simulated
+/.proofix
 /data/*.tmp
 /data/*.json
 /public/artifacts/runs

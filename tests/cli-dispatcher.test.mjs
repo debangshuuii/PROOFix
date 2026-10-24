@@ -34,3 +34,12 @@ test('dispatcher: routes doctor command returning exit code 0 or 1', async () =>
   const exitCode = await dispatch(['doctor', '--json']);
   assert.ok([0, 1].includes(exitCode));
 });
+
+test('dispatcher: routes run command returning exit code 0 or 1', async () => {
+  const exitCode = await dispatch(['run', '--scenario', 'ecommerce_checkout', '--json']);
+  assert.ok([0, 1].includes(exitCode));
+});
+
+test.after(() => {
+  setTimeout(() => process.exit(0), 20).unref();
+});

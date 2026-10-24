@@ -143,14 +143,15 @@ export class PlaygroundEngine {
       id: proposalId,
       runId: originalRunId,
       projectId,
-      title: scenario.fixProposal.summary,
-      description: scenario.aiDiagnosis.explanation,
-      confidenceScore: scenario.aiDiagnosis.confidenceScore,
-      targetFile: scenario.fixProposal.targetFile,
-      patchDiff: scenario.fixProposal.patchDiff,
-      status: 'applied',
-      appliedAt: new Date().toISOString(),
+      failureId: `fail-${scenarioId}`,
+      commitSha: 'demo-patch-sha',
+      explanation: scenario.aiDiagnosis.explanation,
+      proposedChanges: scenario.fixProposal.patchDiff,
+      affectedFiles: [scenario.fixProposal.targetFile],
+      confidenceScore: Math.round(scenario.aiDiagnosis.confidenceScore * 100),
+      validationStatus: 'applied',
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     // 2. Synthesize verified post-patch run where all tests pass
@@ -160,8 +161,8 @@ export class PlaygroundEngine {
       id: `t-ver-${scenarioId}-${idx}-${Date.now().toString(36)}`,
       runId: verifiedRunId,
       status: 'passed',
-      errorMessage: undefined,
-      timestamp: new Date().toISOString(),
+      startedAt: new Date().toISOString(),
+      completedAt: new Date().toISOString(),
     }));
 
     const verifiedRun: VerificationRun = {
@@ -170,16 +171,13 @@ export class PlaygroundEngine {
       projectId,
       status: 'completed',
       summary: {
-        totalTests: verifiedTests.length,
+        total: verifiedTests.length,
         passed: verifiedTests.length,
         failed: 0,
         blocked: 0,
         skipped: 0,
+        inconclusive: 0,
       },
-      stages: scenario.preloadedRun.stages?.map((s) => ({
-        ...s,
-        status: 'passed',
-      })) || [],
       logs: [
         `[patch] Applied verified fix proposal ${proposalId}`,
         `[patch] Target file: ${scenario.fixProposal.targetFile}`,

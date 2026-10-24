@@ -33,7 +33,7 @@ export class PlaygroundEngine {
     }
 
     const projectId = generateDemoProjectId(scenarioId);
-    let project = await db.getProject(projectId);
+    let project = await db.getProjectById(projectId);
 
     if (!project) {
       const newProject = {
@@ -42,19 +42,25 @@ export class PlaygroundEngine {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-      await db.saveProject(newProject as any);
+      await db.createProject(newProject as any);
       project = newProject as any;
     }
 
     // Save baseline run and initial tests
-    const run = {
+    const existingRun = await db.getRunById(scenario.preloadedRun.id);
+    const run: VerificationRun = {
       ...scenario.preloadedRun,
       projectId,
       startedAt: new Date().toISOString(),
       completedAt: new Date().toISOString(),
     };
 
-    await db.saveRun(run);
+    if (!existingRun) {
+      await db.createRun(run);
+    } else {
+      await db.updateRun(run.id, run);
+    }
+
     await db.saveTestResults(scenario.initialTestResults);
     await db.saveFindings(scenario.initialFindings);
 
@@ -99,7 +105,7 @@ export class PlaygroundEngine {
       runId: newRunId,
     }));
 
-    await db.saveRun(liveRun);
+    await db.createRun(liveRun);
     await db.saveTestResults(testResults);
     await db.saveFindings(findings);
 
@@ -185,7 +191,7 @@ export class PlaygroundEngine {
       completedAt: new Date().toISOString(),
     };
 
-    await db.saveRun(verifiedRun);
+    await db.createRun(verifiedRun);
     await db.saveTestResults(verifiedTests);
     await db.saveFindings([]); // Zero findings on verified run
 

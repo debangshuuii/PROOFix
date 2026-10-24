@@ -5,6 +5,7 @@
 
 import { executeDoctorCommand } from './commands/doctor.ts';
 import { executeRunCommand } from './commands/run.ts';
+import { executeFixCommand } from './commands/fix.ts';
 import { printBanner, PROOFIX_VERSION } from './banner.ts';
 import { colors } from './colors.ts';
 import type { CliCommand, ParsedCliArgs } from './types.ts';
@@ -153,6 +154,17 @@ export async function dispatch(rawArgs: string[]): Promise<number> {
       bail: Boolean(parsed.flags.bail),
     });
     return result.status === 'failed' ? 1 : 0;
+  }
+
+  if (parsed.command === 'fix') {
+    const result = await executeFixCommand({
+      scenario: parsed.flags.scenario as string | undefined,
+      apply: Boolean(parsed.flags.apply),
+      rollback: Boolean(parsed.flags.rollback),
+      json: Boolean(parsed.flags.json),
+      interactive: Boolean(parsed.flags.interactive),
+    });
+    return result.success ? 0 : 1;
   }
 
   // Placeholders for remaining commands wired in upcoming commits

@@ -7,6 +7,8 @@ import { executeDoctorCommand } from './commands/doctor.ts';
 import { executeRunCommand } from './commands/run.ts';
 import { executeFixCommand } from './commands/fix.ts';
 import { executeWatchCommand } from './commands/watch.ts';
+import { executeAnalyzeCommand } from './commands/analyze.ts';
+import { executeStatusCommand } from './commands/status.ts';
 import { printBanner, PROOFIX_VERSION } from './banner.ts';
 import { colors } from './colors.ts';
 import type { CliCommand, ParsedCliArgs } from './types.ts';
@@ -176,6 +178,17 @@ export async function dispatch(rawArgs: string[]): Promise<number> {
     return 0;
   }
 
-  // Placeholders for remaining commands wired in upcoming commits
+  if (parsed.command === 'analyze') {
+    const targetDir = parsed.positional[0] || '.';
+    executeAnalyzeCommand(targetDir, Boolean(parsed.flags.json));
+    return 0;
+  }
+
+  if (parsed.command === 'status') {
+    const port = typeof parsed.flags.port === 'number' ? parsed.flags.port : undefined;
+    const result = await executeStatusCommand(port, Boolean(parsed.flags.json));
+    return result.active ? 0 : 1;
+  }
+
   return 0;
 }

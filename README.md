@@ -58,6 +58,23 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
+## 🎮 Zero-Setup Interactive Demo Playground
+
+> **"Experience automated failure detection, AI diagnosis, and self-healing fixes in 10 seconds — with zero configuration."**
+
+PROOFix features 3 pre-packaged defect scenarios accessible with one click from the [Landing Page](http://localhost:3000/#playground) and [Dashboard](http://localhost:3000/dashboard):
+
+- **E-Commerce Broken Checkout**: Form submission failure + missing `/api/checkout` (HTTP 404).
+- **Next.js SSR Hydration Drift**: Server/client timestamp drift triggering React 19 Hydration Error #418.
+- **SQL Injection Preflight Gate**: Raw string concatenation in `db.query()` blocked by the AST Security Gate (CWE-89).
+
+Execute the automated playground CI verification suite:
+```bash
+npm run test:playground
+```
+
+---
+
 ## 🧪 Testing with the Built-in Verification Fixture
 
 PROOFix includes an interactive verification testbed (`src/fixtures/sample-app`) with known, deterministic test outcomes:
@@ -139,6 +156,7 @@ PROOFix/
 
 ## 📄 Documentation
 
+- [Zero-Setup Interactive Demo Playground](docs/ZERO_SETUP_INTERACTIVE_PLAYGROUND.md)
 - [Enterprise UI/UX & Developer Experience](docs/ENTERPRISE_UI_UX_DEVELOPER_EXPERIENCE.md)
 - [Interactive OpenAPI 3.1 Reference](/docs)
 - [Architecture & Subsystems](docs/architecture.md)

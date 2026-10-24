@@ -20,14 +20,6 @@ export interface PipelineExecutionCallbacks {
 }
 
 export class CliPipelineExecutor {
-  private registry: ScenarioRegistry;
-  private engine: PlaygroundEngine;
-
-  constructor() {
-    this.registry = new ScenarioRegistry();
-    this.engine = new PlaygroundEngine();
-  }
-
   public async execute(
     options: CliRunOptions = {},
     callbacks: PipelineExecutionCallbacks = {}
@@ -35,7 +27,7 @@ export class CliPipelineExecutor {
     const startTime = Date.now();
     const scenarioId = options.scenario || 'ecommerce_checkout';
 
-    const scenario = this.registry.getScenarioById(scenarioId) || this.registry.getAllScenarios()[0];
+    const scenario = ScenarioRegistry.getScenarioById(scenarioId as any) || ScenarioRegistry.getAllScenarios()[0];
     const totalStages = VERIFICATION_STAGES.length;
     const stagesInfo: PipelineStageInfo[] = [];
 
@@ -43,7 +35,7 @@ export class CliPipelineExecutor {
     let failedCount = 0;
 
     // Launch simulation run via PlaygroundEngine
-    const simResult = await this.engine.launchScenarioSimulation(scenario.id);
+    const simResult = await PlaygroundEngine.launchDemoRun(scenario.id as any);
 
     for (let i = 0; i < VERIFICATION_STAGES.length; i++) {
       const stageDef = VERIFICATION_STAGES[i];
@@ -63,7 +55,7 @@ export class CliPipelineExecutor {
       switch (stageDef.id) {
         case 'preflight':
           log('Inspecting TypeScript AST and Next.js route preflight constraints...');
-          log(`Target route: ${scenario.targetUrl}`);
+          log(`Target file: ${scenario.fault.faultyFile}`);
           summaryMsg = 'Static preflight verified 0 compilation errors';
           break;
 
@@ -127,7 +119,7 @@ export class CliPipelineExecutor {
 
         case 'self_healing_repair':
           log('Triggering AI Autonomous Diagnosis & Patch Synthesis...');
-          log(`Fix Proposal generated: ${scenario.solution.fixTitle}`);
+          log(`Fix Proposal generated: ${scenario.fixProposal?.summary || 'Autonomous self-healing patch'}`);
           summaryMsg = 'Autonomous patch synthesized and ready for review';
           break;
       }

@@ -21,6 +21,8 @@ import {
   GitBranch,
 } from 'lucide-react';
 import { CardSkeleton } from '@/components/Skeleton';
+import { PlaygroundScenarioSelector } from '@/components/playground/PlaygroundScenarioSelector';
+import { PlaygroundBadge } from '@/components/playground/PlaygroundBadge';
 
 export default function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -231,6 +233,32 @@ export default function DashboardPage() {
             <div className="text-2xl font-bold text-rose-400 mt-2">{failedRuns}</div>
             <div className="text-[11px] text-rose-400/80 mt-1">Requires evidence inspection & fixes</div>
           </div>
+        </div>
+
+        {/* Zero-Setup Interactive Demo Playground */}
+        <div className="my-10 p-6 rounded-2xl border border-sky-500/20 bg-gradient-to-r from-sky-950/20 via-slate-900/40 to-indigo-950/20 shadow-xl shadow-sky-500/5">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <PlaygroundBadge size="sm" label="Instant Sandbox" />
+                <span className="text-xs font-semibold text-slate-400">Zero Configuration Required</span>
+              </div>
+              <h2 className="text-xl font-bold text-white tracking-tight">
+                One-Click Interactive Demo Scenarios
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Experience failure detection, AI diagnosis, and self-healing fixes in 10 seconds.
+              </p>
+            </div>
+            <Link
+              href="/#playground"
+              className="text-xs font-semibold text-sky-400 hover:text-sky-300 flex items-center gap-1 group"
+            >
+              <span>Explore All Scenarios</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </div>
+          <PlaygroundScenarioSelector />
         </div>
 
         {/* Projects Section */}

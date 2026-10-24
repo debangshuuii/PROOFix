@@ -40,6 +40,11 @@ test('dispatcher: routes run command returning exit code 0 or 1', async () => {
   assert.ok([0, 1].includes(exitCode));
 });
 
+test('dispatcher: routes fix command returning exit code 0 or 1', async () => {
+  const exitCode = await dispatch(['fix', '--scenario', 'ecommerce_checkout', '--apply', '--json']);
+  assert.ok([0, 1].includes(exitCode));
+});
+
 test.after(() => {
   setTimeout(() => process.exit(0), 20).unref();
 });

@@ -19,6 +19,7 @@ import { CRAWLER_SCHEMAS, CRAWLER_PATHS } from './modules/crawler.ts';
 import { FUZZING_SCHEMAS, FUZZING_PATHS } from './modules/fuzzing.ts';
 import { REPLAY_SCHEMAS, REPLAY_PATHS } from './modules/replay.ts';
 import { COMPANION_SCHEMAS, COMPANION_PATHS } from './modules/companion.ts';
+import { PLAYGROUND_SCHEMAS, PLAYGROUND_PATHS } from './modules/playground.ts';
 
 export class OpenApiSpecGenerator {
   /**
@@ -61,6 +62,7 @@ export class OpenApiSpecGenerator {
         { name: 'Fuzzing', description: 'Automated contract boundary mutations and fuzz probes' },
         { name: 'Replay', description: 'Deterministic HAR network traffic capture and mock replays' },
         { name: 'Companion', description: 'Real-time WebRTC canvas streaming and developer companion' },
+        { name: 'Playground', description: 'Zero-setup interactive defect sandboxes and simulation' },
       ],
       paths: {
         ...PROJECT_PATHS,
@@ -75,6 +77,7 @@ export class OpenApiSpecGenerator {
         ...FUZZING_PATHS,
         ...REPLAY_PATHS,
         ...COMPANION_PATHS,
+        ...PLAYGROUND_PATHS,
       },
       components: {
         securitySchemes: OPENAPI_SECURITY_SCHEMES,
@@ -92,6 +95,7 @@ export class OpenApiSpecGenerator {
           ...FUZZING_SCHEMAS,
           ...REPLAY_SCHEMAS,
           ...COMPANION_SCHEMAS,
+          ...PLAYGROUND_SCHEMAS,
         },
       },
     };

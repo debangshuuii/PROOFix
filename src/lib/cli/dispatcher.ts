@@ -4,6 +4,7 @@
  */
 
 import { executeDoctorCommand } from './commands/doctor.ts';
+import { executeRunCommand } from './commands/run.ts';
 import { printBanner, PROOFIX_VERSION } from './banner.ts';
 import { colors } from './colors.ts';
 import type { CliCommand, ParsedCliArgs } from './types.ts';
@@ -140,6 +141,18 @@ export async function dispatch(rawArgs: string[]): Promise<number> {
       verbose: Boolean(parsed.flags.verbose),
     });
     return report.overallStatus === 'unhealthy' ? 1 : 0;
+  }
+
+  if (parsed.command === 'run') {
+    const result = await executeRunCommand({
+      scenario: parsed.flags.scenario as string | undefined,
+      interactive: Boolean(parsed.flags.interactive),
+      headless: Boolean(parsed.flags.headless),
+      json: Boolean(parsed.flags.json),
+      verbose: Boolean(parsed.flags.verbose),
+      bail: Boolean(parsed.flags.bail),
+    });
+    return result.status === 'failed' ? 1 : 0;
   }
 
   // Placeholders for remaining commands wired in upcoming commits

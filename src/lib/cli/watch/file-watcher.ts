@@ -14,11 +14,11 @@ export interface FileWatcherOptions {
 }
 
 const DEFAULT_IGNORED: RegExp[] = [
-  /[\\/]\.git([\\/]|$)/,
-  /[\\/]node_modules([\\/]|$)/,
-  /[\\/]\.next([\\/]|$)/,
-  /[\\/]\.proofix([\\/]|$)/,
-  /[\\/]data[\\/]proofix_db\.json$/,
+  /(^|[\\/])\.git([\\/]|$)/,
+  /(^|[\\/])node_modules([\\/]|$)/,
+  /(^|[\\/])\.next([\\/]|$)/,
+  /(^|[\\/])\.proofix([\\/]|$)/,
+  /(^|[\\/])data[\\/]proofix_db\.json$/,
   /\.proofix\.bak$/,
   /\.swp$/,
   /\.tmp$/,

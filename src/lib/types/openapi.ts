@@ -55,7 +55,11 @@ export interface OpenApiSchema {
   enum?: (string | number | boolean)[];
   example?: any;
   default?: any;
-  nullable?: boolean;
+  minimum?: number;
+  maximum?: number;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
   oneOf?: OpenApiSchema[];
   anyOf?: OpenApiSchema[];
   allOf?: OpenApiSchema[];

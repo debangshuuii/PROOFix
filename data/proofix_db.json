@@ -9,6 +9,80 @@
   ],
   "projects": [
     {
+      "id": "prj-demo-sql-injection-preflight",
+      "name": "VaultAdmin Directory Demo",
+      "provider": "sample_fixture",
+      "repoUrl": "https://github.com/demo/vaultadmin-sqli-vulnerability",
+      "branch": "main",
+      "framework": "nextjs",
+      "packageManager": "npm",
+      "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "test": "proofix check"
+      },
+      "environmentVariables": [
+        "DATABASE_URL",
+        "AUTH_SECRET"
+      ],
+      "routes": [
+        "/",
+        "/users",
+        "/api/users/search"
+      ],
+      "createdAt": "2026-10-24T05:17:16.181Z",
+      "updatedAt": "2026-10-24T05:17:16.181Z"
+    },
+    {
+      "id": "prj-demo-hydration-mismatch",
+      "name": "PulseOps Dashboard Demo",
+      "provider": "sample_fixture",
+      "repoUrl": "https://github.com/demo/pulseops-hydration-crash",
+      "branch": "main",
+      "framework": "nextjs",
+      "packageManager": "npm",
+      "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "test": "playwright test"
+      },
+      "environmentVariables": [
+        "NEXT_PUBLIC_TIMEZONE"
+      ],
+      "routes": [
+        "/",
+        "/analytics",
+        "/metrics"
+      ],
+      "createdAt": "2026-10-24T05:17:16.145Z",
+      "updatedAt": "2026-10-24T05:17:16.145Z"
+    },
+    {
+      "id": "prj-demo-ecommerce-checkout",
+      "name": "NextStore E-Commerce Demo",
+      "provider": "sample_fixture",
+      "repoUrl": "https://github.com/demo/nextstore-broken-checkout",
+      "branch": "main",
+      "framework": "nextjs",
+      "packageManager": "npm",
+      "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "test": "playwright test"
+      },
+      "environmentVariables": [
+        "NEXT_PUBLIC_API_URL"
+      ],
+      "routes": [
+        "/",
+        "/catalog",
+        "/cart",
+        "/checkout"
+      ],
+      "createdAt": "2026-10-24T05:17:16.124Z",
+      "updatedAt": "2026-10-24T05:17:16.124Z"
+    },
+    {
       "id": "proj_1792569519341_vp46",
       "ownerId": "usr_default",
       "name": "Aasra",
@@ -643,6 +717,2055 @@
     }
   ],
   "runs": [
+    {
+      "id": "run-demo-sql-injection-preflight-verified-mvm0vq1u",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "projectVersionId": "ver_demo_sqli",
+      "runNumber": 1,
+      "status": "completed",
+      "buildStatus": "failed",
+      "startupStatus": "skipped",
+      "commitHash": "sqli89e5f6",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Execution conducted in process sandbox",
+      "summary": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-sql_injection_preflight-mvm0vq1u",
+        "[patch] Target file: src/app/api/users/search/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Repository Dependency Preflight Audit passed",
+        "[test] ✓ Security Preflight Gate & AST Policy Audit passed",
+        "[test] ✓ Secret Leak Redaction & Vault Audit passed",
+        "[test] ✓ API Search Route Live Smoke Check passed",
+        "[test] ✓ Database Connection Pool Configuration passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:33:13.498Z",
+      "completedAt": "2026-10-24T06:33:18.498Z",
+      "createdAt": "2026-10-24T06:32:18.192Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-live-mvm0vq1h",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "projectVersionId": "ver_demo_sqli",
+      "runNumber": 1,
+      "status": "failed",
+      "buildStatus": "failed",
+      "startupStatus": "skipped",
+      "commitHash": "sqli89e5f6",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Execution conducted in process sandbox",
+      "summary": {
+        "total": 5,
+        "passed": 3,
+        "failed": 1,
+        "blocked": 1,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "logs": [
+        "[preflight] Commencing AST static analysis across 14 routes...",
+        "[ast-scanner] Analyzing database query invocations in src/app/api/users/search/route.ts",
+        "[security-gate] CRITICAL VIOLATION: TemplateLiteral string concatenation in db.query()",
+        "[security-gate] Identified vulnerability type: CWE-89 (SQL Injection)",
+        "[policy] Zero-Tolerance Security Gate tripped. Aborting runtime container deployment.",
+        "[diagnoser] Formulating parameterized query patch with 99% confidence score..."
+      ],
+      "startedAt": "2026-10-24T06:33:18.485Z",
+      "completedAt": "2026-10-24T06:33:18.485Z",
+      "createdAt": "2026-10-24T06:32:18.192Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-verified-mvm0vq0m",
+      "projectId": "prj-demo-hydration-mismatch",
+      "projectVersionId": "ver_demo_hydration",
+      "runNumber": 1,
+      "status": "completed",
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "commitHash": "hydr418c3d4",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Execution conducted in process sandbox",
+      "summary": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-hydration_mismatch-mvm0vq0m",
+        "[patch] Target file: src/components/dashboard/LiveServerClock.tsx",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Root Route SSR Response Health Check passed",
+        "[test] ✓ Client-Side React Hydration Audit passed",
+        "[test] ✓ Dashboard Analytics Route Navigation passed",
+        "[test] ✓ Zero Browser Console Exceptions Policy Gate passed",
+        "[test] ✓ DOM Tree Structural Stability & Integrity passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:33:13.454Z",
+      "completedAt": "2026-10-24T06:33:18.454Z",
+      "createdAt": "2026-10-24T06:32:18.192Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-live-mvm0vq0b",
+      "projectId": "prj-demo-hydration-mismatch",
+      "projectVersionId": "ver_demo_hydration",
+      "runNumber": 1,
+      "status": "failed",
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "commitHash": "hydr418c3d4",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Execution conducted in process sandbox",
+      "summary": {
+        "total": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-hydration",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (290ms)",
+        "[console.error] Error: Hydration failed because the initial UI does not match what was rendered on the server.",
+        "[console.error] Warning: Text content did not match. Server: \"10:30:15 AM\" Client: \"10:30:16 AM\"",
+        "[playwright] Caught uncaught browser console exception during hydration check",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:33:18.443Z",
+      "completedAt": "2026-10-24T06:33:18.443Z",
+      "createdAt": "2026-10-24T06:32:18.192Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-verified-mvm0vpwi",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "projectVersionId": "ver_demo_ecommerce",
+      "runNumber": 1,
+      "status": "completed",
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "commitHash": "ecom404a1b2",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Execution conducted in process sandbox",
+      "summary": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-ecommerce_checkout-mvm0vpwi",
+        "[patch] Target file: src/app/api/checkout/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Storefront Root Route Health Check passed",
+        "[test] ✓ Catalog Navigation & Routing passed",
+        "[test] ✓ Cart Hydration & Line Item Count passed",
+        "[test] ✓ Place Order Button Click Interaction passed",
+        "[test] ✓ Backend API Route /api/checkout Health passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:33:13.306Z",
+      "completedAt": "2026-10-24T06:33:18.306Z",
+      "createdAt": "2026-10-24T06:32:18.192Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-live-mvm0vpv7",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "projectVersionId": "ver_demo_ecommerce",
+      "runNumber": 1,
+      "status": "failed",
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "commitHash": "ecom404a1b2",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Execution conducted in process sandbox",
+      "summary": {
+        "total": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-ecommerce",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (340ms)",
+        "[test] GET /checkout - HTTP 200 OK (410ms)",
+        "[test] Click #place-order-btn triggered fetch POST /api/checkout",
+        "[network] <-- HTTP 404 Not Found on POST /api/checkout",
+        "[error] Unhandled rejection: Failed to fetch order confirmation: HTTP 404",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:33:18.259Z",
+      "completedAt": "2026-10-24T06:33:18.259Z",
+      "createdAt": "2026-10-24T06:32:18.192Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-verified-mvm09ly0",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "passed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "passed",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-sql_injection_preflight-mvm09ly0",
+        "[patch] Target file: src/app/api/users/search/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Repository Dependency Preflight Audit passed",
+        "[test] ✓ Security Preflight Gate & AST Policy Audit passed",
+        "[test] ✓ Secret Leak Redaction & Vault Audit passed",
+        "[test] ✓ API Search Route Live Smoke Check passed",
+        "[test] ✓ Database Connection Pool Configuration passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:16:01.744Z",
+      "completedAt": "2026-10-24T06:16:06.744Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-live-mvm09lwl",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 1,
+        "blocked": 1,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "failed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "blocked",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[preflight] Commencing AST static analysis across 14 routes...",
+        "[ast-scanner] Analyzing database query invocations in src/app/api/users/search/route.ts",
+        "[security-gate] CRITICAL VIOLATION: TemplateLiteral string concatenation in db.query()",
+        "[security-gate] Identified vulnerability type: CWE-89 (SQL Injection)",
+        "[policy] Zero-Tolerance Security Gate tripped. Aborting runtime container deployment.",
+        "[diagnoser] Formulating parameterized query patch with 99% confidence score..."
+      ],
+      "startedAt": "2026-10-24T06:16:06.693Z",
+      "completedAt": "2026-10-24T06:16:06.693Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-verified-mvm09lts",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "passed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-hydration_mismatch-mvm09lts",
+        "[patch] Target file: src/components/dashboard/LiveServerClock.tsx",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Root Route SSR Response Health Check passed",
+        "[test] ✓ Client-Side React Hydration Audit passed",
+        "[test] ✓ Dashboard Analytics Route Navigation passed",
+        "[test] ✓ Zero Browser Console Exceptions Policy Gate passed",
+        "[test] ✓ DOM Tree Structural Stability & Integrity passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:16:01.592Z",
+      "completedAt": "2026-10-24T06:16:06.592Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-live-mvm09lsg",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "failed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-hydration",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (290ms)",
+        "[console.error] Error: Hydration failed because the initial UI does not match what was rendered on the server.",
+        "[console.error] Warning: Text content did not match. Server: \"10:30:15 AM\" Client: \"10:30:16 AM\"",
+        "[playwright] Caught uncaught browser console exception during hydration check",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:16:06.544Z",
+      "completedAt": "2026-10-24T06:16:06.544Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-verified-mvm09lqt",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "passed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-ecommerce_checkout-mvm09lqt",
+        "[patch] Target file: src/app/api/checkout/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Storefront Root Route Health Check passed",
+        "[test] ✓ Catalog Navigation & Routing passed",
+        "[test] ✓ Cart Hydration & Line Item Count passed",
+        "[test] ✓ Place Order Button Click Interaction passed",
+        "[test] ✓ Backend API Route /api/checkout Health passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:16:01.485Z",
+      "completedAt": "2026-10-24T06:16:06.485Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-live-mvm09lpi",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "failed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-ecommerce",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (340ms)",
+        "[test] GET /checkout - HTTP 200 OK (410ms)",
+        "[test] Click #place-order-btn triggered fetch POST /api/checkout",
+        "[network] <-- HTTP 404 Not Found on POST /api/checkout",
+        "[error] Unhandled rejection: Failed to fetch order confirmation: HTTP 404",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:16:06.438Z",
+      "completedAt": "2026-10-24T06:16:06.438Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-verified-mvm088t8",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "passed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "passed",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-sql_injection_preflight-mvm088t8",
+        "[patch] Target file: src/app/api/users/search/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Repository Dependency Preflight Audit passed",
+        "[test] ✓ Security Preflight Gate & AST Policy Audit passed",
+        "[test] ✓ Secret Leak Redaction & Vault Audit passed",
+        "[test] ✓ API Search Route Live Smoke Check passed",
+        "[test] ✓ Database Connection Pool Configuration passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:14:58.068Z",
+      "completedAt": "2026-10-24T06:15:03.068Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-live-mvm088s6",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 1,
+        "blocked": 1,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "failed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "blocked",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[preflight] Commencing AST static analysis across 14 routes...",
+        "[ast-scanner] Analyzing database query invocations in src/app/api/users/search/route.ts",
+        "[security-gate] CRITICAL VIOLATION: TemplateLiteral string concatenation in db.query()",
+        "[security-gate] Identified vulnerability type: CWE-89 (SQL Injection)",
+        "[policy] Zero-Tolerance Security Gate tripped. Aborting runtime container deployment.",
+        "[diagnoser] Formulating parameterized query patch with 99% confidence score..."
+      ],
+      "startedAt": "2026-10-24T06:15:03.030Z",
+      "completedAt": "2026-10-24T06:15:03.030Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-verified-mvm088q5",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "passed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-hydration_mismatch-mvm088q5",
+        "[patch] Target file: src/components/dashboard/LiveServerClock.tsx",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Root Route SSR Response Health Check passed",
+        "[test] ✓ Client-Side React Hydration Audit passed",
+        "[test] ✓ Dashboard Analytics Route Navigation passed",
+        "[test] ✓ Zero Browser Console Exceptions Policy Gate passed",
+        "[test] ✓ DOM Tree Structural Stability & Integrity passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:14:57.957Z",
+      "completedAt": "2026-10-24T06:15:02.957Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-live-mvm088py",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "failed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-hydration",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (290ms)",
+        "[console.error] Error: Hydration failed because the initial UI does not match what was rendered on the server.",
+        "[console.error] Warning: Text content did not match. Server: \"10:30:15 AM\" Client: \"10:30:16 AM\"",
+        "[playwright] Caught uncaught browser console exception during hydration check",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:15:02.950Z",
+      "completedAt": "2026-10-24T06:15:02.950Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-verified-mvm088o5",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "passed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-ecommerce_checkout-mvm088o5",
+        "[patch] Target file: src/app/api/checkout/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Storefront Root Route Health Check passed",
+        "[test] ✓ Catalog Navigation & Routing passed",
+        "[test] ✓ Cart Hydration & Line Item Count passed",
+        "[test] ✓ Place Order Button Click Interaction passed",
+        "[test] ✓ Backend API Route /api/checkout Health passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:14:57.885Z",
+      "completedAt": "2026-10-24T06:15:02.885Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-live-mvm088nt",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "failed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-ecommerce",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (340ms)",
+        "[test] GET /checkout - HTTP 200 OK (410ms)",
+        "[test] Click #place-order-btn triggered fetch POST /api/checkout",
+        "[network] <-- HTTP 404 Not Found on POST /api/checkout",
+        "[error] Unhandled rejection: Failed to fetch order confirmation: HTTP 404",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:15:02.873Z",
+      "completedAt": "2026-10-24T06:15:02.873Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-verified-mvm06cps",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "passed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "passed",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-sql_injection_preflight-mvm06cps",
+        "[patch] Target file: src/app/api/users/search/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Repository Dependency Preflight Audit passed",
+        "[test] ✓ Security Preflight Gate & AST Policy Audit passed",
+        "[test] ✓ Secret Leak Redaction & Vault Audit passed",
+        "[test] ✓ API Search Route Live Smoke Check passed",
+        "[test] ✓ Database Connection Pool Configuration passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:13:29.816Z",
+      "completedAt": "2026-10-24T06:13:34.816Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-live-mvm06cnh",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 1,
+        "blocked": 1,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "failed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "blocked",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[preflight] Commencing AST static analysis across 14 routes...",
+        "[ast-scanner] Analyzing database query invocations in src/app/api/users/search/route.ts",
+        "[security-gate] CRITICAL VIOLATION: TemplateLiteral string concatenation in db.query()",
+        "[security-gate] Identified vulnerability type: CWE-89 (SQL Injection)",
+        "[policy] Zero-Tolerance Security Gate tripped. Aborting runtime container deployment.",
+        "[diagnoser] Formulating parameterized query patch with 99% confidence score..."
+      ],
+      "startedAt": "2026-10-24T06:13:34.733Z",
+      "completedAt": "2026-10-24T06:13:34.733Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-live-mvm06cl0",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "failed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-hydration",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (290ms)",
+        "[console.error] Error: Hydration failed because the initial UI does not match what was rendered on the server.",
+        "[console.error] Warning: Text content did not match. Server: \"10:30:15 AM\" Client: \"10:30:16 AM\"",
+        "[playwright] Caught uncaught browser console exception during hydration check",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:13:34.644Z",
+      "completedAt": "2026-10-24T06:13:34.644Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-verified-mvm03hmc",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "passed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-ecommerce_checkout-mvm03hmc",
+        "[patch] Target file: src/app/api/checkout/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Storefront Root Route Health Check passed",
+        "[test] ✓ Catalog Navigation & Routing passed",
+        "[test] ✓ Cart Hydration & Line Item Count passed",
+        "[test] ✓ Place Order Button Click Interaction passed",
+        "[test] ✓ Backend API Route /api/checkout Health passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:11:16.204Z",
+      "completedAt": "2026-10-24T06:11:21.204Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-live-mvm03hlj",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "failed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-ecommerce",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (340ms)",
+        "[test] GET /checkout - HTTP 200 OK (410ms)",
+        "[test] Click #place-order-btn triggered fetch POST /api/checkout",
+        "[network] <-- HTTP 404 Not Found on POST /api/checkout",
+        "[error] Unhandled rejection: Failed to fetch order confirmation: HTTP 404",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:11:21.175Z",
+      "completedAt": "2026-10-24T06:11:21.176Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-verified-mvlzzfj9",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "passed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "passed",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-sql_injection_preflight-mvlzzfj9",
+        "[patch] Target file: src/app/api/users/search/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Repository Dependency Preflight Audit passed",
+        "[test] ✓ Security Preflight Gate & AST Policy Audit passed",
+        "[test] ✓ Secret Leak Redaction & Vault Audit passed",
+        "[test] ✓ API Search Route Live Smoke Check passed",
+        "[test] ✓ Database Connection Pool Configuration passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:08:06.878Z",
+      "completedAt": "2026-10-24T06:08:11.878Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-live-mvlzzfj3",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 1,
+        "blocked": 1,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "failed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "blocked",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[preflight] Commencing AST static analysis across 14 routes...",
+        "[ast-scanner] Analyzing database query invocations in src/app/api/users/search/route.ts",
+        "[security-gate] CRITICAL VIOLATION: TemplateLiteral string concatenation in db.query()",
+        "[security-gate] Identified vulnerability type: CWE-89 (SQL Injection)",
+        "[policy] Zero-Tolerance Security Gate tripped. Aborting runtime container deployment.",
+        "[diagnoser] Formulating parameterized query patch with 99% confidence score..."
+      ],
+      "startedAt": "2026-10-24T06:08:11.871Z",
+      "completedAt": "2026-10-24T06:08:11.871Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-verified-mvlzxt80",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "passed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-hydration_mismatch-mvlzxt80",
+        "[patch] Target file: src/components/dashboard/LiveServerClock.tsx",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Root Route SSR Response Health Check passed",
+        "[test] ✓ Client-Side React Hydration Audit passed",
+        "[test] ✓ Dashboard Analytics Route Navigation passed",
+        "[test] ✓ Zero Browser Console Exceptions Policy Gate passed",
+        "[test] ✓ DOM Tree Structural Stability & Integrity passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:06:51.305Z",
+      "completedAt": "2026-10-24T06:06:56.305Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-live-mvlzxt7s",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "failed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-hydration",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (290ms)",
+        "[console.error] Error: Hydration failed because the initial UI does not match what was rendered on the server.",
+        "[console.error] Warning: Text content did not match. Server: \"10:30:15 AM\" Client: \"10:30:16 AM\"",
+        "[playwright] Caught uncaught browser console exception during hydration check",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:06:56.296Z",
+      "completedAt": "2026-10-24T06:06:56.296Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-verified-mvlzw6sg",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "passed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-ecommerce_checkout-mvlzw6sg",
+        "[patch] Target file: src/app/api/checkout/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Storefront Root Route Health Check passed",
+        "[test] ✓ Catalog Navigation & Routing passed",
+        "[test] ✓ Cart Hydration & Line Item Count passed",
+        "[test] ✓ Place Order Button Click Interaction passed",
+        "[test] ✓ Backend API Route /api/checkout Health passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T06:05:35.576Z",
+      "completedAt": "2026-10-24T06:05:40.576Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-live-mvlzw6rn",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "failed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-ecommerce",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (340ms)",
+        "[test] GET /checkout - HTTP 200 OK (410ms)",
+        "[test] Click #place-order-btn triggered fetch POST /api/checkout",
+        "[network] <-- HTTP 404 Not Found on POST /api/checkout",
+        "[error] Unhandled rejection: Failed to fetch order confirmation: HTTP 404",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:05:40.547Z",
+      "completedAt": "2026-10-24T06:05:40.547Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-verified-mvlybkn0",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "passed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-hydration_mismatch-mvlybkn0",
+        "[patch] Target file: src/components/dashboard/LiveServerClock.tsx",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Root Route SSR Response Health Check passed",
+        "[test] ✓ Client-Side React Hydration Audit passed",
+        "[test] ✓ Dashboard Analytics Route Navigation passed",
+        "[test] ✓ Zero Browser Console Exceptions Policy Gate passed",
+        "[test] ✓ DOM Tree Structural Stability & Integrity passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T05:21:34.132Z",
+      "completedAt": "2026-10-24T05:21:39.132Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-live-mvlybkm3",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "failed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-hydration",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (290ms)",
+        "[console.error] Error: Hydration failed because the initial UI does not match what was rendered on the server.",
+        "[console.error] Warning: Text content did not match. Server: \"10:30:15 AM\" Client: \"10:30:16 AM\"",
+        "[playwright] Caught uncaught browser console exception during hydration check",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T05:21:39.099Z",
+      "completedAt": "2026-10-24T05:21:39.099Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-live-mvlybkl3",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "failed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-ecommerce",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (340ms)",
+        "[test] GET /checkout - HTTP 200 OK (410ms)",
+        "[test] Click #place-order-btn triggered fetch POST /api/checkout",
+        "[network] <-- HTTP 404 Not Found on POST /api/checkout",
+        "[error] Unhandled rejection: Failed to fetch order confirmation: HTTP 404",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T05:21:39.063Z",
+      "completedAt": "2026-10-24T05:21:39.063Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-verified-mvly9kfa",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "passed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-hydration_mismatch-mvly9kfa",
+        "[patch] Target file: src/components/dashboard/LiveServerClock.tsx",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Root Route SSR Response Health Check passed",
+        "[test] ✓ Client-Side React Hydration Audit passed",
+        "[test] ✓ Dashboard Analytics Route Navigation passed",
+        "[test] ✓ Zero Browser Console Exceptions Policy Gate passed",
+        "[test] ✓ DOM Tree Structural Stability & Integrity passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T05:20:00.542Z",
+      "completedAt": "2026-10-24T05:20:05.542Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-live-mvly9ke8",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "failed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-hydration",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (290ms)",
+        "[console.error] Error: Hydration failed because the initial UI does not match what was rendered on the server.",
+        "[console.error] Warning: Text content did not match. Server: \"10:30:15 AM\" Client: \"10:30:16 AM\"",
+        "[playwright] Caught uncaught browser console exception during hydration check",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T05:20:05.504Z",
+      "completedAt": "2026-10-24T05:20:05.504Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-live-mvly9kbw",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "failed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-ecommerce",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (340ms)",
+        "[test] GET /checkout - HTTP 200 OK (410ms)",
+        "[test] Click #place-order-btn triggered fetch POST /api/checkout",
+        "[network] <-- HTTP 404 Not Found on POST /api/checkout",
+        "[error] Unhandled rejection: Failed to fetch order confirmation: HTTP 404",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T05:20:05.420Z",
+      "completedAt": "2026-10-24T05:20:05.420Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-verified-mvly5xr9",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "completed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 5,
+        "failed": 0,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "passed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "passed",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[patch] Applied verified fix proposal prop-demo-sql_injection_preflight-mvly5xr9",
+        "[patch] Target file: src/app/api/users/search/route.ts",
+        "[sandbox] Re-executing Playwright testbed verification...",
+        "[test] ✓ Repository Dependency Preflight Audit passed",
+        "[test] ✓ Security Preflight Gate & AST Policy Audit passed",
+        "[test] ✓ Secret Leak Redaction & Vault Audit passed",
+        "[test] ✓ API Search Route Live Smoke Check passed",
+        "[test] ✓ Database Connection Pool Configuration passed",
+        "[verification] ALL TESTS GREEN (100% pass rate). Regression check clean."
+      ],
+      "startedAt": "2026-10-24T05:17:11.197Z",
+      "completedAt": "2026-10-24T05:17:16.197Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-live-mvly5xr3",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 1,
+        "blocked": 1,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "failed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "blocked",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[preflight] Commencing AST static analysis across 14 routes...",
+        "[ast-scanner] Analyzing database query invocations in src/app/api/users/search/route.ts",
+        "[security-gate] CRITICAL VIOLATION: TemplateLiteral string concatenation in db.query()",
+        "[security-gate] Identified vulnerability type: CWE-89 (SQL Injection)",
+        "[policy] Zero-Tolerance Security Gate tripped. Aborting runtime container deployment.",
+        "[diagnoser] Formulating parameterized query patch with 99% confidence score..."
+      ],
+      "startedAt": "2026-10-24T05:17:16.191Z",
+      "completedAt": "2026-10-24T05:17:16.191Z"
+    },
+    {
+      "id": "run-demo-sql-injection-preflight-baseline",
+      "projectId": "prj-demo-sql-injection-preflight",
+      "status": "failed",
+      "summary": {
+        "total": 5,
+        "passed": 3,
+        "failed": 1,
+        "blocked": 1,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 140
+        },
+        {
+          "name": "Dependency Vulnerability Scan",
+          "status": "passed",
+          "durationMs": 310
+        },
+        {
+          "name": "AST Security Preflight Gate",
+          "status": "failed",
+          "durationMs": 420
+        },
+        {
+          "name": "Secret Redaction Audit",
+          "status": "passed",
+          "durationMs": 90
+        },
+        {
+          "name": "Runtime Sandbox Execution",
+          "status": "blocked",
+          "durationMs": 0
+        }
+      ],
+      "logs": [
+        "[preflight] Commencing AST static analysis across 14 routes...",
+        "[ast-scanner] Analyzing database query invocations in src/app/api/users/search/route.ts",
+        "[security-gate] CRITICAL VIOLATION: TemplateLiteral string concatenation in db.query()",
+        "[security-gate] Identified vulnerability type: CWE-89 (SQL Injection)",
+        "[policy] Zero-Tolerance Security Gate tripped. Aborting runtime container deployment.",
+        "[diagnoser] Formulating parameterized query patch with 99% confidence score..."
+      ],
+      "startedAt": "2026-10-24T06:33:18.468Z",
+      "completedAt": "2026-10-24T06:33:18.468Z",
+      "projectVersionId": "ver_demo_sqli",
+      "runNumber": 1,
+      "buildStatus": "failed",
+      "startupStatus": "skipped",
+      "commitHash": "sqli89e5f6",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Execution conducted in process sandbox",
+      "createdAt": "2026-10-24T06:32:18.192Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-live-mvly5xqo",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "failed",
+      "summary": {
+        "totalTests": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "failed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-hydration",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (290ms)",
+        "[console.error] Error: Hydration failed because the initial UI does not match what was rendered on the server.",
+        "[console.error] Warning: Text content did not match. Server: \"10:30:15 AM\" Client: \"10:30:16 AM\"",
+        "[playwright] Caught uncaught browser console exception during hydration check",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T05:17:16.176Z",
+      "completedAt": "2026-10-24T05:17:16.176Z"
+    },
+    {
+      "id": "run-demo-hydration-mismatch-baseline",
+      "projectId": "prj-demo-hydration-mismatch",
+      "status": "failed",
+      "summary": {
+        "total": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 180
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 760
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 290
+        },
+        {
+          "name": "Hydration & Console Exception Interception",
+          "status": "failed",
+          "durationMs": 890
+        },
+        {
+          "name": "Route Navigation",
+          "status": "passed",
+          "durationMs": 380
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-hydration",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (290ms)",
+        "[console.error] Error: Hydration failed because the initial UI does not match what was rendered on the server.",
+        "[console.error] Warning: Text content did not match. Server: \"10:30:15 AM\" Client: \"10:30:16 AM\"",
+        "[playwright] Caught uncaught browser console exception during hydration check",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:33:18.391Z",
+      "completedAt": "2026-10-24T06:33:18.391Z",
+      "projectVersionId": "ver_demo_hydration",
+      "runNumber": 1,
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "commitHash": "hydr418c3d4",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Execution conducted in process sandbox",
+      "createdAt": "2026-10-24T06:32:18.192Z"
+    },
+    {
+      "id": "run-demo-ecommerce-checkout-baseline",
+      "projectId": "prj-demo-ecommerce-checkout",
+      "status": "failed",
+      "summary": {
+        "total": 5,
+        "passed": 3,
+        "failed": 2,
+        "blocked": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "stages": [
+        {
+          "name": "Repository Analysis",
+          "status": "passed",
+          "durationMs": 210
+        },
+        {
+          "name": "Sandbox Startup",
+          "status": "passed",
+          "durationMs": 820
+        },
+        {
+          "name": "Root URL Health",
+          "status": "passed",
+          "durationMs": 340
+        },
+        {
+          "name": "Navigation Flow",
+          "status": "passed",
+          "durationMs": 410
+        },
+        {
+          "name": "Interactive Form Submission",
+          "status": "failed",
+          "durationMs": 1240
+        }
+      ],
+      "logs": [
+        "[sandbox] Mounted ephemeral workspace at /data/workspaces/demo-ecommerce",
+        "[playwright] Launched Chromium headless browser instance",
+        "[test] GET / - HTTP 200 OK (340ms)",
+        "[test] GET /checkout - HTTP 200 OK (410ms)",
+        "[test] Click #place-order-btn triggered fetch POST /api/checkout",
+        "[network] <-- HTTP 404 Not Found on POST /api/checkout",
+        "[error] Unhandled rejection: Failed to fetch order confirmation: HTTP 404",
+        "[diagnoser] Formulating root cause and unified diff patch..."
+      ],
+      "startedAt": "2026-10-24T06:33:18.556Z",
+      "completedAt": "2026-10-24T06:33:18.556Z",
+      "projectVersionId": "ver_demo_ecommerce",
+      "runNumber": 1,
+      "buildStatus": "success",
+      "startupStatus": "success",
+      "commitHash": "ecom404a1b2",
+      "branch": "main",
+      "executionConfig": {
+        "isolationMode": "local_process_sandbox",
+        "port": 3000,
+        "timeoutMs": 30000
+      },
+      "isolationDisclaimer": "Execution conducted in process sandbox",
+      "createdAt": "2026-10-24T06:32:18.192Z"
+    },
     {
       "id": "run_action_1792572778539",
       "projectId": "proj_fixture_01",
@@ -1681,6 +3804,2541 @@
       },
       "startedAt": "2026-10-21T08:52:57.889Z",
       "completedAt": "2026-10-21T08:52:58.539Z"
+    },
+    {
+      "id": "t-ecom-1",
+      "runId": "run-demo-ecommerce-checkout-baseline",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 340,
+      "actualResult": "Storefront loaded HTTP 200 within 340ms",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-ecom-2",
+      "runId": "run-demo-ecommerce-checkout-baseline",
+      "name": "Catalog Navigation & Routing",
+      "category": "route_discovery",
+      "status": "passed",
+      "durationMs": 410,
+      "actualResult": "Discovered /catalog route and rendered 12 products",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-ecom-3",
+      "runId": "run-demo-ecommerce-checkout-baseline",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "user_flow",
+      "status": "passed",
+      "durationMs": 520,
+      "actualResult": "Cart counter incremented to 2 items correctly",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-ecom-4",
+      "runId": "run-demo-ecommerce-checkout-baseline",
+      "name": "Place Order Button Click Interaction",
+      "category": "form_validation",
+      "status": "failed",
+      "durationMs": 1240,
+      "actualResult": "Order submission button click did not resolve to confirmation card within 5000ms",
+      "errorDetails": {
+        "message": "Order submission button click did not resolve to confirmation card within 5000ms"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [
+          {
+            "url": "/api/checkout",
+            "method": "POST",
+            "status": 404,
+            "failureReason": "Endpoint not implemented"
+          }
+        ],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-ecom-5",
+      "runId": "run-demo-ecommerce-checkout-baseline",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api_health",
+      "status": "failed",
+      "durationMs": 180,
+      "actualResult": "HTTP 404 (Not Found) returned by POST /api/checkout",
+      "errorDetails": {
+        "message": "HTTP 404 (Not Found) returned by POST /api/checkout"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [
+          {
+            "url": "/api/checkout",
+            "method": "POST",
+            "status": 404,
+            "failureReason": "HTTP 404 Not Found"
+          }
+        ],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-hyd-1",
+      "runId": "run-demo-hydration-mismatch-baseline",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 290,
+      "actualResult": "Server responded HTTP 200 within 290ms",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-hyd-2",
+      "runId": "run-demo-hydration-mismatch-baseline",
+      "name": "Client-Side React Hydration Audit",
+      "category": "error_boundary",
+      "status": "failed",
+      "durationMs": 150,
+      "actualResult": "Hydration failed due to server/client HTML divergence",
+      "errorDetails": {
+        "message": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server."
+      },
+      "evidence": {
+        "consoleErrors": [
+          {
+            "timestamp": "2026-10-24T06:33:18.192Z",
+            "type": "error",
+            "text": "Error: Hydration failed because the initial UI does not match what was rendered on the server."
+          }
+        ],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-hyd-3",
+      "runId": "run-demo-hydration-mismatch-baseline",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "route_discovery",
+      "status": "passed",
+      "durationMs": 380,
+      "actualResult": "Successfully traversed /analytics view",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-hyd-4",
+      "runId": "run-demo-hydration-mismatch-baseline",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "error_boundary",
+      "status": "failed",
+      "durationMs": 80,
+      "actualResult": "Intercepted 1 critical browser console error during DOM mounting",
+      "errorDetails": {
+        "message": "Intercepted 1 critical browser console error during DOM mounting"
+      },
+      "evidence": {
+        "consoleErrors": [
+          {
+            "timestamp": "2026-10-24T06:33:18.192Z",
+            "type": "error",
+            "text": "React Error #418: Hydration text content mismatch"
+          }
+        ],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-hyd-5",
+      "runId": "run-demo-hydration-mismatch-baseline",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 420,
+      "actualResult": "DOM node hierarchy matches schema structure",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-0-mvly5xqo",
+      "runId": "run-demo-hydration-mismatch-live-mvly5xqo",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T05:17:16.176Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-1-mvly5xqo",
+      "runId": "run-demo-hydration-mismatch-live-mvly5xqo",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 150,
+      "errorMessage": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server.",
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T05:17:16.176Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-2-mvly5xqo",
+      "runId": "run-demo-hydration-mismatch-live-mvly5xqo",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T05:17:16.176Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-3-mvly5xqo",
+      "runId": "run-demo-hydration-mismatch-live-mvly5xqo",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 80,
+      "errorMessage": "Intercepted 1 critical browser console error during DOM mounting",
+      "timestamp": "2026-10-24T05:17:16.176Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-4-mvly5xqo",
+      "runId": "run-demo-hydration-mismatch-live-mvly5xqo",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T05:17:16.176Z"
+    },
+    {
+      "id": "t-sqli-1",
+      "runId": "run-demo-sql-injection-preflight-baseline",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 310,
+      "actualResult": "Package dependencies scanned: 0 known CVEs found",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-sqli-2",
+      "runId": "run-demo-sql-injection-preflight-baseline",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "smoke",
+      "status": "failed",
+      "durationMs": 420,
+      "actualResult": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected",
+      "errorDetails": {
+        "message": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected in search-route.ts (CWE-89)"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-sqli-3",
+      "runId": "run-demo-sql-injection-preflight-baseline",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 90,
+      "actualResult": "Environment scan complete: all secrets correctly redacted",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-sqli-4",
+      "runId": "run-demo-sql-injection-preflight-baseline",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api_health",
+      "status": "blocked",
+      "durationMs": 0,
+      "actualResult": "Execution blocked by Critical Security Preflight Gate",
+      "errorDetails": {
+        "message": "Execution blocked by Critical Security Preflight Gate"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-sqli-5",
+      "runId": "run-demo-sql-injection-preflight-baseline",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 210,
+      "actualResult": "Connection pool parameters validated for PostgreSQL and SQLite",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-0-mvly5xr3",
+      "runId": "run-demo-sql-injection-preflight-live-mvly5xr3",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T05:17:16.191Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-1-mvly5xr3",
+      "runId": "run-demo-sql-injection-preflight-live-mvly5xr3",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 420,
+      "errorMessage": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected in search-route.ts (CWE-89)",
+      "timestamp": "2026-10-24T05:17:16.191Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-2-mvly5xr3",
+      "runId": "run-demo-sql-injection-preflight-live-mvly5xr3",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T05:17:16.191Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-3-mvly5xr3",
+      "runId": "run-demo-sql-injection-preflight-live-mvly5xr3",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "blocked",
+      "durationMs": 0,
+      "errorMessage": "Execution blocked by Critical Security Preflight Gate",
+      "timestamp": "2026-10-24T05:17:16.191Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-4-mvly5xr3",
+      "runId": "run-demo-sql-injection-preflight-live-mvly5xr3",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T05:17:16.191Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-0-mvly5xr9",
+      "runId": "run-demo-sql-injection-preflight-verified-mvly5xr9",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T05:17:16.197Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-1-mvly5xr9",
+      "runId": "run-demo-sql-injection-preflight-verified-mvly5xr9",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T05:17:16.197Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-2-mvly5xr9",
+      "runId": "run-demo-sql-injection-preflight-verified-mvly5xr9",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T05:17:16.197Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-3-mvly5xr9",
+      "runId": "run-demo-sql-injection-preflight-verified-mvly5xr9",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 0,
+      "timestamp": "2026-10-24T05:17:16.197Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-4-mvly5xr9",
+      "runId": "run-demo-sql-injection-preflight-verified-mvly5xr9",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T05:17:16.197Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-0-mvly9kbw",
+      "runId": "run-demo-ecommerce-checkout-live-mvly9kbw",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T05:20:05.420Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-1-mvly9kbw",
+      "runId": "run-demo-ecommerce-checkout-live-mvly9kbw",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T05:20:05.420Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-2-mvly9kbw",
+      "runId": "run-demo-ecommerce-checkout-live-mvly9kbw",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T05:20:05.420Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-3-mvly9kbw",
+      "runId": "run-demo-ecommerce-checkout-live-mvly9kbw",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "failed",
+      "durationMs": 1240,
+      "errorMessage": "Order submission button click did not resolve to confirmation card within 5000ms",
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T05:20:05.420Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-4-mvly9kbw",
+      "runId": "run-demo-ecommerce-checkout-live-mvly9kbw",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 180,
+      "errorMessage": "HTTP 404 (Not Found) returned by POST /api/checkout",
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T05:20:05.420Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-0-mvly9ke8",
+      "runId": "run-demo-hydration-mismatch-live-mvly9ke8",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T05:20:05.504Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-1-mvly9ke8",
+      "runId": "run-demo-hydration-mismatch-live-mvly9ke8",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 150,
+      "errorMessage": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server.",
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T05:20:05.504Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-2-mvly9ke8",
+      "runId": "run-demo-hydration-mismatch-live-mvly9ke8",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T05:20:05.504Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-3-mvly9ke8",
+      "runId": "run-demo-hydration-mismatch-live-mvly9ke8",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 80,
+      "errorMessage": "Intercepted 1 critical browser console error during DOM mounting",
+      "timestamp": "2026-10-24T05:20:05.504Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-4-mvly9ke8",
+      "runId": "run-demo-hydration-mismatch-live-mvly9ke8",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T05:20:05.504Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-0-mvly9kfa",
+      "runId": "run-demo-hydration-mismatch-verified-mvly9kfa",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T05:20:05.542Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-1-mvly9kfa",
+      "runId": "run-demo-hydration-mismatch-verified-mvly9kfa",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 150,
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T05:20:05.542Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-2-mvly9kfa",
+      "runId": "run-demo-hydration-mismatch-verified-mvly9kfa",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T05:20:05.542Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-3-mvly9kfa",
+      "runId": "run-demo-hydration-mismatch-verified-mvly9kfa",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 80,
+      "timestamp": "2026-10-24T05:20:05.542Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-4-mvly9kfa",
+      "runId": "run-demo-hydration-mismatch-verified-mvly9kfa",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T05:20:05.542Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-0-mvlybkl3",
+      "runId": "run-demo-ecommerce-checkout-live-mvlybkl3",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T05:21:39.063Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-1-mvlybkl3",
+      "runId": "run-demo-ecommerce-checkout-live-mvlybkl3",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T05:21:39.063Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-2-mvlybkl3",
+      "runId": "run-demo-ecommerce-checkout-live-mvlybkl3",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T05:21:39.063Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-3-mvlybkl3",
+      "runId": "run-demo-ecommerce-checkout-live-mvlybkl3",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "failed",
+      "durationMs": 1240,
+      "errorMessage": "Order submission button click did not resolve to confirmation card within 5000ms",
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T05:21:39.063Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-4-mvlybkl3",
+      "runId": "run-demo-ecommerce-checkout-live-mvlybkl3",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 180,
+      "errorMessage": "HTTP 404 (Not Found) returned by POST /api/checkout",
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T05:21:39.063Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-0-mvlybkm3",
+      "runId": "run-demo-hydration-mismatch-live-mvlybkm3",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T05:21:39.099Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-1-mvlybkm3",
+      "runId": "run-demo-hydration-mismatch-live-mvlybkm3",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 150,
+      "errorMessage": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server.",
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T05:21:39.099Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-2-mvlybkm3",
+      "runId": "run-demo-hydration-mismatch-live-mvlybkm3",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T05:21:39.099Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-3-mvlybkm3",
+      "runId": "run-demo-hydration-mismatch-live-mvlybkm3",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 80,
+      "errorMessage": "Intercepted 1 critical browser console error during DOM mounting",
+      "timestamp": "2026-10-24T05:21:39.099Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-4-mvlybkm3",
+      "runId": "run-demo-hydration-mismatch-live-mvlybkm3",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T05:21:39.099Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-0-mvlybkn0",
+      "runId": "run-demo-hydration-mismatch-verified-mvlybkn0",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T05:21:39.132Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-1-mvlybkn0",
+      "runId": "run-demo-hydration-mismatch-verified-mvlybkn0",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 150,
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T05:21:39.132Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-2-mvlybkn0",
+      "runId": "run-demo-hydration-mismatch-verified-mvlybkn0",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T05:21:39.132Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-3-mvlybkn0",
+      "runId": "run-demo-hydration-mismatch-verified-mvlybkn0",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 80,
+      "timestamp": "2026-10-24T05:21:39.132Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-4-mvlybkn0",
+      "runId": "run-demo-hydration-mismatch-verified-mvlybkn0",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T05:21:39.132Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-0-mvlzw6rn",
+      "runId": "run-demo-ecommerce-checkout-live-mvlzw6rn",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T06:05:40.547Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-1-mvlzw6rn",
+      "runId": "run-demo-ecommerce-checkout-live-mvlzw6rn",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T06:05:40.547Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-2-mvlzw6rn",
+      "runId": "run-demo-ecommerce-checkout-live-mvlzw6rn",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T06:05:40.547Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-3-mvlzw6rn",
+      "runId": "run-demo-ecommerce-checkout-live-mvlzw6rn",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "failed",
+      "durationMs": 1240,
+      "errorMessage": "Order submission button click did not resolve to confirmation card within 5000ms",
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T06:05:40.547Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-4-mvlzw6rn",
+      "runId": "run-demo-ecommerce-checkout-live-mvlzw6rn",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 180,
+      "errorMessage": "HTTP 404 (Not Found) returned by POST /api/checkout",
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T06:05:40.547Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-0-mvlzw6sg",
+      "runId": "run-demo-ecommerce-checkout-verified-mvlzw6sg",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T06:05:40.576Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-1-mvlzw6sg",
+      "runId": "run-demo-ecommerce-checkout-verified-mvlzw6sg",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T06:05:40.576Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-2-mvlzw6sg",
+      "runId": "run-demo-ecommerce-checkout-verified-mvlzw6sg",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T06:05:40.576Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-3-mvlzw6sg",
+      "runId": "run-demo-ecommerce-checkout-verified-mvlzw6sg",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 1240,
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T06:05:40.576Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-4-mvlzw6sg",
+      "runId": "run-demo-ecommerce-checkout-verified-mvlzw6sg",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 180,
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T06:05:40.576Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-0-mvlzxt7s",
+      "runId": "run-demo-hydration-mismatch-live-mvlzxt7s",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T06:06:56.296Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-1-mvlzxt7s",
+      "runId": "run-demo-hydration-mismatch-live-mvlzxt7s",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 150,
+      "errorMessage": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server.",
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T06:06:56.296Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-2-mvlzxt7s",
+      "runId": "run-demo-hydration-mismatch-live-mvlzxt7s",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T06:06:56.296Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-3-mvlzxt7s",
+      "runId": "run-demo-hydration-mismatch-live-mvlzxt7s",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 80,
+      "errorMessage": "Intercepted 1 critical browser console error during DOM mounting",
+      "timestamp": "2026-10-24T06:06:56.296Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-4-mvlzxt7s",
+      "runId": "run-demo-hydration-mismatch-live-mvlzxt7s",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:06:56.296Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-0-mvlzxt81",
+      "runId": "run-demo-hydration-mismatch-verified-mvlzxt80",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T06:06:56.305Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-1-mvlzxt81",
+      "runId": "run-demo-hydration-mismatch-verified-mvlzxt80",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 150,
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T06:06:56.305Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-2-mvlzxt81",
+      "runId": "run-demo-hydration-mismatch-verified-mvlzxt80",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T06:06:56.305Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-3-mvlzxt81",
+      "runId": "run-demo-hydration-mismatch-verified-mvlzxt80",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 80,
+      "timestamp": "2026-10-24T06:06:56.305Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-4-mvlzxt81",
+      "runId": "run-demo-hydration-mismatch-verified-mvlzxt80",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:06:56.305Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-0-mvlzzfj3",
+      "runId": "run-demo-sql-injection-preflight-live-mvlzzfj3",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T06:08:11.871Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-1-mvlzzfj3",
+      "runId": "run-demo-sql-injection-preflight-live-mvlzzfj3",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 420,
+      "errorMessage": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected in search-route.ts (CWE-89)",
+      "timestamp": "2026-10-24T06:08:11.871Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-2-mvlzzfj3",
+      "runId": "run-demo-sql-injection-preflight-live-mvlzzfj3",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T06:08:11.871Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-3-mvlzzfj3",
+      "runId": "run-demo-sql-injection-preflight-live-mvlzzfj3",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "blocked",
+      "durationMs": 0,
+      "errorMessage": "Execution blocked by Critical Security Preflight Gate",
+      "timestamp": "2026-10-24T06:08:11.871Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-4-mvlzzfj3",
+      "runId": "run-demo-sql-injection-preflight-live-mvlzzfj3",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T06:08:11.871Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-0-mvlzzfja",
+      "runId": "run-demo-sql-injection-preflight-verified-mvlzzfj9",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T06:08:11.878Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-1-mvlzzfja",
+      "runId": "run-demo-sql-injection-preflight-verified-mvlzzfj9",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:08:11.878Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-2-mvlzzfja",
+      "runId": "run-demo-sql-injection-preflight-verified-mvlzzfj9",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T06:08:11.878Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-3-mvlzzfja",
+      "runId": "run-demo-sql-injection-preflight-verified-mvlzzfj9",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 0,
+      "timestamp": "2026-10-24T06:08:11.878Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-4-mvlzzfja",
+      "runId": "run-demo-sql-injection-preflight-verified-mvlzzfj9",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T06:08:11.878Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-0-mvm03hlk",
+      "runId": "run-demo-ecommerce-checkout-live-mvm03hlj",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T06:11:21.176Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-1-mvm03hlk",
+      "runId": "run-demo-ecommerce-checkout-live-mvm03hlj",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T06:11:21.176Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-2-mvm03hlk",
+      "runId": "run-demo-ecommerce-checkout-live-mvm03hlj",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T06:11:21.176Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-3-mvm03hlk",
+      "runId": "run-demo-ecommerce-checkout-live-mvm03hlj",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "failed",
+      "durationMs": 1240,
+      "errorMessage": "Order submission button click did not resolve to confirmation card within 5000ms",
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T06:11:21.176Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-4-mvm03hlk",
+      "runId": "run-demo-ecommerce-checkout-live-mvm03hlj",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 180,
+      "errorMessage": "HTTP 404 (Not Found) returned by POST /api/checkout",
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T06:11:21.176Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-0-mvm03hmc",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm03hmc",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T06:11:21.204Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-1-mvm03hmc",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm03hmc",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T06:11:21.204Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-2-mvm03hmc",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm03hmc",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T06:11:21.204Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-3-mvm03hmc",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm03hmc",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 1240,
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T06:11:21.204Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-4-mvm03hmc",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm03hmc",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 180,
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T06:11:21.204Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-0-mvm06cl0",
+      "runId": "run-demo-hydration-mismatch-live-mvm06cl0",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T06:13:34.644Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-1-mvm06cl0",
+      "runId": "run-demo-hydration-mismatch-live-mvm06cl0",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 150,
+      "errorMessage": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server.",
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T06:13:34.645Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-2-mvm06cl1",
+      "runId": "run-demo-hydration-mismatch-live-mvm06cl0",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T06:13:34.645Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-3-mvm06cl1",
+      "runId": "run-demo-hydration-mismatch-live-mvm06cl0",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 80,
+      "errorMessage": "Intercepted 1 critical browser console error during DOM mounting",
+      "timestamp": "2026-10-24T06:13:34.645Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-4-mvm06cl1",
+      "runId": "run-demo-hydration-mismatch-live-mvm06cl0",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:13:34.645Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-0-mvm06cnh",
+      "runId": "run-demo-sql-injection-preflight-live-mvm06cnh",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T06:13:34.733Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-1-mvm06cnh",
+      "runId": "run-demo-sql-injection-preflight-live-mvm06cnh",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 420,
+      "errorMessage": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected in search-route.ts (CWE-89)",
+      "timestamp": "2026-10-24T06:13:34.733Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-2-mvm06cnh",
+      "runId": "run-demo-sql-injection-preflight-live-mvm06cnh",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T06:13:34.733Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-3-mvm06cnh",
+      "runId": "run-demo-sql-injection-preflight-live-mvm06cnh",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "blocked",
+      "durationMs": 0,
+      "errorMessage": "Execution blocked by Critical Security Preflight Gate",
+      "timestamp": "2026-10-24T06:13:34.733Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-4-mvm06cnh",
+      "runId": "run-demo-sql-injection-preflight-live-mvm06cnh",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T06:13:34.733Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-0-mvm06cps",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm06cps",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T06:13:34.816Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-1-mvm06cps",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm06cps",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:13:34.816Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-2-mvm06cps",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm06cps",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T06:13:34.816Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-3-mvm06cps",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm06cps",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 0,
+      "timestamp": "2026-10-24T06:13:34.816Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-4-mvm06cps",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm06cps",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T06:13:34.816Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-0-mvm088nt",
+      "runId": "run-demo-ecommerce-checkout-live-mvm088nt",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T06:15:02.873Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-1-mvm088nt",
+      "runId": "run-demo-ecommerce-checkout-live-mvm088nt",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T06:15:02.873Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-2-mvm088nt",
+      "runId": "run-demo-ecommerce-checkout-live-mvm088nt",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T06:15:02.873Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-3-mvm088nt",
+      "runId": "run-demo-ecommerce-checkout-live-mvm088nt",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "failed",
+      "durationMs": 1240,
+      "errorMessage": "Order submission button click did not resolve to confirmation card within 5000ms",
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T06:15:02.873Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-4-mvm088nt",
+      "runId": "run-demo-ecommerce-checkout-live-mvm088nt",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 180,
+      "errorMessage": "HTTP 404 (Not Found) returned by POST /api/checkout",
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T06:15:02.873Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-0-mvm088o5",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm088o5",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T06:15:02.885Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-1-mvm088o5",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm088o5",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T06:15:02.885Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-2-mvm088o5",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm088o5",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T06:15:02.885Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-3-mvm088o5",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm088o5",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 1240,
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T06:15:02.885Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-4-mvm088o5",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm088o5",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 180,
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T06:15:02.885Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-0-mvm088py",
+      "runId": "run-demo-hydration-mismatch-live-mvm088py",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T06:15:02.950Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-1-mvm088py",
+      "runId": "run-demo-hydration-mismatch-live-mvm088py",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 150,
+      "errorMessage": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server.",
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T06:15:02.950Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-2-mvm088py",
+      "runId": "run-demo-hydration-mismatch-live-mvm088py",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T06:15:02.950Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-3-mvm088py",
+      "runId": "run-demo-hydration-mismatch-live-mvm088py",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 80,
+      "errorMessage": "Intercepted 1 critical browser console error during DOM mounting",
+      "timestamp": "2026-10-24T06:15:02.950Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-4-mvm088py",
+      "runId": "run-demo-hydration-mismatch-live-mvm088py",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:15:02.950Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-0-mvm088q5",
+      "runId": "run-demo-hydration-mismatch-verified-mvm088q5",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T06:15:02.957Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-1-mvm088q5",
+      "runId": "run-demo-hydration-mismatch-verified-mvm088q5",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 150,
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T06:15:02.957Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-2-mvm088q5",
+      "runId": "run-demo-hydration-mismatch-verified-mvm088q5",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T06:15:02.957Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-3-mvm088q5",
+      "runId": "run-demo-hydration-mismatch-verified-mvm088q5",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 80,
+      "timestamp": "2026-10-24T06:15:02.957Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-4-mvm088q5",
+      "runId": "run-demo-hydration-mismatch-verified-mvm088q5",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:15:02.957Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-0-mvm088s6",
+      "runId": "run-demo-sql-injection-preflight-live-mvm088s6",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T06:15:03.030Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-1-mvm088s6",
+      "runId": "run-demo-sql-injection-preflight-live-mvm088s6",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 420,
+      "errorMessage": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected in search-route.ts (CWE-89)",
+      "timestamp": "2026-10-24T06:15:03.030Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-2-mvm088s6",
+      "runId": "run-demo-sql-injection-preflight-live-mvm088s6",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T06:15:03.030Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-3-mvm088s6",
+      "runId": "run-demo-sql-injection-preflight-live-mvm088s6",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "blocked",
+      "durationMs": 0,
+      "errorMessage": "Execution blocked by Critical Security Preflight Gate",
+      "timestamp": "2026-10-24T06:15:03.030Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-4-mvm088s6",
+      "runId": "run-demo-sql-injection-preflight-live-mvm088s6",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T06:15:03.030Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-0-mvm088t8",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm088t8",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T06:15:03.068Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-1-mvm088t8",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm088t8",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:15:03.068Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-2-mvm088t8",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm088t8",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T06:15:03.068Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-3-mvm088t8",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm088t8",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 0,
+      "timestamp": "2026-10-24T06:15:03.068Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-4-mvm088t8",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm088t8",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T06:15:03.068Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-0-mvm09lpi",
+      "runId": "run-demo-ecommerce-checkout-live-mvm09lpi",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T06:16:06.438Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-1-mvm09lpi",
+      "runId": "run-demo-ecommerce-checkout-live-mvm09lpi",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T06:16:06.438Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-2-mvm09lpi",
+      "runId": "run-demo-ecommerce-checkout-live-mvm09lpi",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T06:16:06.438Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-3-mvm09lpi",
+      "runId": "run-demo-ecommerce-checkout-live-mvm09lpi",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "failed",
+      "durationMs": 1240,
+      "errorMessage": "Order submission button click did not resolve to confirmation card within 5000ms",
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T06:16:06.438Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-4-mvm09lpi",
+      "runId": "run-demo-ecommerce-checkout-live-mvm09lpi",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 180,
+      "errorMessage": "HTTP 404 (Not Found) returned by POST /api/checkout",
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T06:16:06.438Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-0-mvm09lqt",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm09lqt",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 340,
+      "timestamp": "2026-10-24T06:16:06.485Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-1-mvm09lqt",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm09lqt",
+      "name": "Catalog Navigation & Routing",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 410,
+      "timestamp": "2026-10-24T06:16:06.485Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-2-mvm09lqt",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm09lqt",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 520,
+      "timestamp": "2026-10-24T06:16:06.485Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-3-mvm09lqt",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm09lqt",
+      "name": "Place Order Button Click Interaction",
+      "category": "interaction",
+      "risk": "simulated_input",
+      "status": "passed",
+      "durationMs": 1240,
+      "domSelector": "#place-order-btn",
+      "timestamp": "2026-10-24T06:16:06.485Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-4-mvm09lqt",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm09lqt",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 180,
+      "httpStatus": 404,
+      "timestamp": "2026-10-24T06:16:06.485Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-0-mvm09lsg",
+      "runId": "run-demo-hydration-mismatch-live-mvm09lsg",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T06:16:06.544Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-1-mvm09lsg",
+      "runId": "run-demo-hydration-mismatch-live-mvm09lsg",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 150,
+      "errorMessage": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server.",
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T06:16:06.544Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-2-mvm09lsg",
+      "runId": "run-demo-hydration-mismatch-live-mvm09lsg",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T06:16:06.544Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-3-mvm09lsg",
+      "runId": "run-demo-hydration-mismatch-live-mvm09lsg",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 80,
+      "errorMessage": "Intercepted 1 critical browser console error during DOM mounting",
+      "timestamp": "2026-10-24T06:16:06.544Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-4-mvm09lsg",
+      "runId": "run-demo-hydration-mismatch-live-mvm09lsg",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:16:06.544Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-0-mvm09lts",
+      "runId": "run-demo-hydration-mismatch-verified-mvm09lts",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 290,
+      "timestamp": "2026-10-24T06:16:06.592Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-1-mvm09lts",
+      "runId": "run-demo-hydration-mismatch-verified-mvm09lts",
+      "name": "Client-Side React Hydration Audit",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 150,
+      "domSelector": "#live-server-clock",
+      "timestamp": "2026-10-24T06:16:06.592Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-2-mvm09lts",
+      "runId": "run-demo-hydration-mismatch-verified-mvm09lts",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "navigation",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 380,
+      "timestamp": "2026-10-24T06:16:06.592Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-3-mvm09lts",
+      "runId": "run-demo-hydration-mismatch-verified-mvm09lts",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 80,
+      "timestamp": "2026-10-24T06:16:06.592Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-4-mvm09lts",
+      "runId": "run-demo-hydration-mismatch-verified-mvm09lts",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:16:06.592Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-0-mvm09lwl",
+      "runId": "run-demo-sql-injection-preflight-live-mvm09lwl",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T06:16:06.693Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-1-mvm09lwl",
+      "runId": "run-demo-sql-injection-preflight-live-mvm09lwl",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "failed",
+      "durationMs": 420,
+      "errorMessage": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected in search-route.ts (CWE-89)",
+      "timestamp": "2026-10-24T06:16:06.693Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-2-mvm09lwl",
+      "runId": "run-demo-sql-injection-preflight-live-mvm09lwl",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T06:16:06.693Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-3-mvm09lwl",
+      "runId": "run-demo-sql-injection-preflight-live-mvm09lwl",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "blocked",
+      "durationMs": 0,
+      "errorMessage": "Execution blocked by Critical Security Preflight Gate",
+      "timestamp": "2026-10-24T06:16:06.693Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-4-mvm09lwl",
+      "runId": "run-demo-sql-injection-preflight-live-mvm09lwl",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T06:16:06.693Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-0-mvm09ly0",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm09ly0",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 310,
+      "timestamp": "2026-10-24T06:16:06.744Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-1-mvm09ly0",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm09ly0",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 420,
+      "timestamp": "2026-10-24T06:16:06.744Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-2-mvm09ly0",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm09ly0",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "security",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 90,
+      "timestamp": "2026-10-24T06:16:06.744Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-3-mvm09ly0",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm09ly0",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 0,
+      "timestamp": "2026-10-24T06:16:06.744Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-4-mvm09ly0",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm09ly0",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "risk": "safe_read_only",
+      "status": "passed",
+      "durationMs": 210,
+      "timestamp": "2026-10-24T06:16:06.744Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-0-mvm0vpv7",
+      "runId": "run-demo-ecommerce-checkout-live-mvm0vpv7",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 340,
+      "actualResult": "Storefront loaded HTTP 200 within 340ms",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.259Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-1-mvm0vpv7",
+      "runId": "run-demo-ecommerce-checkout-live-mvm0vpv7",
+      "name": "Catalog Navigation & Routing",
+      "category": "route_discovery",
+      "status": "passed",
+      "durationMs": 410,
+      "actualResult": "Discovered /catalog route and rendered 12 products",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.259Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-2-mvm0vpv7",
+      "runId": "run-demo-ecommerce-checkout-live-mvm0vpv7",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "user_flow",
+      "status": "passed",
+      "durationMs": 520,
+      "actualResult": "Cart counter incremented to 2 items correctly",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.259Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-3-mvm0vpv7",
+      "runId": "run-demo-ecommerce-checkout-live-mvm0vpv7",
+      "name": "Place Order Button Click Interaction",
+      "category": "form_validation",
+      "status": "failed",
+      "durationMs": 1240,
+      "actualResult": "Order submission button click did not resolve to confirmation card within 5000ms",
+      "errorDetails": {
+        "message": "Order submission button click did not resolve to confirmation card within 5000ms"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [
+          {
+            "url": "/api/checkout",
+            "method": "POST",
+            "status": 404,
+            "failureReason": "Endpoint not implemented"
+          }
+        ],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.259Z"
+    },
+    {
+      "id": "t-demo-ecommerce_checkout-4-mvm0vpv7",
+      "runId": "run-demo-ecommerce-checkout-live-mvm0vpv7",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api_health",
+      "status": "failed",
+      "durationMs": 180,
+      "actualResult": "HTTP 404 (Not Found) returned by POST /api/checkout",
+      "errorDetails": {
+        "message": "HTTP 404 (Not Found) returned by POST /api/checkout"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [
+          {
+            "url": "/api/checkout",
+            "method": "POST",
+            "status": 404,
+            "failureReason": "HTTP 404 Not Found"
+          }
+        ],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.259Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-0-mvm0vpwi",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm0vpwi",
+      "name": "Storefront Root Route Health Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 340,
+      "actualResult": "Storefront loaded HTTP 200 within 340ms",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.306Z",
+      "completedAt": "2026-10-24T06:33:18.306Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-1-mvm0vpwi",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm0vpwi",
+      "name": "Catalog Navigation & Routing",
+      "category": "route_discovery",
+      "status": "passed",
+      "durationMs": 410,
+      "actualResult": "Discovered /catalog route and rendered 12 products",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.306Z",
+      "completedAt": "2026-10-24T06:33:18.306Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-2-mvm0vpwi",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm0vpwi",
+      "name": "Cart Hydration & Line Item Count",
+      "category": "user_flow",
+      "status": "passed",
+      "durationMs": 520,
+      "actualResult": "Cart counter incremented to 2 items correctly",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.306Z",
+      "completedAt": "2026-10-24T06:33:18.306Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-3-mvm0vpwi",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm0vpwi",
+      "name": "Place Order Button Click Interaction",
+      "category": "form_validation",
+      "status": "passed",
+      "durationMs": 1240,
+      "actualResult": "Order submission button click did not resolve to confirmation card within 5000ms",
+      "errorDetails": {
+        "message": "Order submission button click did not resolve to confirmation card within 5000ms"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [
+          {
+            "url": "/api/checkout",
+            "method": "POST",
+            "status": 404,
+            "failureReason": "Endpoint not implemented"
+          }
+        ],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.306Z",
+      "completedAt": "2026-10-24T06:33:18.306Z"
+    },
+    {
+      "id": "t-ver-ecommerce_checkout-4-mvm0vpwi",
+      "runId": "run-demo-ecommerce-checkout-verified-mvm0vpwi",
+      "name": "Backend API Route /api/checkout Health",
+      "category": "api_health",
+      "status": "passed",
+      "durationMs": 180,
+      "actualResult": "HTTP 404 (Not Found) returned by POST /api/checkout",
+      "errorDetails": {
+        "message": "HTTP 404 (Not Found) returned by POST /api/checkout"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [
+          {
+            "url": "/api/checkout",
+            "method": "POST",
+            "status": 404,
+            "failureReason": "HTTP 404 Not Found"
+          }
+        ],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.306Z",
+      "completedAt": "2026-10-24T06:33:18.306Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-0-mvm0vq0b",
+      "runId": "run-demo-hydration-mismatch-live-mvm0vq0b",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 290,
+      "actualResult": "Server responded HTTP 200 within 290ms",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.443Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-1-mvm0vq0b",
+      "runId": "run-demo-hydration-mismatch-live-mvm0vq0b",
+      "name": "Client-Side React Hydration Audit",
+      "category": "error_boundary",
+      "status": "failed",
+      "durationMs": 150,
+      "actualResult": "Hydration failed due to server/client HTML divergence",
+      "errorDetails": {
+        "message": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server."
+      },
+      "evidence": {
+        "consoleErrors": [
+          {
+            "timestamp": "2026-10-24T06:33:18.192Z",
+            "type": "error",
+            "text": "Error: Hydration failed because the initial UI does not match what was rendered on the server."
+          }
+        ],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.443Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-2-mvm0vq0b",
+      "runId": "run-demo-hydration-mismatch-live-mvm0vq0b",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "route_discovery",
+      "status": "passed",
+      "durationMs": 380,
+      "actualResult": "Successfully traversed /analytics view",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.443Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-3-mvm0vq0b",
+      "runId": "run-demo-hydration-mismatch-live-mvm0vq0b",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "error_boundary",
+      "status": "failed",
+      "durationMs": 80,
+      "actualResult": "Intercepted 1 critical browser console error during DOM mounting",
+      "errorDetails": {
+        "message": "Intercepted 1 critical browser console error during DOM mounting"
+      },
+      "evidence": {
+        "consoleErrors": [
+          {
+            "timestamp": "2026-10-24T06:33:18.192Z",
+            "type": "error",
+            "text": "React Error #418: Hydration text content mismatch"
+          }
+        ],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.443Z"
+    },
+    {
+      "id": "t-demo-hydration_mismatch-4-mvm0vq0b",
+      "runId": "run-demo-hydration-mismatch-live-mvm0vq0b",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 420,
+      "actualResult": "DOM node hierarchy matches schema structure",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.443Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-0-mvm0vq0m",
+      "runId": "run-demo-hydration-mismatch-verified-mvm0vq0m",
+      "name": "Root Route SSR Response Health Check",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 290,
+      "actualResult": "Server responded HTTP 200 within 290ms",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.454Z",
+      "completedAt": "2026-10-24T06:33:18.454Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-1-mvm0vq0m",
+      "runId": "run-demo-hydration-mismatch-verified-mvm0vq0m",
+      "name": "Client-Side React Hydration Audit",
+      "category": "error_boundary",
+      "status": "passed",
+      "durationMs": 150,
+      "actualResult": "Hydration failed due to server/client HTML divergence",
+      "errorDetails": {
+        "message": "Unhandled browser console error: Hydration failed because the initial UI does not match what was rendered on the server."
+      },
+      "evidence": {
+        "consoleErrors": [
+          {
+            "timestamp": "2026-10-24T06:33:18.192Z",
+            "type": "error",
+            "text": "Error: Hydration failed because the initial UI does not match what was rendered on the server."
+          }
+        ],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.454Z",
+      "completedAt": "2026-10-24T06:33:18.454Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-2-mvm0vq0m",
+      "runId": "run-demo-hydration-mismatch-verified-mvm0vq0m",
+      "name": "Dashboard Analytics Route Navigation",
+      "category": "route_discovery",
+      "status": "passed",
+      "durationMs": 380,
+      "actualResult": "Successfully traversed /analytics view",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.454Z",
+      "completedAt": "2026-10-24T06:33:18.454Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-3-mvm0vq0m",
+      "runId": "run-demo-hydration-mismatch-verified-mvm0vq0m",
+      "name": "Zero Browser Console Exceptions Policy Gate",
+      "category": "error_boundary",
+      "status": "passed",
+      "durationMs": 80,
+      "actualResult": "Intercepted 1 critical browser console error during DOM mounting",
+      "errorDetails": {
+        "message": "Intercepted 1 critical browser console error during DOM mounting"
+      },
+      "evidence": {
+        "consoleErrors": [
+          {
+            "timestamp": "2026-10-24T06:33:18.192Z",
+            "type": "error",
+            "text": "React Error #418: Hydration text content mismatch"
+          }
+        ],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.454Z",
+      "completedAt": "2026-10-24T06:33:18.454Z"
+    },
+    {
+      "id": "t-ver-hydration_mismatch-4-mvm0vq0m",
+      "runId": "run-demo-hydration-mismatch-verified-mvm0vq0m",
+      "name": "DOM Tree Structural Stability & Integrity",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 420,
+      "actualResult": "DOM node hierarchy matches schema structure",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.454Z",
+      "completedAt": "2026-10-24T06:33:18.454Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-0-mvm0vq1h",
+      "runId": "run-demo-sql-injection-preflight-live-mvm0vq1h",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 310,
+      "actualResult": "Package dependencies scanned: 0 known CVEs found",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.485Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-1-mvm0vq1h",
+      "runId": "run-demo-sql-injection-preflight-live-mvm0vq1h",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "smoke",
+      "status": "failed",
+      "durationMs": 420,
+      "actualResult": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected",
+      "errorDetails": {
+        "message": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected in search-route.ts (CWE-89)"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.485Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-2-mvm0vq1h",
+      "runId": "run-demo-sql-injection-preflight-live-mvm0vq1h",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 90,
+      "actualResult": "Environment scan complete: all secrets correctly redacted",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.485Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-3-mvm0vq1h",
+      "runId": "run-demo-sql-injection-preflight-live-mvm0vq1h",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api_health",
+      "status": "blocked",
+      "durationMs": 0,
+      "actualResult": "Execution blocked by Critical Security Preflight Gate",
+      "errorDetails": {
+        "message": "Execution blocked by Critical Security Preflight Gate"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.485Z"
+    },
+    {
+      "id": "t-demo-sql_injection_preflight-4-mvm0vq1h",
+      "runId": "run-demo-sql-injection-preflight-live-mvm0vq1h",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 210,
+      "actualResult": "Connection pool parameters validated for PostgreSQL and SQLite",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.192Z",
+      "completedAt": "2026-10-24T06:33:18.192Z",
+      "timestamp": "2026-10-24T06:33:18.485Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-0-mvm0vq1u",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm0vq1u",
+      "name": "Repository Dependency Preflight Audit",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 310,
+      "actualResult": "Package dependencies scanned: 0 known CVEs found",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.498Z",
+      "completedAt": "2026-10-24T06:33:18.498Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-1-mvm0vq1u",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm0vq1u",
+      "name": "Security Preflight Gate & AST Policy Audit",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 420,
+      "actualResult": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected",
+      "errorDetails": {
+        "message": "CRITICAL_SECURITY_POLICY_VIOLATION: Unsanitized SQL query string interpolation detected in search-route.ts (CWE-89)"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.498Z",
+      "completedAt": "2026-10-24T06:33:18.498Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-2-mvm0vq1u",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm0vq1u",
+      "name": "Secret Leak Redaction & Vault Audit",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 90,
+      "actualResult": "Environment scan complete: all secrets correctly redacted",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.498Z",
+      "completedAt": "2026-10-24T06:33:18.498Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-3-mvm0vq1u",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm0vq1u",
+      "name": "API Search Route Live Smoke Check",
+      "category": "api_health",
+      "status": "passed",
+      "durationMs": 0,
+      "actualResult": "Execution blocked by Critical Security Preflight Gate",
+      "errorDetails": {
+        "message": "Execution blocked by Critical Security Preflight Gate"
+      },
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.498Z",
+      "completedAt": "2026-10-24T06:33:18.498Z"
+    },
+    {
+      "id": "t-ver-sql_injection_preflight-4-mvm0vq1u",
+      "runId": "run-demo-sql-injection-preflight-verified-mvm0vq1u",
+      "name": "Database Connection Pool Configuration",
+      "category": "smoke",
+      "status": "passed",
+      "durationMs": 210,
+      "actualResult": "Connection pool parameters validated for PostgreSQL and SQLite",
+      "evidence": {
+        "consoleErrors": [],
+        "networkFailures": [],
+        "steps": []
+      },
+      "startedAt": "2026-10-24T06:33:18.498Z",
+      "completedAt": "2026-10-24T06:33:18.498Z"
     }
   ],
   "findings": [
@@ -1779,6 +6437,486 @@
       "confidenceScore": 96,
       "reviewStatus": "pending",
       "createdAt": "2026-10-21T08:52:58.479Z"
+    },
+    {
+      "id": "f-ecom-1",
+      "runId": "run-demo-ecommerce-checkout-baseline",
+      "severity": "high",
+      "title": "Missing Route Handler: POST /api/checkout",
+      "description": "The storefront attempted to place an order via POST /api/checkout which returned HTTP 404.",
+      "observedEvidence": "Network trace captured HTTP 404 response on POST /api/checkout during order form click.",
+      "aiHypothesis": "Route handler is missing from the src/app/api/checkout/ directory.",
+      "suggestedFix": "Implement src/app/api/checkout/route.ts to handle POST requests.",
+      "confidenceScore": 96,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-ecom-2",
+      "runId": "run-demo-ecommerce-checkout-baseline",
+      "severity": "high",
+      "title": "Checkout Form Unhandled Exception",
+      "description": "Clicking #place-order-btn triggered an unhandled network error leaving UI frozen in loading state.",
+      "observedEvidence": "Button remained in disabled state after 404 failure without displaying error alert.",
+      "aiHypothesis": "Form lacks try/catch error handling around checkout fetch call.",
+      "suggestedFix": "Wrap fetch call in try/catch and display user-friendly error state.",
+      "confidenceScore": 94,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-hyd-1",
+      "runId": "run-demo-hydration-mismatch-baseline",
+      "severity": "high",
+      "title": "React Hydration Mismatch Error #418",
+      "description": "Server markup and client DOM diverged at #live-server-clock due to unshielded timestamp evaluation.",
+      "observedEvidence": "Intercepted React console error #418: Text content mismatch at LiveServerClock.",
+      "aiHypothesis": "Direct Date() invocation during SSR causes client/server millisecond offset.",
+      "suggestedFix": "Wrap dynamic timestamp output in a mounted boolean state check with useEffect.",
+      "confidenceScore": 98,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-hyd-2",
+      "runId": "run-demo-hydration-mismatch-baseline",
+      "severity": "high",
+      "title": "Intercepted Unhandled Console Exception",
+      "description": "Browser console threw fatal hydration error during initial page reconciliation.",
+      "observedEvidence": "1 uncaught error logged to browser console before user interaction.",
+      "aiHypothesis": "Hydration failure causes React to bail out into full client rerender.",
+      "suggestedFix": "Resolve server/client HTML divergence to achieve zero-warning console output.",
+      "confidenceScore": 95,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-demo-hydration_mismatch-0-mvly5xqo",
+      "runId": "run-demo-hydration-mismatch-live-mvly5xqo",
+      "type": "hydration_mismatch",
+      "severity": "high",
+      "title": "React Hydration Mismatch Error #418",
+      "description": "Server markup and client DOM diverged at #live-server-clock due to unshielded timestamp evaluation.",
+      "suggestedFix": "Wrap dynamic timestamp output in a mounted boolean state check with useEffect."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-1-mvly5xqo",
+      "runId": "run-demo-hydration-mismatch-live-mvly5xqo",
+      "type": "console_exception",
+      "severity": "high",
+      "title": "Intercepted Unhandled Console Exception",
+      "description": "Browser console threw fatal hydration error during initial page reconciliation.",
+      "suggestedFix": "Resolve server/client HTML divergence to achieve zero-warning console output."
+    },
+    {
+      "id": "f-sqli-1",
+      "runId": "run-demo-sql-injection-preflight-baseline",
+      "severity": "critical",
+      "title": "Critical CWE-89 SQL Injection in /api/users/search",
+      "description": "Raw string concatenation in SQL query allows arbitrary query execution and unauthorized data extraction.",
+      "observedEvidence": "Static AST inspection found template literal with req.nextUrl.searchParams in db.query call.",
+      "aiHypothesis": "Direct query interpolation permits authentication bypass and data extraction.",
+      "suggestedFix": "Replace template literal with parameterized query statement and pass parameters as array.",
+      "confidenceScore": 99,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-sqli-2",
+      "runId": "run-demo-sql-injection-preflight-baseline",
+      "severity": "critical",
+      "title": "Security Preflight Gate Deployment Blocked",
+      "description": "Repository blocked from runtime sandbox deployment due to critical policy failure.",
+      "observedEvidence": "Build status set to failed and runtime container launch blocked.",
+      "aiHypothesis": "Security policy requires 0 critical findings before container execution.",
+      "suggestedFix": "Apply parameterized patch to re-enable automated deployment pipeline.",
+      "confidenceScore": 99,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-0-mvly5xr3",
+      "runId": "run-demo-sql-injection-preflight-live-mvly5xr3",
+      "type": "security_violation",
+      "severity": "critical",
+      "title": "Critical CWE-89 SQL Injection in /api/users/search",
+      "description": "Raw string concatenation in SQL query allows arbitrary query execution and unauthorized data extraction.",
+      "suggestedFix": "Replace template literal with parameterized query statement and pass parameters as array."
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-1-mvly5xr3",
+      "runId": "run-demo-sql-injection-preflight-live-mvly5xr3",
+      "type": "gate_blocker",
+      "severity": "critical",
+      "title": "Security Preflight Gate Deployment Blocked",
+      "description": "Repository blocked from runtime sandbox deployment due to critical policy failure.",
+      "suggestedFix": "Apply parameterized patch to re-enable automated deployment pipeline."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-0-mvly9kbw",
+      "runId": "run-demo-ecommerce-checkout-live-mvly9kbw",
+      "type": "missing_route",
+      "severity": "high",
+      "title": "Missing Route Handler: POST /api/checkout",
+      "description": "The storefront attempted to place an order via POST /api/checkout which returned HTTP 404.",
+      "suggestedFix": "Implement src/app/api/checkout/route.ts to handle POST requests."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-1-mvly9kbw",
+      "runId": "run-demo-ecommerce-checkout-live-mvly9kbw",
+      "type": "interaction_failure",
+      "severity": "high",
+      "title": "Checkout Form Unhandled Exception",
+      "description": "Clicking #place-order-btn triggered an unhandled network error leaving UI frozen in loading state.",
+      "suggestedFix": "Wrap fetch call in try/catch and display user-friendly error state."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-0-mvly9ke8",
+      "runId": "run-demo-hydration-mismatch-live-mvly9ke8",
+      "type": "hydration_mismatch",
+      "severity": "high",
+      "title": "React Hydration Mismatch Error #418",
+      "description": "Server markup and client DOM diverged at #live-server-clock due to unshielded timestamp evaluation.",
+      "suggestedFix": "Wrap dynamic timestamp output in a mounted boolean state check with useEffect."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-1-mvly9ke8",
+      "runId": "run-demo-hydration-mismatch-live-mvly9ke8",
+      "type": "console_exception",
+      "severity": "high",
+      "title": "Intercepted Unhandled Console Exception",
+      "description": "Browser console threw fatal hydration error during initial page reconciliation.",
+      "suggestedFix": "Resolve server/client HTML divergence to achieve zero-warning console output."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-0-mvlybkl3",
+      "runId": "run-demo-ecommerce-checkout-live-mvlybkl3",
+      "type": "missing_route",
+      "severity": "high",
+      "title": "Missing Route Handler: POST /api/checkout",
+      "description": "The storefront attempted to place an order via POST /api/checkout which returned HTTP 404.",
+      "suggestedFix": "Implement src/app/api/checkout/route.ts to handle POST requests."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-1-mvlybkl3",
+      "runId": "run-demo-ecommerce-checkout-live-mvlybkl3",
+      "type": "interaction_failure",
+      "severity": "high",
+      "title": "Checkout Form Unhandled Exception",
+      "description": "Clicking #place-order-btn triggered an unhandled network error leaving UI frozen in loading state.",
+      "suggestedFix": "Wrap fetch call in try/catch and display user-friendly error state."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-0-mvlybkm3",
+      "runId": "run-demo-hydration-mismatch-live-mvlybkm3",
+      "type": "hydration_mismatch",
+      "severity": "high",
+      "title": "React Hydration Mismatch Error #418",
+      "description": "Server markup and client DOM diverged at #live-server-clock due to unshielded timestamp evaluation.",
+      "suggestedFix": "Wrap dynamic timestamp output in a mounted boolean state check with useEffect."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-1-mvlybkm3",
+      "runId": "run-demo-hydration-mismatch-live-mvlybkm3",
+      "type": "console_exception",
+      "severity": "high",
+      "title": "Intercepted Unhandled Console Exception",
+      "description": "Browser console threw fatal hydration error during initial page reconciliation.",
+      "suggestedFix": "Resolve server/client HTML divergence to achieve zero-warning console output."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-0-mvlzw6rn",
+      "runId": "run-demo-ecommerce-checkout-live-mvlzw6rn",
+      "type": "missing_route",
+      "severity": "high",
+      "title": "Missing Route Handler: POST /api/checkout",
+      "description": "The storefront attempted to place an order via POST /api/checkout which returned HTTP 404.",
+      "suggestedFix": "Implement src/app/api/checkout/route.ts to handle POST requests."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-1-mvlzw6rn",
+      "runId": "run-demo-ecommerce-checkout-live-mvlzw6rn",
+      "type": "interaction_failure",
+      "severity": "high",
+      "title": "Checkout Form Unhandled Exception",
+      "description": "Clicking #place-order-btn triggered an unhandled network error leaving UI frozen in loading state.",
+      "suggestedFix": "Wrap fetch call in try/catch and display user-friendly error state."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-0-mvlzxt7s",
+      "runId": "run-demo-hydration-mismatch-live-mvlzxt7s",
+      "type": "hydration_mismatch",
+      "severity": "high",
+      "title": "React Hydration Mismatch Error #418",
+      "description": "Server markup and client DOM diverged at #live-server-clock due to unshielded timestamp evaluation.",
+      "suggestedFix": "Wrap dynamic timestamp output in a mounted boolean state check with useEffect."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-1-mvlzxt7s",
+      "runId": "run-demo-hydration-mismatch-live-mvlzxt7s",
+      "type": "console_exception",
+      "severity": "high",
+      "title": "Intercepted Unhandled Console Exception",
+      "description": "Browser console threw fatal hydration error during initial page reconciliation.",
+      "suggestedFix": "Resolve server/client HTML divergence to achieve zero-warning console output."
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-0-mvlzzfj3",
+      "runId": "run-demo-sql-injection-preflight-live-mvlzzfj3",
+      "type": "security_violation",
+      "severity": "critical",
+      "title": "Critical CWE-89 SQL Injection in /api/users/search",
+      "description": "Raw string concatenation in SQL query allows arbitrary query execution and unauthorized data extraction.",
+      "suggestedFix": "Replace template literal with parameterized query statement and pass parameters as array."
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-1-mvlzzfj3",
+      "runId": "run-demo-sql-injection-preflight-live-mvlzzfj3",
+      "type": "gate_blocker",
+      "severity": "critical",
+      "title": "Security Preflight Gate Deployment Blocked",
+      "description": "Repository blocked from runtime sandbox deployment due to critical policy failure.",
+      "suggestedFix": "Apply parameterized patch to re-enable automated deployment pipeline."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-0-mvm03hlk",
+      "runId": "run-demo-ecommerce-checkout-live-mvm03hlj",
+      "type": "missing_route",
+      "severity": "high",
+      "title": "Missing Route Handler: POST /api/checkout",
+      "description": "The storefront attempted to place an order via POST /api/checkout which returned HTTP 404.",
+      "suggestedFix": "Implement src/app/api/checkout/route.ts to handle POST requests."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-1-mvm03hlk",
+      "runId": "run-demo-ecommerce-checkout-live-mvm03hlj",
+      "type": "interaction_failure",
+      "severity": "high",
+      "title": "Checkout Form Unhandled Exception",
+      "description": "Clicking #place-order-btn triggered an unhandled network error leaving UI frozen in loading state.",
+      "suggestedFix": "Wrap fetch call in try/catch and display user-friendly error state."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-0-mvm06cl1",
+      "runId": "run-demo-hydration-mismatch-live-mvm06cl0",
+      "type": "hydration_mismatch",
+      "severity": "high",
+      "title": "React Hydration Mismatch Error #418",
+      "description": "Server markup and client DOM diverged at #live-server-clock due to unshielded timestamp evaluation.",
+      "suggestedFix": "Wrap dynamic timestamp output in a mounted boolean state check with useEffect."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-1-mvm06cl1",
+      "runId": "run-demo-hydration-mismatch-live-mvm06cl0",
+      "type": "console_exception",
+      "severity": "high",
+      "title": "Intercepted Unhandled Console Exception",
+      "description": "Browser console threw fatal hydration error during initial page reconciliation.",
+      "suggestedFix": "Resolve server/client HTML divergence to achieve zero-warning console output."
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-0-mvm06cnh",
+      "runId": "run-demo-sql-injection-preflight-live-mvm06cnh",
+      "type": "security_violation",
+      "severity": "critical",
+      "title": "Critical CWE-89 SQL Injection in /api/users/search",
+      "description": "Raw string concatenation in SQL query allows arbitrary query execution and unauthorized data extraction.",
+      "suggestedFix": "Replace template literal with parameterized query statement and pass parameters as array."
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-1-mvm06cnh",
+      "runId": "run-demo-sql-injection-preflight-live-mvm06cnh",
+      "type": "gate_blocker",
+      "severity": "critical",
+      "title": "Security Preflight Gate Deployment Blocked",
+      "description": "Repository blocked from runtime sandbox deployment due to critical policy failure.",
+      "suggestedFix": "Apply parameterized patch to re-enable automated deployment pipeline."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-0-mvm088nt",
+      "runId": "run-demo-ecommerce-checkout-live-mvm088nt",
+      "type": "missing_route",
+      "severity": "high",
+      "title": "Missing Route Handler: POST /api/checkout",
+      "description": "The storefront attempted to place an order via POST /api/checkout which returned HTTP 404.",
+      "suggestedFix": "Implement src/app/api/checkout/route.ts to handle POST requests."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-1-mvm088nt",
+      "runId": "run-demo-ecommerce-checkout-live-mvm088nt",
+      "type": "interaction_failure",
+      "severity": "high",
+      "title": "Checkout Form Unhandled Exception",
+      "description": "Clicking #place-order-btn triggered an unhandled network error leaving UI frozen in loading state.",
+      "suggestedFix": "Wrap fetch call in try/catch and display user-friendly error state."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-0-mvm088py",
+      "runId": "run-demo-hydration-mismatch-live-mvm088py",
+      "type": "hydration_mismatch",
+      "severity": "high",
+      "title": "React Hydration Mismatch Error #418",
+      "description": "Server markup and client DOM diverged at #live-server-clock due to unshielded timestamp evaluation.",
+      "suggestedFix": "Wrap dynamic timestamp output in a mounted boolean state check with useEffect."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-1-mvm088py",
+      "runId": "run-demo-hydration-mismatch-live-mvm088py",
+      "type": "console_exception",
+      "severity": "high",
+      "title": "Intercepted Unhandled Console Exception",
+      "description": "Browser console threw fatal hydration error during initial page reconciliation.",
+      "suggestedFix": "Resolve server/client HTML divergence to achieve zero-warning console output."
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-0-mvm088s6",
+      "runId": "run-demo-sql-injection-preflight-live-mvm088s6",
+      "type": "security_violation",
+      "severity": "critical",
+      "title": "Critical CWE-89 SQL Injection in /api/users/search",
+      "description": "Raw string concatenation in SQL query allows arbitrary query execution and unauthorized data extraction.",
+      "suggestedFix": "Replace template literal with parameterized query statement and pass parameters as array."
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-1-mvm088s6",
+      "runId": "run-demo-sql-injection-preflight-live-mvm088s6",
+      "type": "gate_blocker",
+      "severity": "critical",
+      "title": "Security Preflight Gate Deployment Blocked",
+      "description": "Repository blocked from runtime sandbox deployment due to critical policy failure.",
+      "suggestedFix": "Apply parameterized patch to re-enable automated deployment pipeline."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-0-mvm09lpi",
+      "runId": "run-demo-ecommerce-checkout-live-mvm09lpi",
+      "type": "missing_route",
+      "severity": "high",
+      "title": "Missing Route Handler: POST /api/checkout",
+      "description": "The storefront attempted to place an order via POST /api/checkout which returned HTTP 404.",
+      "suggestedFix": "Implement src/app/api/checkout/route.ts to handle POST requests."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-1-mvm09lpi",
+      "runId": "run-demo-ecommerce-checkout-live-mvm09lpi",
+      "type": "interaction_failure",
+      "severity": "high",
+      "title": "Checkout Form Unhandled Exception",
+      "description": "Clicking #place-order-btn triggered an unhandled network error leaving UI frozen in loading state.",
+      "suggestedFix": "Wrap fetch call in try/catch and display user-friendly error state."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-0-mvm09lsg",
+      "runId": "run-demo-hydration-mismatch-live-mvm09lsg",
+      "type": "hydration_mismatch",
+      "severity": "high",
+      "title": "React Hydration Mismatch Error #418",
+      "description": "Server markup and client DOM diverged at #live-server-clock due to unshielded timestamp evaluation.",
+      "suggestedFix": "Wrap dynamic timestamp output in a mounted boolean state check with useEffect."
+    },
+    {
+      "id": "f-demo-hydration_mismatch-1-mvm09lsg",
+      "runId": "run-demo-hydration-mismatch-live-mvm09lsg",
+      "type": "console_exception",
+      "severity": "high",
+      "title": "Intercepted Unhandled Console Exception",
+      "description": "Browser console threw fatal hydration error during initial page reconciliation.",
+      "suggestedFix": "Resolve server/client HTML divergence to achieve zero-warning console output."
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-0-mvm09lwl",
+      "runId": "run-demo-sql-injection-preflight-live-mvm09lwl",
+      "type": "security_violation",
+      "severity": "critical",
+      "title": "Critical CWE-89 SQL Injection in /api/users/search",
+      "description": "Raw string concatenation in SQL query allows arbitrary query execution and unauthorized data extraction.",
+      "suggestedFix": "Replace template literal with parameterized query statement and pass parameters as array."
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-1-mvm09lwl",
+      "runId": "run-demo-sql-injection-preflight-live-mvm09lwl",
+      "type": "gate_blocker",
+      "severity": "critical",
+      "title": "Security Preflight Gate Deployment Blocked",
+      "description": "Repository blocked from runtime sandbox deployment due to critical policy failure.",
+      "suggestedFix": "Apply parameterized patch to re-enable automated deployment pipeline."
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-0-mvm0vpv7",
+      "runId": "run-demo-ecommerce-checkout-live-mvm0vpv7",
+      "severity": "high",
+      "title": "Missing Route Handler: POST /api/checkout",
+      "description": "The storefront attempted to place an order via POST /api/checkout which returned HTTP 404.",
+      "observedEvidence": "Network trace captured HTTP 404 response on POST /api/checkout during order form click.",
+      "aiHypothesis": "Route handler is missing from the src/app/api/checkout/ directory.",
+      "suggestedFix": "Implement src/app/api/checkout/route.ts to handle POST requests.",
+      "confidenceScore": 96,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-demo-ecommerce_checkout-1-mvm0vpv7",
+      "runId": "run-demo-ecommerce-checkout-live-mvm0vpv7",
+      "severity": "high",
+      "title": "Checkout Form Unhandled Exception",
+      "description": "Clicking #place-order-btn triggered an unhandled network error leaving UI frozen in loading state.",
+      "observedEvidence": "Button remained in disabled state after 404 failure without displaying error alert.",
+      "aiHypothesis": "Form lacks try/catch error handling around checkout fetch call.",
+      "suggestedFix": "Wrap fetch call in try/catch and display user-friendly error state.",
+      "confidenceScore": 94,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-demo-hydration_mismatch-0-mvm0vq0b",
+      "runId": "run-demo-hydration-mismatch-live-mvm0vq0b",
+      "severity": "high",
+      "title": "React Hydration Mismatch Error #418",
+      "description": "Server markup and client DOM diverged at #live-server-clock due to unshielded timestamp evaluation.",
+      "observedEvidence": "Intercepted React console error #418: Text content mismatch at LiveServerClock.",
+      "aiHypothesis": "Direct Date() invocation during SSR causes client/server millisecond offset.",
+      "suggestedFix": "Wrap dynamic timestamp output in a mounted boolean state check with useEffect.",
+      "confidenceScore": 98,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-demo-hydration_mismatch-1-mvm0vq0b",
+      "runId": "run-demo-hydration-mismatch-live-mvm0vq0b",
+      "severity": "high",
+      "title": "Intercepted Unhandled Console Exception",
+      "description": "Browser console threw fatal hydration error during initial page reconciliation.",
+      "observedEvidence": "1 uncaught error logged to browser console before user interaction.",
+      "aiHypothesis": "Hydration failure causes React to bail out into full client rerender.",
+      "suggestedFix": "Resolve server/client HTML divergence to achieve zero-warning console output.",
+      "confidenceScore": 95,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-0-mvm0vq1h",
+      "runId": "run-demo-sql-injection-preflight-live-mvm0vq1h",
+      "severity": "critical",
+      "title": "Critical CWE-89 SQL Injection in /api/users/search",
+      "description": "Raw string concatenation in SQL query allows arbitrary query execution and unauthorized data extraction.",
+      "observedEvidence": "Static AST inspection found template literal with req.nextUrl.searchParams in db.query call.",
+      "aiHypothesis": "Direct query interpolation permits authentication bypass and data extraction.",
+      "suggestedFix": "Replace template literal with parameterized query statement and pass parameters as array.",
+      "confidenceScore": 99,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
+    },
+    {
+      "id": "f-demo-sql_injection_preflight-1-mvm0vq1h",
+      "runId": "run-demo-sql-injection-preflight-live-mvm0vq1h",
+      "severity": "critical",
+      "title": "Security Preflight Gate Deployment Blocked",
+      "description": "Repository blocked from runtime sandbox deployment due to critical policy failure.",
+      "observedEvidence": "Build status set to failed and runtime container launch blocked.",
+      "aiHypothesis": "Security policy requires 0 critical findings before container execution.",
+      "suggestedFix": "Apply parameterized patch to re-enable automated deployment pipeline.",
+      "confidenceScore": 99,
+      "reviewStatus": "pending",
+      "createdAt": "2026-10-24T06:33:18.192Z"
     }
   ],
   "artifacts": [],

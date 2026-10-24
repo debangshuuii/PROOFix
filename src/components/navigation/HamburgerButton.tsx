@@ -14,14 +14,15 @@ interface HamburgerButtonProps {
   isOpen: boolean;
   onClick: () => void;
   className?: string;
+  ariaLabel?: string;
 }
 
-export function HamburgerButton({ isOpen, onClick, className = '' }: HamburgerButtonProps) {
+export function HamburgerButton({ isOpen, onClick, className = '', ariaLabel }: HamburgerButtonProps) {
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+      aria-label={ariaLabel || (isOpen ? 'Close navigation menu' : 'Open navigation menu')}
       aria-expanded={isOpen}
       aria-controls="mobile-nav-drawer"
       className={`md:hidden flex items-center justify-center w-9 h-9 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white transition-all focus:outline-none focus:ring-1 focus:ring-sky-500 ${className}`}

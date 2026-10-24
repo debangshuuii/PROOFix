@@ -992,7 +992,7 @@ function VerificationRunContent() {
           <StreamingTerminal
             logs={logs}
             runId={runId}
-            isRunning={run?.status === 'running'}
+            isRunning={isLiveRunning}
             initialLogLevel="ALL"
           />
         )}

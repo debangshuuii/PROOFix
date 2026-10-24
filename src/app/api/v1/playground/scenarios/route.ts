@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ScenarioRegistry } from '@/lib/playground/registry';
-import { DemoScenarioCategory } from '@/lib/playground/types';
+import { ScenarioRegistry } from '../../../../../lib/playground/registry.ts';
+import type { DemoScenarioCategory } from '../../../../../lib/playground/types.ts';
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get('category') as DemoScenarioCategory | 'all' | null;
@@ -10,13 +9,13 @@ export async function GET(req: NextRequest) {
 
     const scenarios = ScenarioRegistry.listScenarios(category || 'all', query);
 
-    return NextResponse.json({
+    return Response.json({
       success: true,
       count: scenarios.length,
       scenarios,
     });
   } catch (error: any) {
-    return NextResponse.json(
+    return Response.json(
       { success: false, error: error.message || 'Failed to list scenarios' },
       { status: 500 }
     );

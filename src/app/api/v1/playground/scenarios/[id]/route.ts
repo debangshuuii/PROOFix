@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ScenarioRegistry } from '@/lib/playground/registry';
+import { ScenarioRegistry } from '../../../../../../lib/playground/registry.ts';
 
 export async function GET(
-  _req: NextRequest,
+  _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -10,18 +9,18 @@ export async function GET(
     const scenario = ScenarioRegistry.getScenarioById(id);
 
     if (!scenario) {
-      return NextResponse.json(
+      return Response.json(
         { success: false, error: `Demo scenario not found: ${id}` },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({
+    return Response.json({
       success: true,
       scenario,
     });
   } catch (error: any) {
-    return NextResponse.json(
+    return Response.json(
       { success: false, error: error.message || 'Failed to retrieve scenario' },
       { status: 500 }
     );

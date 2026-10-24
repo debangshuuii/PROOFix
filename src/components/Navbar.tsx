@@ -14,6 +14,7 @@ import {
   FileCheck2,
   Search,
   Command,
+  Sparkles,
 } from 'lucide-react';
 import { CommandPaletteModal } from './navigation/CommandPaletteModal';
 import { HamburgerButton } from './navigation/HamburgerButton';
@@ -28,6 +29,7 @@ export function Navbar() {
   const coreLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/projects', label: 'Projects', icon: FolderGit2 },
+    { href: '/#playground', label: 'Sandbox', icon: Sparkles, badge: 'Demo' },
     { href: '/hub', label: 'Operations Hub', icon: Cpu },
   ];
 

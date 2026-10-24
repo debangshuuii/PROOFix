@@ -27,7 +27,7 @@ export class CliPipelineExecutor {
     const startTime = Date.now();
     const scenarioId = options.scenario || 'ecommerce_checkout';
 
-    const scenario = ScenarioRegistry.getScenarioById(scenarioId as any) || ScenarioRegistry.getAllScenarios()[0];
+    const scenario = ScenarioRegistry.getScenarioById(scenarioId as any) || ScenarioRegistry.listScenarios()[0];
     const totalStages = VERIFICATION_STAGES.length;
     const stagesInfo: PipelineStageInfo[] = [];
 

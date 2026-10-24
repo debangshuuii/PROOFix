@@ -4,14 +4,14 @@
  */
 
 import { colors, symbols, stripAnsi } from './colors.ts';
-import type { RunPipelineStage } from './types.ts';
+import type { RunPipelineStage, PipelineStageStatus } from './types.ts';
 
 export interface ProgressBarRenderOptions {
   stageIndex: number; // 0-based
   totalStages: number;
   stageName: string;
   stageId?: RunPipelineStage;
-  status: 'pending' | 'running' | 'passed' | 'failed';
+  status: PipelineStageStatus;
   elapsedMs: number;
   recentLog?: string;
   width?: number;

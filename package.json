@@ -40,7 +40,8 @@
     "test:ai:repair": "node tests/verify-ai-diagnosis-self-repair-ci.mjs",
     "test:db:engine": "node tests/verify-pluggable-database-ci.mjs",
     "test:ui:enterprise": "node tests/verify-enterprise-ui-ci.mjs",
-    "test:playground": "node tests/verify-demo-playground-ci.mjs"
+    "test:playground": "node tests/verify-demo-playground-ci.mjs",
+    "test:cli": "node tests/verify-cli-tooling-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

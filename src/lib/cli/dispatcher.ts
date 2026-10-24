@@ -6,6 +6,7 @@
 import { executeDoctorCommand } from './commands/doctor.ts';
 import { executeRunCommand } from './commands/run.ts';
 import { executeFixCommand } from './commands/fix.ts';
+import { executeWatchCommand } from './commands/watch.ts';
 import { printBanner, PROOFIX_VERSION } from './banner.ts';
 import { colors } from './colors.ts';
 import type { CliCommand, ParsedCliArgs } from './types.ts';
@@ -165,6 +166,14 @@ export async function dispatch(rawArgs: string[]): Promise<number> {
       interactive: Boolean(parsed.flags.interactive),
     });
     return result.success ? 0 : 1;
+  }
+
+  if (parsed.command === 'watch') {
+    await executeWatchCommand({
+      debounceMs: typeof parsed.flags.debounce === 'number' ? parsed.flags.debounce : undefined,
+      scenario: parsed.flags.scenario as string | undefined,
+    });
+    return 0;
   }
 
   // Placeholders for remaining commands wired in upcoming commits

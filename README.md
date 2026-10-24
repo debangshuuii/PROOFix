@@ -75,6 +75,49 @@ npm run test:playground
 
 ---
 
+## 💻 Native Developer CLI Tooling (`bin/proofix.js`)
+
+PROOFix includes a command-line developer tool for terminal workflows:
+
+### 1. Environmental Diagnostics (`npx proofix doctor`)
+Validates host environment: Node.js version (`>= 20`), Playwright Chromium binary presence, ephemeral loopback port permissions, and active AI keys (`GEMINI_API_KEY`, `OPENAI_API_KEY`).
+Auto-heals missing binaries with `--heal`:
+```bash
+npx proofix doctor --heal
+```
+
+### 2. Interactive Terminal UI (`npx proofix run --interactive`)
+Terminal UI (TUI) displaying an animated 11-stage pipeline progress bar and real-time streaming logs:
+```bash
+npx proofix run --interactive --scenario ecommerce_checkout
+```
+
+### 3. Patch Review & Self-Healing (`npx proofix fix --apply`)
+Terminal-based patch review prompt with color-highlighted unified diffs and interactive confirmation `[y/N/diff/help]`:
+```bash
+# Review patch interactively with diff inspection
+npx proofix fix --scenario ecommerce_checkout
+
+# Automatically apply patch with automatic backup (.proofix.bak)
+npx proofix fix --scenario ecommerce_checkout --apply
+
+# Rollback previously applied patch
+npx proofix fix --scenario ecommerce_checkout --rollback
+```
+
+### 4. Local Watch Mode (`npx proofix watch`)
+File watcher re-running Playwright journeys automatically on file save (analogous to Vitest / Jest watch mode) with interactive hotkeys (`r` rerun, `a` all, `d` doctor, `c` clear, `q` quit):
+```bash
+npx proofix watch --debounce 300
+```
+
+Run the complete CLI test suite:
+```bash
+npm run test:cli
+```
+
+---
+
 ## 🧪 Testing with the Built-in Verification Fixture
 
 PROOFix includes an interactive verification testbed (`src/fixtures/sample-app`) with known, deterministic test outcomes:

@@ -4,7 +4,7 @@
  */
 
 import { colors, symbols, stripAnsi } from './colors.ts';
-import { RunPipelineStage } from './types.ts';
+import type { RunPipelineStage } from './types.ts';
 
 export interface ProgressBarRenderOptions {
   stageIndex: number; // 0-based

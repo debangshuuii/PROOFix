@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
+import { PlaygroundSection } from '@/components/playground/PlaygroundSection';
 import {
   ShieldCheck,
   Play,
@@ -16,6 +17,7 @@ import {
   Terminal,
   FileSearch,
   Zap,
+  Sparkles,
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -60,12 +62,20 @@ export default function LandingPage() {
               <ArrowRight className="w-4 h-4" />
             </Link>
 
+            <a
+              href="#playground"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-sky-950/60 hover:bg-sky-900/60 border border-sky-800/80 text-sky-300 font-semibold text-sm transition-all"
+            >
+              <Sparkles className="w-4 h-4 text-sky-400" />
+              10s Interactive Sandbox
+            </a>
+
             <Link
               href="/projects/proj_fixture_01/runs/run_fixture_baseline"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 font-semibold text-sm transition-all"
             >
               <Play className="w-3.5 h-3.5 text-sky-400" />
-              Inspect Live Sample Report
+              Inspect Sample Report
             </Link>
           </div>
 
@@ -124,6 +134,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Zero-Setup Interactive Demo Playground */}
+      <PlaygroundSection id="playground" />
 
       {/* Realistic Product Preview Section */}
       <section className="py-20 bg-slate-950">

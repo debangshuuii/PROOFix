@@ -2,7 +2,7 @@
  * Playground Identifier & Formatting Utilities
  */
 
-import { DemoScenarioId } from './types';
+import type { DemoScenarioId } from './types.ts';
 
 export function generateDemoProjectId(scenarioId: DemoScenarioId): string {
   const prefix = scenarioId.replace(/_/g, '-');

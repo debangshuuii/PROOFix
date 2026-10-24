@@ -2,7 +2,7 @@
  * Interactive Demo Playground Constants & Display Configurations
  */
 
-import { DemoScenarioCategory, FaultSeverity } from './types';
+import type { DemoScenarioCategory, FaultSeverity } from './types.ts';
 
 export const PLAYGROUND_CATEGORIES: Record<
   DemoScenarioCategory,

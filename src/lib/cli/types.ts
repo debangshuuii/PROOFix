@@ -11,7 +11,9 @@ export type CliCommand =
   | 'analyze'
   | 'status'
   | 'help'
-  | 'version';
+  | 'version'
+  | 'mcp'
+  | 'prove';
 
 export type DoctorCheckStatus = 'passed' | 'warning' | 'failed' | 'healed';
 

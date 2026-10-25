@@ -82,7 +82,7 @@ export function parseArgs(rawArgs: string[]): ParsedCliArgs {
     // Positional / Subcommand
     if (positional.length === 0 && !flags.help) {
       const lower = arg.toLowerCase();
-      if (['doctor', 'run', 'fix', 'watch', 'analyze', 'status', 'help', 'version'].includes(lower)) {
+      if (['doctor', 'run', 'fix', 'watch', 'analyze', 'status', 'mcp', 'prove', 'help', 'version'].includes(lower)) {
         command = lower as CliCommand;
       } else {
         positional.push(arg);

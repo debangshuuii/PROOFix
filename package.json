@@ -1,6 +1,6 @@
 {
   "name": "proofix",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "bin": {
     "proofix": "./bin/proofix.js"
@@ -42,8 +42,8 @@
     "test:ui:enterprise": "node tests/verify-enterprise-ui-ci.mjs",
     "test:playground": "node tests/verify-demo-playground-ci.mjs",
     "test:cli": "node tests/verify-cli-tooling-ci.mjs",
-    "test:mcp": "node tests/verify-mcp-prover-ci.mjs",
-    "test:prover": "node tests/verify-mcp-prover-ci.mjs"
+    "test:mcp": "npx tsx tests/verify-mcp-prover-ci.mjs",
+    "test:prover": "npx tsx tests/verify-mcp-prover-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

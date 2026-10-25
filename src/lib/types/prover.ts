@@ -37,3 +37,21 @@ export interface ProofCertificate {
   };
   certifiedBy: 'PROOFix-Shadow-Prover-v1';
 }
+
+export interface ShadowWorkspaceOptions {
+  baseDirectory: string;
+  shadowRoot?: string;
+  excludePatterns?: string[];
+  autoClean?: boolean;
+  isolationLevel?: 'process_sandbox' | 'ephemeral_worktree';
+}
+
+export interface ProverExecutionResult {
+  runId: string;
+  status: ProofStatus;
+  durationMs: number;
+  iterationsRun: number;
+  certificate?: ProofCertificate;
+  error?: string;
+  appliedPatch?: string;
+}

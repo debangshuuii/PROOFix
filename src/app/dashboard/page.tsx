@@ -1,3 +1,4 @@
+import { DualPassProverCard } from '@/components/prover/DualPassProverCard';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -258,6 +259,7 @@ export default function DashboardPage() {
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
+          <DualPassProverCard />
           <PlaygroundScenarioSelector />
         </div>
 

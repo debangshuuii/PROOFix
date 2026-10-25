@@ -1,3 +1,4 @@
+import { executeProveCommand } from './commands/prove.ts';
 /**
  * PROOFix CLI Command Dispatcher & Argument Parser
  * Parses CLI flags, routes subcommands, and handles process exit codes.
@@ -181,6 +182,21 @@ export async function dispatch(rawArgs: string[]): Promise<number> {
   if (parsed.command === 'analyze') {
     const targetDir = parsed.positional[0] || '.';
     executeAnalyzeCommand(targetDir, Boolean(parsed.flags.json));
+    return 0;
+  }
+
+  if (parsed.command === 'prove') {
+    return await executeProveCommand({
+      scenario: parsed.flags.scenario as string | undefined,
+      patch: parsed.flags.patch as string | undefined,
+      json: Boolean(parsed.flags.json),
+    });
+  }
+
+  if (parsed.command === 'mcp') {
+    console.log(colors.cyan('\n[PROOFix MCP Server] Starting stdio server...\n'));
+    const { startMcpServer } = await import('../../../bin/proofix-mcp.js');
+    await startMcpServer();
     return 0;
   }
 

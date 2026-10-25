@@ -75,6 +75,35 @@ npm run test:playground
 
 ---
 
+## 🤖 Model Context Protocol (MCP) Server (`npx proofix mcp`)
+
+PROOFix integrates natively into AI coding agents (Cursor, Claude Code, Windsurf, Antigravity) via the standard MCP protocol:
+
+- **`proofix_run_route`**: Tests specific routes with genuine Playwright Chromium.
+- **`proofix_diagnose_failure`**: Formulates evidence-grounded root causes and diffs.
+- **`proofix_prove_patch`**: Proves self-healing patches in shadow worktrees with zero regressions.
+
+```bash
+npx proofix mcp
+```
+
+---
+
+## 🛡️ Dual-Pass Shadow Prover (`npx proofix prove`)
+
+> **"Never accept an AI patch without mathematical execution evidence."**
+
+When an AI patch is generated, PROOFix executes a shadow sandbox pass to certify that:
+1. The target defect is completely extinguished.
+2. All baseline checks pass with 100% pass rate.
+3. Issues a tamper-proof SHA-256 cryptographic proof certificate.
+
+```bash
+npx proofix prove --scenario ecommerce_checkout
+```
+
+---
+
 ## 💻 Native Developer CLI Tooling (`bin/proofix.js`)
 
 PROOFix includes a command-line developer tool for terminal workflows:

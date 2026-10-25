@@ -1,3 +1,5 @@
+import { McpConfigModal } from './mcp/McpConfigModal';
+import { Bot } from 'lucide-react';
 'use client';
 
 import React, { useState } from 'react';
@@ -25,6 +27,7 @@ export function Navbar() {
   const pathname = usePathname();
   const [paletteOpen, setPaletteOpen] = useState<boolean>(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState<boolean>(false);
+  const [mcpModalOpen, setMcpModalOpen] = useState<boolean>(false);
 
   const coreLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -132,7 +135,15 @@ export function Navbar() {
 
             {/* Desktop Theme Switcher */}
             <div className="hidden sm:block">
-              <ThemeSwitcher />
+              <button
+      onClick={() => setMcpModalOpen(true)}
+      className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-sky-400 text-xs font-semibold transition"
+      title="Model Context Protocol (MCP) Integration"
+    >
+      <Bot className="w-3.5 h-3.5" />
+      <span className="hidden lg:inline">MCP</span>
+    </button>
+    <ThemeSwitcher />
             </div>
 
             <Link
@@ -144,6 +155,7 @@ export function Navbar() {
           </div>
         </div>
       </header>
+      <McpConfigModal isOpen={mcpModalOpen} onClose={() => setMcpModalOpen(false)} />
 
       {/* Mobile Navigation Drawer */}
       <MobileNavigationDrawer

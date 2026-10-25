@@ -41,7 +41,9 @@
     "test:db:engine": "node tests/verify-pluggable-database-ci.mjs",
     "test:ui:enterprise": "node tests/verify-enterprise-ui-ci.mjs",
     "test:playground": "node tests/verify-demo-playground-ci.mjs",
-    "test:cli": "node tests/verify-cli-tooling-ci.mjs"
+    "test:cli": "node tests/verify-cli-tooling-ci.mjs",
+    "test:mcp": "node tests/verify-mcp-prover-ci.mjs",
+    "test:prover": "node tests/verify-mcp-prover-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

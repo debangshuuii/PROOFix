@@ -16,3 +16,24 @@ export interface RegressionCheckResult {
   durationMs: number;
   error?: string;
 }
+
+export interface ProofCertificate {
+  certificateId: string;
+  timestamp: string;
+  status: ProofStatus;
+  scenarioId: string;
+  sha256Fingerprint: string;
+  patchHash: string;
+  pass1Failure: {
+    checkId: string;
+    errorSummary: string;
+  };
+  pass2Verification: {
+    targetCheckPassed: boolean;
+    regressionCount: number;
+    passedRegressionCount: number;
+    passRate: number;
+    latencyMs: number;
+  };
+  certifiedBy: 'PROOFix-Shadow-Prover-v1';
+}

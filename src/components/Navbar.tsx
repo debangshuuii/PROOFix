@@ -1,9 +1,9 @@
-import { McpConfigModal } from './mcp/McpConfigModal';
-import { Bot } from 'lucide-react';
 'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { Bot } from 'lucide-react';
+import { McpConfigModal } from './mcp/McpConfigModal';
 import { usePathname } from 'next/navigation';
 import {
   ShieldCheck,

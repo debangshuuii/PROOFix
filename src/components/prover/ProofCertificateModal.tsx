@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { ShieldCheck, X, Copy, Check, FileCode } from 'lucide-react';
 import { ProofCertificate } from '@/lib/types/prover';

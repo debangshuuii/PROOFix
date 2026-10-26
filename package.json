@@ -43,9 +43,10 @@
     "test:playground": "node tests/verify-demo-playground-ci.mjs",
     "test:cli": "node tests/verify-cli-tooling-ci.mjs",
     "test:mcp": "npx tsx tests/verify-mcp-prover-ci.mjs",
-    "test:prover": "npx tsx tests/verify-mcp-prover-ci.mjs",
     "test:pr:bot": "npx tsx tests/verify-pr-bot-and-vitals-gate-ci.mjs",
-    "test:vitals:gate": "npx tsx tests/verify-pr-bot-and-vitals-gate-ci.mjs"
+    "test:vitals:gate": "npx tsx tests/verify-pr-bot-and-vitals-gate-ci.mjs",
+    "test:canvas": "npx tsx tests/verify-interactive-canvas-timetravel-ci.mjs",
+    "test:timetravel": "npx tsx tests/verify-interactive-canvas-timetravel-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

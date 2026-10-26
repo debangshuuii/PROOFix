@@ -42,8 +42,34 @@ inputs:
     description: 'Optional GITHUB_TOKEN used for authorized PR generation or baseline commit annotations.'
     required: false
     default: ''
+  lcp-budget-ms:
+    description: 'Maximum permitted Largest Contentful Paint (LCP) in milliseconds before triggering a gate violation.'
+    required: false
+    default: '2500'
+  cls-budget:
+    description: 'Maximum permitted Cumulative Layout Shift (CLS) score before triggering a gate violation.'
+    required: false
+    default: '0.10'
+  fail-on-vitals-budget:
+    description: 'Whether Core Web Vitals budget violations (LCP > 2.5s or CLS > 0.1) trigger a non-zero exit code.'
+    required: false
+    default: 'true'
+  post-pr-comment:
+    description: 'Whether to automatically publish the rich PR comment with visual slider and proof badge.'
+    required: false
+    default: 'true'
 
 outputs:
+  vitals-status:
+    description: 'Core Web Vitals evaluation status: "passed" or "failed".'
+  lcp-value:
+    description: 'Measured Largest Contentful Paint in milliseconds.'
+  cls-value:
+    description: 'Measured Cumulative Layout Shift score.'
+  proof-fingerprint:
+    description: 'Tamper-proof SHA-256 cryptographic proof fingerprint.'
+  proof-badge:
+    description: 'Markdown string for the cryptographic proof badge.'
   run-id:
     description: 'Unique execution run identifier assigned by PROOFix.'
   status:

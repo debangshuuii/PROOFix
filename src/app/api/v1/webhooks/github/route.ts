@@ -37,6 +37,41 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Handle issue_comment events for /proofix slash commands
+    if (event === 'issue_comment') {
+      const { globalSlashCommandParser } = await import('@/lib/integrations/slash-command-parser');
+      const { globalCommentCommandHandler } = await import('@/lib/integrations/comment-command-handler');
+
+      const commentBody = payload.comment?.body || '';
+      if (!globalSlashCommandParser.isSlashCommand(commentBody)) {
+        return NextResponse.json({ message: 'Ignored non-command comment.' });
+      }
+
+      const parsed = globalSlashCommandParser.parseComment(commentBody, {
+        author: payload.comment?.user?.login,
+        commentId: payload.comment?.id,
+        pullRequestNumber: payload.issue?.number,
+      });
+
+      const repoName = payload.repository?.full_name || 'unknown/repo';
+      const prNumber = payload.issue?.number || 0;
+      const headSha = payload.comment?.commit_id || payload.issue?.pull_request?.sha || 'head';
+
+      const result = await globalCommentCommandHandler.handleCommand(parsed, {
+        repoFullName: repoName,
+        pullRequestNumber: prNumber,
+        branchName: payload.issue?.pull_request?.head?.ref || 'main',
+        headSha,
+      });
+
+      return NextResponse.json({
+        success: result.success,
+        command: result.command,
+        message: result.message,
+        replyCommentBody: result.replyCommentBody,
+      });
+    }
+
     if (event !== 'push' && event !== 'pull_request') {
       return NextResponse.json({ message: `Ignored unhandled GitHub event: ${event}` });
     }

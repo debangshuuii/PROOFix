@@ -13,6 +13,10 @@ export interface ActionInputs {
   generateSummary: boolean;
   uploadArtifacts: boolean;
   githubToken?: string;
+  lcpBudgetMs?: number;
+  clsBudget?: number;
+  failOnVitalsBudget?: boolean;
+  postPrComment?: boolean;
 }
 
 export interface ValidationResult {
@@ -84,6 +88,22 @@ export function validateActionInputs(raw: Record<string, string | undefined>): V
   // github-token
   const githubToken = raw['github-token'] ?? raw['githubToken'] ?? process.env.GITHUB_TOKEN;
 
+  // lcp-budget-ms
+  const lcpBudgetMsStr = raw['lcp-budget-ms'] ?? raw['lcpBudgetMs'] ?? '2500';
+  const lcpBudgetMs = parseInt(lcpBudgetMsStr, 10);
+
+  // cls-budget
+  const clsBudgetStr = raw['cls-budget'] ?? raw['clsBudget'] ?? '0.10';
+  const clsBudget = parseFloat(clsBudgetStr);
+
+  // fail-on-vitals-budget
+  const failOnVitalsStr = (raw['fail-on-vitals-budget'] ?? raw['failOnVitalsBudget'] ?? 'true').toLowerCase().trim();
+  const failOnVitalsBudget = failOnVitalsStr !== 'false';
+
+  // post-pr-comment
+  const postPrCommentStr = (raw['post-pr-comment'] ?? raw['postPrComment'] ?? 'true').toLowerCase().trim();
+  const postPrComment = postPrCommentStr !== 'false';
+
   if (errors.length > 0) {
     return { valid: false, errors };
   }
@@ -101,6 +121,10 @@ export function validateActionInputs(raw: Record<string, string | undefined>): V
       generateSummary,
       uploadArtifacts,
       githubToken: githubToken || undefined,
+      lcpBudgetMs: isNaN(lcpBudgetMs) ? 2500 : lcpBudgetMs,
+      clsBudget: isNaN(clsBudget) ? 0.10 : clsBudget,
+      failOnVitalsBudget,
+      postPrComment,
     },
   };
 }

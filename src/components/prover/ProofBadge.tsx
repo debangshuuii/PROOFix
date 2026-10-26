@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { ShieldCheck, ShieldAlert, Clock } from 'lucide-react';
 import { ProofStatus } from '@/lib/types/prover';

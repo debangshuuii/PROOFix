@@ -1,8 +1,8 @@
-import { DualPassProverCard } from '@/components/prover/DualPassProverCard';
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { DualPassProverCard } from '@/components/prover/DualPassProverCard';
 import { Navbar } from '@/components/Navbar';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Project, VerificationRun } from '@/lib/types';

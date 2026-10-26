@@ -24,6 +24,10 @@ import {
 import { CardSkeleton } from '@/components/Skeleton';
 import { PlaygroundScenarioSelector } from '@/components/playground/PlaygroundScenarioSelector';
 import { PlaygroundBadge } from '@/components/playground/PlaygroundBadge';
+import { LiveInteractiveCanvas } from '@/components/canvas/LiveInteractiveCanvas';
+import { TimeTravelScrubber } from '@/components/timetravel/TimeTravelScrubber';
+import { LinearShortcutsBar } from '@/components/shortcuts/LinearShortcutsBar';
+import { PrBotCard } from '@/components/integrations/PrBotCard';
 
 export default function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -197,6 +201,11 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Linear-Grade Keyboard Shortcuts & Audio Chimes Bar */}
+        <div className="my-6">
+          <LinearShortcutsBar />
+        </div>
+
         {/* Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 my-8">
           <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800/80">
@@ -259,8 +268,17 @@ export default function DashboardPage() {
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
-          <DualPassProverCard />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <DualPassProverCard />
+            <PrBotCard />
+          </div>
           <PlaygroundScenarioSelector />
+        </div>
+
+        {/* Live Interactive Chromium Canvas Stream & Time-Travel Scrubber */}
+        <div className="my-10 space-y-6">
+          <LiveInteractiveCanvas />
+          <TimeTravelScrubber />
         </div>
 
         {/* Projects Section */}

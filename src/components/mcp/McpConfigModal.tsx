@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Bot, X, Copy, Check, Terminal, ExternalLink } from 'lucide-react';
 
@@ -15,17 +17,17 @@ export function McpConfigModal({ isOpen, onClose }: McpConfigModalProps) {
   const claudeSnippet = JSON.stringify({
     mcpServers: {
       proofix: {
-        command: 'node',
-        args: ['d:/Coding/PROOFix/bin/proofix-mcp.js'],
-        env: { NODE_ENV: 'development' }
+        command: 'npx',
+        args: ['-y', 'proofix', 'mcp'],
+        env: { NODE_ENV: 'production' }
       }
     }
   }, null, 2);
 
   const cursorSnippet = JSON.stringify({
     proofix: {
-      command: 'node',
-      args: ['d:/Coding/PROOFix/bin/proofix-mcp.js']
+      command: 'npx',
+      args: ['-y', 'proofix', 'mcp']
     }
   }, null, 2);
 

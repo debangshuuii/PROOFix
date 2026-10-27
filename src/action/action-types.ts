@@ -1,6 +1,19 @@
-/**
- * Type definitions for Turnkey GitHub Action, Sticky PR Comments, and Check-Run Gates.
- */
+import { TestResult } from '../lib/types';
+
+export type ActionTestItem = TestResult | {
+  id?: string;
+  testId?: string;
+  name?: string;
+  title?: string;
+  route?: string;
+  category?: string;
+  status: string;
+  durationMs?: number;
+  error?: string;
+  errorDetails?: { message: string; url?: string; stack?: string };
+  consoleLogs?: any[];
+  evidence?: { consoleErrors?: any[]; networkFailures?: any[] };
+};
 
 export interface HydrationDriftDetail {
   route: string;

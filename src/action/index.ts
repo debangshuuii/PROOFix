@@ -263,7 +263,10 @@ export async function runAction(
         commitSha: process.env.GITHUB_SHA || 'head_commit',
         runId: runResult.runId,
         status: runResult.status,
-        summary: runResult.summary,
+        summary: {
+          ...runResult.summary,
+          durationMs: runResult.durationMs,
+        },
         hydrationDrifts,
         brokenRoutes,
         visualDiffs: [],

@@ -1,5 +1,4 @@
-import { HydrationDriftDetail } from './action-types';
-import { TestExecutionResult } from '../lib/types';
+import { HydrationDriftDetail, ActionTestItem } from './action-types';
 
 /**
  * Known React 19 and Next.js SSR hydration error signatures.
@@ -18,7 +17,7 @@ const HYDRATION_SIGNATURES = [
  * Scans test execution logs and failure messages for React 19 SSR hydration drift.
  */
 export function detectHydrationDrifts(
-  results: TestExecutionResult[],
+  results: ActionTestItem[],
   executionLogs: string[] = []
 ): HydrationDriftDetail[] {
   const drifts: HydrationDriftDetail[] = [];
@@ -26,9 +25,14 @@ export function detectHydrationDrifts(
 
   // 1. Scan individual test execution results
   for (const res of results) {
+    const resAny = res as any;
+    const errorMsg = resAny.error || resAny.errorDetails?.message || '';
+    const consoleLogs = resAny.consoleLogs || resAny.evidence?.consoleErrors?.map((c: any) => c.text || c.message) || [];
+    const targetRoute = resAny.route || resAny.errorDetails?.url || resAny.name || resAny.testId || resAny.id || 'unknown';
+
     const messages = [
-      res.error || '',
-      ...(res.consoleLogs || []).map((l) => (typeof l === 'string' ? l : JSON.stringify(l))),
+      errorMsg,
+      ...consoleLogs.map((l: any) => (typeof l === 'string' ? l : JSON.stringify(l))),
     ];
 
     for (const msg of messages) {
@@ -36,7 +40,7 @@ export function detectHydrationDrifts(
 
       for (const sig of HYDRATION_SIGNATURES) {
         if (sig.test(msg)) {
-          const testKey = `${res.route || res.testId}`;
+          const testKey = `${targetRoute}`;
           if (!seenKeys.has(testKey)) {
             seenKeys.add(testKey);
 
@@ -50,7 +54,7 @@ export function detectHydrationDrifts(
             if (clientMatch) clientValue = clientMatch[1].trim();
 
             drifts.push({
-              route: res.route || `test:${res.testId}`,
+              route: targetRoute,
               component: extractComponentName(msg),
               errorMessage: sanitizeHydrationError(msg),
               serverValue,

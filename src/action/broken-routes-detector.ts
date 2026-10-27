@@ -1,29 +1,30 @@
-import { BrokenRouteDetail } from './action-types';
-import { TestExecutionResult } from '../lib/types';
+import { BrokenRouteDetail, ActionTestItem } from './action-types';
 
 /**
  * Scans test execution results for HTTP 404 dead link and broken route occurrences.
  */
 export function detectBrokenRoutes(
-  results: TestExecutionResult[],
+  results: ActionTestItem[],
   executionLogs: string[] = []
 ): BrokenRouteDetail[] {
   const brokenRoutes: BrokenRouteDetail[] = [];
   const seenRoutes = new Set<string>();
 
   for (const res of results) {
-    const errorMsg = res.error || '';
-    const logs = (res.consoleLogs || []).map((l) => (typeof l === 'string' ? l : JSON.stringify(l)));
+    const resAny = res as any;
+    const errorMsg = resAny.error || resAny.errorDetails?.message || '';
+    const rawLogs = resAny.consoleLogs || resAny.evidence?.consoleErrors?.map((c: any) => c.text || c.message) || [];
+    const logs = rawLogs.map((l: any) => (typeof l === 'string' ? l : JSON.stringify(l)));
     const allText = [errorMsg, ...logs].join('\n');
 
     // Check for HTTP 404 indicators
     const is404 =
       /404(?:\s+Not\s+Found)?/i.test(allText) ||
       /status code 404/i.test(allText) ||
-      res.category === 'route_discovery' && res.status === 'failed';
+      (resAny.category === 'route_discovery' && resAny.status === 'failed');
 
     if (is404) {
-      const targetRoute = res.route || extractRouteFromText(allText) || `test:${res.testId}`;
+      const targetRoute = resAny.route || resAny.errorDetails?.url || extractRouteFromText(allText) || `test:${resAny.testId || resAny.id || 'unknown'}`;
 
       if (!seenRoutes.has(targetRoute)) {
         seenRoutes.add(targetRoute);
@@ -31,7 +32,7 @@ export function detectBrokenRoutes(
           route: targetRoute,
           httpStatus: 404,
           referringPage: extractReferringPage(allText),
-          durationMs: res.durationMs,
+          durationMs: resAny.durationMs,
         });
       }
     }

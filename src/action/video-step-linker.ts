@@ -1,11 +1,10 @@
-import { FailureVideoStep } from './action-types';
-import { TestExecutionResult } from '../lib/types';
+import { FailureVideoStep, ActionTestItem } from './action-types';
 
 /**
  * Correlates test step execution failures with timestamped positions inside the captured Playwright video recording.
  */
 export function linkVideoFailureSteps(
-  results: TestExecutionResult[],
+  results: ActionTestItem[],
   videoOptions?: {
     videoUrl?: string;
     localVideoPath?: string;
@@ -17,17 +16,19 @@ export function linkVideoFailureSteps(
 
   for (let i = 0; i < results.length; i++) {
     const res = results[i];
-    const durationSec = Math.max(0.5, (res.durationMs || 1000) / 1000);
+    const resAny = res as any;
+    const durationSec = Math.max(0.5, (resAny.durationMs || 1000) / 1000);
     const failureTimestamp = accumulatedSec + durationSec * 0.8;
 
-    if (res.status === 'failed' || res.status === 'error') {
-      const stepName = res.title || res.route || `Step #${i + 1}`;
-      const errorSnippet = res.error ? res.error.split('\n')[0].substring(0, 150) : undefined;
+    if (resAny.status === 'failed' || resAny.status === 'error') {
+      const stepName = resAny.title || resAny.name || resAny.route || `Step #${i + 1}`;
+      const err = resAny.error || resAny.errorDetails?.message;
+      const errorSnippet = err ? err.split('\n')[0].substring(0, 150) : undefined;
 
       steps.push({
         stepIndex: i + 1,
         stepName,
-        status: res.status as 'failed' | 'timeout',
+        status: (resAny.status === 'timeout' ? 'timeout' : 'failed') as 'failed' | 'timeout',
         videoTimestampSec: parseFloat(failureTimestamp.toFixed(1)),
         videoUrl: videoOptions?.videoUrl,
         localVideoPath: videoOptions?.localVideoPath,

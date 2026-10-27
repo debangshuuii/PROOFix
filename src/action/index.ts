@@ -8,6 +8,14 @@ import { generateJobSummaryMarkdown, writeJobSummary } from './job-summary';
 import { packageVerificationArtifacts } from './artifact-packager';
 import { sanitizeActionLog } from './security';
 import { withTimeout } from './retry-handler';
+import { detectHydrationDrifts } from './hydration-detector';
+import { detectBrokenRoutes } from './broken-routes-detector';
+import { linkVideoFailureSteps } from './video-step-linker';
+import { generateAutoFixDispatchLink } from './autofix-dispatch-generator';
+import { publishStickyPrComment } from './sticky-pr-comment';
+import { evaluateCheckRunGate } from './check-run-gatekeeper';
+import { createOrUpdateCheckRun } from './github-comment-client';
+import { generateZeroAuthProofPreviewHtml } from './visual-slider-generator';
 
 /**
  * Sets a step output in GitHub Actions by appending to $GITHUB_OUTPUT.
@@ -162,7 +170,45 @@ export async function runAction(
       runId: runResult.runId,
     });
 
-    // Determine exit code factoring in both test failures and Core Web Vitals budget
+    // Detect React 19 SSR hydration drift
+    const hydrationDrifts = detectHydrationDrifts(runResult.results, runResult.logs);
+
+    // Detect HTTP 404 broken navigation routes
+    const brokenRoutes = detectBrokenRoutes(runResult.results, runResult.logs);
+
+    // Link Playwright failure video timestamps
+    const videoSteps = linkVideoFailureSteps(runResult.results);
+
+    // Generate zero-auth proof preview HTML artifact
+    const proofPreviewFilename = `proof-preview-${runResult.runId}.html`;
+    const proofPreviewPath = path.join(config.reportDirectory, proofPreviewFilename);
+    const proofPreviewHtml = generateZeroAuthProofPreviewHtml({
+      runId: runResult.runId,
+      commitSha: process.env.GITHUB_SHA || 'head_commit',
+      status: runResult.status,
+      totalChecks: runResult.summary.total,
+      passedChecks: runResult.summary.passed,
+      failedChecks: runResult.summary.failed,
+      durationMs: runResult.durationMs,
+      visualDiffs: [],
+      proofFingerprint: proofBadge.fingerprint,
+    });
+    try {
+      if (!fs.existsSync(config.reportDirectory)) {
+        fs.mkdirSync(config.reportDirectory, { recursive: true });
+      }
+      fs.writeFileSync(proofPreviewPath, proofPreviewHtml, 'utf-8');
+    } catch {}
+
+    // Evaluate Check Run Hard Gating
+    const gateResult = evaluateCheckRunGate({
+      failOnHydrationDrift: inputs.failOnHydrationDrift ?? true,
+      failOnBrokenRoutes: inputs.failOnBrokenRoutes ?? true,
+      hydrationDrifts,
+      brokenRoutes,
+    });
+
+    // Determine exit code factoring in test failures, Core Web Vitals, and hard gates
     let exitCode = determineActionExitCode({
       status: runResult.status,
       failedChecks: runResult.summary.failed,
@@ -172,6 +218,81 @@ export async function runAction(
     if (exitCode === 0 && inputs.failOnVitalsBudget && !vitalsEvaluation.passed) {
       exitCode = 1;
       console.log(`[PROOFix Action Gatekeeper] Exiting with code 1 due to Core Web Vitals budget violation.`);
+    }
+
+    if (exitCode === 0 && !gateResult.passed) {
+      exitCode = 1;
+      console.log(`[PROOFix Action Gatekeeper] Exiting with code 1 due to hard gate violation: ${gateResult.title}`);
+    }
+
+    // Publish Sticky PR Comment if in pull request context
+    const prNumberRaw = process.env.GITHUB_EVENT_PATH
+      ? (() => {
+          try {
+            const evt = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf-8'));
+            return evt.pull_request?.number || evt.issue?.number;
+          } catch {
+            return undefined;
+          }
+        })()
+      : undefined;
+
+    const repoFullName = process.env.GITHUB_REPOSITORY || 'debangshuuii/PROOFix';
+    const [repoOwner, repoName] = repoFullName.split('/');
+    const headBranch = process.env.GITHUB_HEAD_REF || process.env.GITHUB_REF_NAME || 'main';
+
+    let stickyCommentId: number | undefined;
+    let stickyCommentUrl: string | undefined;
+
+    if (inputs.postPrComment && prNumberRaw && inputs.githubToken) {
+      const autoFixDispatch = generateAutoFixDispatchLink({
+        repoOwner,
+        repoName,
+        workflowFile: inputs.autoFixWorkflow || 'proofix-autofix.yml',
+        branchName: headBranch,
+        prNumber: prNumberRaw,
+        runId: runResult.runId,
+      });
+
+      const commentRes = await publishStickyPrComment({
+        prNumber: prNumberRaw,
+        repoOwner,
+        repoName,
+        commitSha: process.env.GITHUB_SHA || 'head_commit',
+        runId: runResult.runId,
+        status: runResult.status,
+        summary: runResult.summary,
+        hydrationDrifts,
+        brokenRoutes,
+        visualDiffs: [],
+        videoSteps,
+        autoFix: runResult.summary.failed > 0 ? autoFixDispatch : undefined,
+        proofBadgeMarkdown: proofBadge.badgeMarkdown,
+        proofFingerprint: proofBadge.fingerprint,
+        proofPreviewUrl: proofPreviewFilename,
+        githubToken: inputs.githubToken,
+      });
+
+      if (commentRes.commentId) {
+        stickyCommentId = commentRes.commentId;
+        stickyCommentUrl = commentRes.commentUrl;
+        console.log(`[PROOFix Action] Sticky PR Comment ${commentRes.action}: ${commentRes.commentUrl || commentRes.commentId}`);
+      }
+    }
+
+    // Post Check Run if in GitHub Actions with token
+    if (inputs.githubToken && process.env.GITHUB_SHA) {
+      await createOrUpdateCheckRun({
+        owner: repoOwner,
+        repo: repoName,
+        commitSha: process.env.GITHUB_SHA,
+        token: inputs.githubToken,
+        name: gateResult.gateName,
+        conclusion: gateResult.conclusion,
+        title: gateResult.title,
+        summary: gateResult.summary,
+        annotations: gateResult.annotations,
+      });
     }
 
     // Populate GitHub Action step outputs
@@ -188,6 +309,11 @@ export async function runAction(
     setActionOutput('cls-value', vitalsEvaluation.vitals.cls.value ?? 0);
     setActionOutput('proof-fingerprint', proofBadge.fingerprint);
     setActionOutput('proof-badge', proofBadge.badgeMarkdown);
+    setActionOutput('hydration-detected', hydrationDrifts.length > 0 ? 'true' : 'false');
+    setActionOutput('broken-routes-count', brokenRoutes.length);
+    setActionOutput('proof-preview-url', proofPreviewFilename);
+    if (stickyCommentId) setActionOutput('sticky-comment-id', stickyCommentId);
+    if (stickyCommentUrl) setActionOutput('sticky-comment-url', stickyCommentUrl);
 
     const desc = describeExitCode(exitCode);
     console.log(`\n[PROOFix Action Completed] Exit Code ${desc.code} (${desc.name}): ${desc.description}`);

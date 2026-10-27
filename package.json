@@ -46,7 +46,9 @@
     "test:pr:bot": "npx tsx tests/verify-pr-bot-and-vitals-gate-ci.mjs",
     "test:vitals:gate": "npx tsx tests/verify-pr-bot-and-vitals-gate-ci.mjs",
     "test:canvas": "npx tsx tests/verify-interactive-canvas-timetravel-ci.mjs",
-    "test:timetravel": "npx tsx tests/verify-interactive-canvas-timetravel-ci.mjs"
+    "test:timetravel": "npx tsx tests/verify-interactive-canvas-timetravel-ci.mjs",
+    "test:action:turnkey": "node tests/verify-turnkey-action-ci.mjs",
+    "test:vscode": "node tests/verify-vscode-extension-ci.mjs"
   },
   "dependencies": {
     "@types/adm-zip": "^0.5.8",

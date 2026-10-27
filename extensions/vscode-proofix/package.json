@@ -1,0 +1,121 @@
+{
+  "name": "proofix-vscode",
+  "displayName": "PROOFix: AI Software Verification & Prover",
+  "description": "Evidence-grounded Playwright verification, route gutter badges, and inline self-healing prover for Next.js & TypeScript.",
+  "version": "1.0.0",
+  "publisher": "proofix",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Testing",
+    "Linters",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "proofix",
+    "playwright",
+    "verification",
+    "testing",
+    "nextjs",
+    "self-healing",
+    "prover"
+  ],
+  "icon": "icons/icon.png",
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "workspaceContains:**/package.json",
+    "workspaceContains:**/proofix.json"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "proofix.runRoute",
+        "title": "PROOFix: Run Journey for Current Route",
+        "category": "PROOFix",
+        "icon": "$(play)"
+      },
+      {
+        "command": "proofix.proveRoute",
+        "title": "PROOFix: Prove Current Route with Dual-Pass Prover",
+        "category": "PROOFix",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "proofix.runAll",
+        "title": "PROOFix: Run All Verification Journeys",
+        "category": "PROOFix",
+        "icon": "$(run-all)"
+      },
+      {
+        "command": "proofix.showPanel",
+        "title": "PROOFix: Open Proof Canvas & Report Viewer",
+        "category": "PROOFix",
+        "icon": "$(split-horizontal)"
+      },
+      {
+        "command": "proofix.applyPatch",
+        "title": "PROOFix: Apply Proven Self-Healing Fix",
+        "category": "PROOFix",
+        "icon": "$(check)"
+      },
+      {
+        "command": "proofix.rollbackPatch",
+        "title": "PROOFix: Rollback Applied Patch",
+        "category": "PROOFix",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "proofix.refreshRoutes",
+        "title": "PROOFix: Refresh Route Index",
+        "category": "PROOFix",
+        "icon": "$(refresh)"
+      }
+    ],
+    "configuration": {
+      "title": "PROOFix",
+      "properties": {
+        "proofix.serverUrl": {
+          "type": "string",
+          "default": "http://localhost:3000",
+          "description": "Base URL of the running PROOFix development server or API."
+        },
+        "proofix.showGutterBadges": {
+          "type": "boolean",
+          "default": true,
+          "description": "Display green/red verification badges in the editor gutter beside route handlers."
+        },
+        "proofix.enableCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Display inline 'Run Journey' and 'Prove Route' CodeLens above route exports."
+        },
+        "proofix.autoProveOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically trigger the Dual-Pass Shadow Prover on document save."
+        },
+        "proofix.preferredAiProvider": {
+          "type": "string",
+          "enum": ["gemini", "openai", "anthropic", "offline"],
+          "default": "gemini",
+          "description": "Preferred AI model provider for failure diagnosis and self-healing patches."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "node tests/extension.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.0.0"
+  }
+}

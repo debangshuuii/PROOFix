@@ -213,6 +213,8 @@ export async function runAction(
       status: runResult.status,
       failedChecks: runResult.summary.failed,
       failOnRegression: inputs.failOnRegression,
+      hasHydrationViolation: (inputs.failOnHydrationDrift ?? true) && hydrationDrifts.length > 0,
+      hasBrokenRouteViolation: (inputs.failOnBrokenRoutes ?? true) && brokenRoutes.length > 0,
     });
 
     if (exitCode === 0 && inputs.failOnVitalsBudget && !vitalsEvaluation.passed) {

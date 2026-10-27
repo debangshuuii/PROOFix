@@ -49,6 +49,7 @@ jobs:
           node bin/proofix.js prove || true
 
       - name: Commit & Push Verified Fix
+        id: commit_fix
         run: |
           git config --global user.name "proofix-bot[bot]"
           git config --global user.email "proofix-bot@users.noreply.github.com"
@@ -56,7 +57,14 @@ jobs:
             git add -A
             git commit -m "fix(proofix): auto-apply verified patch and proof certificate"
             git push origin ${{ github.event.inputs.pr_branch || github.ref }}
+            echo "pushed=true" >> $GITHUB_OUTPUT
             echo "Successfully committed verified fix to ${{ github.event.inputs.pr_branch || github.ref }}"
           else
+            echo "pushed=false" >> $GITHUB_OUTPUT
             echo "Working tree clean; no patch adjustments needed."
           fi
+
+      - name: Post PR Followup Note
+        if: steps.commit_fix.outputs.pushed == 'true' && github.event.inputs.pr_branch != ''
+        run: |
+          echo "[PROOFix Auto-Fix] Verified fix pushed to ${{ github.event.inputs.pr_branch }}."

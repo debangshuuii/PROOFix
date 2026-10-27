@@ -343,3 +343,16 @@ if (require.main === module) {
     process.exit(exitCode);
   });
 }
+
+// Module Re-exports for programmatic consumers
+export * from './action-types';
+export * from './hydration-detector';
+export * from './broken-routes-detector';
+export * from './sticky-comment-marker';
+export * from './github-comment-client';
+export * from './visual-slider-generator';
+export * from './visual-diff-formatter';
+export * from './video-step-linker';
+export * from './autofix-dispatch-generator';
+export * from './sticky-pr-comment';
+export * from './check-run-gatekeeper';

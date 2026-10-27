@@ -66,6 +66,14 @@ inputs:
     description: 'Whether to automatically publish the rich PR comment with visual slider and proof badge.'
     required: false
     default: 'true'
+  post-sticky-comment:
+    description: 'Whether to update existing bot comments in-place to avoid PR comment clutter.'
+    required: false
+    default: 'true'
+  auto-fix-workflow:
+    description: 'Name of the auto-fix workflow file dispatched by the Prove & Auto-Fix button.'
+    required: false
+    default: 'proofix-autofix.yml'
 
 outputs:
   vitals-status:

@@ -80,6 +80,12 @@ export class PatchManager {
     }
   }
 
+  public hasBackup(targetFilePath: string): boolean {
+    const targetFile = path.resolve(targetFilePath);
+    const backupPath = `${targetFile}.proofix.bak`;
+    return fs.existsSync(backupPath);
+  }
+
   public clear(): void {
     this.proposals.clear();
   }

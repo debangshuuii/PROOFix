@@ -54,6 +54,14 @@ inputs:
     description: 'Whether Core Web Vitals budget violations (LCP > 2.5s or CLS > 0.1) trigger a non-zero exit code.'
     required: false
     default: 'true'
+  fail-on-hydration-drift:
+    description: 'Hard check-run gate: blocks merge if React 19 SSR hydration drift (#418) is detected.'
+    required: false
+    default: 'true'
+  fail-on-broken-routes:
+    description: 'Hard check-run gate: blocks merge if HTTP 404 dead navigation routes are detected.'
+    required: false
+    default: 'true'
   post-pr-comment:
     description: 'Whether to automatically publish the rich PR comment with visual slider and proof badge.'
     required: false

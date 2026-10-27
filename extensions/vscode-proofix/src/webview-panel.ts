@@ -72,6 +72,20 @@ export class ProofCanvasWebviewPanel {
     <button class="btn btn-primary" style="background:#059669;" onclick="vscode.postMessage({ command: 'proveRoute', route: '${routePath}' })">🛡️ Prove Route</button>
   </div>
 
+  <div style="margin-top:24px;">
+    <h3 style="font-size:15px; color:#38bdf8; margin:0 0 10px 0;">👁️ Interactive Visual Regression Split</h3>
+    <div style="position:relative; width:100%; height:260px; background:#0f172a; border:1px solid #334155; border-radius:8px; overflow:hidden;">
+      <div style="position:absolute; top:8px; left:8px; font-size:11px; color:#10b981; font-weight:bold; background:rgba(0,0,0,0.6); padding:2px 8px; border-radius:4px;">APPROVED BASELINE</div>
+      <div style="position:absolute; top:8px; right:8px; font-size:11px; color:#38bdf8; font-weight:bold; background:rgba(0,0,0,0.6); padding:2px 8px; border-radius:4px;">PLAYWRIGHT ACTUAL</div>
+      <div id="wv_slider_clip" style="position:absolute; top:0; left:0; width:50%; height:100%; border-right:2px solid #38bdf8; background:rgba(56,189,248,0.05);"></div>
+    </div>
+    <div style="margin-top:8px; display:flex; align-items:center;">
+      <span style="font-size:11px; color:#94a3b8;">Baseline</span>
+      <input type="range" min="0" max="100" value="50" style="flex:1; margin:0 12px; accent-color:#38bdf8;" oninput="document.getElementById('wv_slider_clip').style.width = this.value + '%'" />
+      <span style="font-size:11px; color:#94a3b8;">Actual</span>
+    </div>
+  </div>
+
   ${patchSection}
 
   <script>

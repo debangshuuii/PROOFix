@@ -98,3 +98,10 @@ export function formatRunJourneyTitle(routePath: string): string {
 export function formatProveRouteTitle(routePath: string): string {
   return `🛡️ Prove Route (${routePath})`;
 }
+
+/**
+ * Formats the Inspect Failure CodeLens title.
+ */
+export function formatFailureLensTitle(failureCount: number): string {
+  return `🚨 ${failureCount} Failing Defect${failureCount > 1 ? 's' : ''} (Inspect Failure Evidence)`;
+}

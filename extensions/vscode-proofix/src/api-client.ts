@@ -4,7 +4,13 @@ import { RouteStatusRecord, ProposedPatch } from './types';
  * REST API client for communicating with local PROOFix daemon or server.
  */
 export class ProofixApiClient {
+  private offlineMode = false;
+
   constructor(private baseUrl: string = 'http://localhost:3000') {}
+
+  public isOfflineMode(): boolean {
+    return this.offlineMode;
+  }
 
   public setBaseUrl(url: string): void {
     this.baseUrl = url.replace(/\/$/, '');

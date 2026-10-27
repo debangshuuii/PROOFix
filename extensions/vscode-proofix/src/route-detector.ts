@@ -83,6 +83,18 @@ export function normalizeRouteFromPath(filePath: string): string {
 }
 
 /**
+ * Extracts dynamic segment parameter names from a normalized route path.
+ */
+export function extractDynamicParams(routePath: string): string[] {
+  const params: string[] = [];
+  const matches = routePath.matchAll(/\[(?:\.\.\.)?([a-zA-Z0-9_]+)\]/g);
+  for (const match of matches) {
+    params.push(match[1]);
+  }
+  return params;
+}
+
+/**
  * Scans file contents to locate the line number of the main route handler export.
  */
 export function findRouteExportLine(fileContent: string): { line: number; exportName: string } {

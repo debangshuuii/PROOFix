@@ -84,6 +84,16 @@ export class GutterDecorationProvider {
     };
   }
 
+  public updateEditorDecorations(
+    editor: { document: { fileName: string }; setDecorations: (type: any, ranges: any[]) => void },
+    routeIndex: { getByFile: (file: string) => RouteHandlerInfo | undefined }
+  ): DecorationItem | null {
+    if (!editor || !editor.document) return null;
+    const route = routeIndex.getByFile(editor.document.fileName);
+    if (!route) return null;
+    return this.computeDecorationsForRoute(route);
+  }
+
   public clear(): void {
     this.routeStatuses.clear();
   }

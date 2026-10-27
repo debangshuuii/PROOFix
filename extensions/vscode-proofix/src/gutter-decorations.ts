@@ -88,3 +88,21 @@ export class GutterDecorationProvider {
     this.routeStatuses.clear();
   }
 }
+
+/**
+ * Formats rich hover Markdown for the route status badge lens.
+ */
+export function formatHoverMarkdown(status: RouteStatusRecord): string {
+  const badgeEmoji = status.status === 'proven' ? '🛡️' : status.status === 'failing' ? '🚨' : '⏳';
+  const passRate = status.totalJourneys > 0 ? Math.round((status.passedJourneys / status.totalJourneys) * 100) : 0;
+
+  return [
+    `### ${badgeEmoji} PROOFix Route Status: ${status.status.toUpperCase()}`,
+    `**Target Route:** \`${status.routePath}\``,
+    `**Pass Rate:** **${passRate}%** (${status.passedJourneys}/${status.totalJourneys} journeys passing)`,
+    `**Execution Duration:** ${(status.durationMs / 1000).toFixed(1)}s`,
+    `**Last Verified:** ${status.lastVerified}`,
+    status.proofFingerprint ? `**Cryptographic Proof:** \`${status.proofFingerprint.slice(0, 16)}...\`` : '',
+    status.failureSnippet ? `\n> ⚠️ **Failure Cause:** \`${status.failureSnippet}\`` : '',
+  ].filter(Boolean).join('\n\n');
+}

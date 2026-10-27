@@ -83,6 +83,17 @@ export class RouteCodeLensProvider {
 
     return lenses;
   }
+
+  public resolveCodeLens(item: CodeLensItem): CodeLensItem {
+    // If dynamic route e.g. [id], parameter can be resolved dynamically
+    if (item.command && item.command.arguments && item.command.arguments[0]) {
+      const routeArg = item.command.arguments[0];
+      if (typeof routeArg === 'string' && routeArg.includes('[')) {
+        item.command.title = item.command.title.replace('(Dynamic)', '⚡');
+      }
+    }
+    return item;
+  }
 }
 
 /**

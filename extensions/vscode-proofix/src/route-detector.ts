@@ -43,6 +43,14 @@ export function isAppRoute(filePath: string): boolean {
 }
 
 /**
+ * Checks if a route file is a Pages Router page or endpoint.
+ */
+export function isPagesRoute(filePath: string): boolean {
+  const normalized = filePath.replace(/\\/g, '/');
+  return /\/pages\//.test(normalized) && !/_app|_document|_error/.test(normalized);
+}
+
+/**
  * Normalizes a filesystem path into an HTTP route path.
  */
 export function normalizeRouteFromPath(filePath: string): string {

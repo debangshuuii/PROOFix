@@ -16,7 +16,11 @@ export interface ActionInputs {
   lcpBudgetMs?: number;
   clsBudget?: number;
   failOnVitalsBudget?: boolean;
+  failOnHydrationDrift?: boolean;
+  failOnBrokenRoutes?: boolean;
   postPrComment?: boolean;
+  postStickyComment?: boolean;
+  autoFixWorkflow?: string;
 }
 
 export interface ValidationResult {
@@ -104,6 +108,21 @@ export function validateActionInputs(raw: Record<string, string | undefined>): V
   const postPrCommentStr = (raw['post-pr-comment'] ?? raw['postPrComment'] ?? 'true').toLowerCase().trim();
   const postPrComment = postPrCommentStr !== 'false';
 
+  // fail-on-hydration-drift
+  const failOnHydrationStr = (raw['fail-on-hydration-drift'] ?? raw['failOnHydrationDrift'] ?? 'true').toLowerCase().trim();
+  const failOnHydrationDrift = failOnHydrationStr !== 'false';
+
+  // fail-on-broken-routes
+  const failOnBrokenStr = (raw['fail-on-broken-routes'] ?? raw['failOnBrokenRoutes'] ?? 'true').toLowerCase().trim();
+  const failOnBrokenRoutes = failOnBrokenStr !== 'false';
+
+  // post-sticky-comment
+  const postStickyCommentStr = (raw['post-sticky-comment'] ?? raw['postStickyComment'] ?? 'true').toLowerCase().trim();
+  const postStickyComment = postStickyCommentStr !== 'false';
+
+  // auto-fix-workflow
+  const autoFixWorkflow = raw['auto-fix-workflow'] ?? raw['autoFixWorkflow'] ?? 'proofix-autofix.yml';
+
   if (errors.length > 0) {
     return { valid: false, errors };
   }
@@ -124,7 +143,11 @@ export function validateActionInputs(raw: Record<string, string | undefined>): V
       lcpBudgetMs: isNaN(lcpBudgetMs) ? 2500 : lcpBudgetMs,
       clsBudget: isNaN(clsBudget) ? 0.10 : clsBudget,
       failOnVitalsBudget,
+      failOnHydrationDrift,
+      failOnBrokenRoutes,
       postPrComment,
+      postStickyComment,
+      autoFixWorkflow,
     },
   };
 }

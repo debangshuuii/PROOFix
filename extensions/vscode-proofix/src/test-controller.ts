@@ -83,4 +83,34 @@ export class ProofixTestController {
     }
     return undefined;
   }
+
+  public countAllTests(): number {
+    let count = 0;
+    const countNodes = (map: Map<string, TestItemNode>) => {
+      for (const node of map.values()) {
+        if (node.children.size === 0) {
+          count++;
+        } else {
+          countNodes(node.children);
+        }
+      }
+    };
+    countNodes(this.rootTests);
+    return count;
+  }
+
+  public getAllLeafJourneys(): TestItemNode[] {
+    const leaves: TestItemNode[] = [];
+    const collect = (map: Map<string, TestItemNode>) => {
+      for (const node of map.values()) {
+        if (node.children.size === 0) {
+          leaves.push(node);
+        } else {
+          collect(node.children);
+        }
+      }
+    };
+    collect(this.rootTests);
+    return leaves;
+  }
 }

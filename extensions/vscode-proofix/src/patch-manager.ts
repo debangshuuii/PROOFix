@@ -86,6 +86,14 @@ export class PatchManager {
     return fs.existsSync(backupPath);
   }
 
+  public listAllBackups(dir: string): string[] {
+    if (!fs.existsSync(dir)) return [];
+    const files = fs.readdirSync(dir, { recursive: true });
+    return (files as string[])
+      .filter((f) => typeof f === 'string' && f.endsWith('.proofix.bak'))
+      .map((f) => path.join(dir, f));
+  }
+
   public clear(): void {
     this.proposals.clear();
   }

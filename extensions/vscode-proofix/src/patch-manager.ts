@@ -84,3 +84,26 @@ export class PatchManager {
     this.proposals.clear();
   }
 }
+
+/**
+ * Formats title for the split-screen VS Code diff editor tab.
+ */
+export function formatDiffPreviewTitle(targetFile: string): string {
+  const base = path.basename(targetFile);
+  return `PROOFix Proposed Fix: ${base} ↔ Current`;
+}
+
+/**
+ * Returns arguments formatted for `vscode.commands.executeCommand('vscode.diff', ...)`.
+ */
+export function getDiffViewerArgs(proposal: ProposedPatch): {
+  originalUri: string;
+  proposedUri: string;
+  title: string;
+} {
+  return {
+    originalUri: proposal.targetFile,
+    proposedUri: `${proposal.targetFile}.proofix-preview`,
+    title: formatDiffPreviewTitle(proposal.targetFile),
+  };
+}

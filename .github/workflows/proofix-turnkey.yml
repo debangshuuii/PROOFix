@@ -1,8 +1,17 @@
+# ==============================================================================
+# PROOFix Turnkey Verification & Sticky PR Bot
+# 
+# 3-Line Quickstart for your own repository:
+#   - uses: proofix/action@v1
+#     with:
+#       github-token: ${{ secrets.GITHUB_TOKEN }}
+# ==============================================================================
+
 name: PROOFix Turnkey Verification & PR Sticky Bot
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, master]
   workflow_dispatch:
 
 permissions:

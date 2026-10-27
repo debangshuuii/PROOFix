@@ -68,3 +68,10 @@ While generative AI models excel at code generation, they frequently produce app
 - Implements strict distinction between **Observed Facts** (e.g. "Observed HTTP 404 response on /broken-route") and **AI Hypotheses** (e.g. "Typo in href or missing route file").
 - Supports Gemini 2.0, OpenAI GPT-4o, Anthropic Claude, and a built-in Deterministic Rule Diagnoser that functions completely offline without API keys.
 - Generates unified patch diffs (`--- a/... +++ b/...`) for developer review.
+
+### E. Turnkey GitHub Action & Sticky PR Bot (`proofix/action@v1`)
+- Runs directly inside GitHub Actions workflows without webhook servers.
+- Manages dynamic sticky PR comments updating in-place on every push.
+- Generates client-side before/after interactive visual sliders and timestamped failure video links.
+- Enforces hard check-run gating on React 19 SSR hydration drift (#418) and dead route 404s.
+- Dispatches "Prove & Auto-Fix" self-healing workflows committing verified patches to the PR branch.

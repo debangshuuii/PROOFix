@@ -83,6 +83,21 @@ export class ProofixTestController {
     return this.findRecursive(this.rootTests, id);
   }
 
+  public updateTestStatus(
+    id: string,
+    status: 'passed' | 'failed' | 'running',
+    durationMs?: number,
+    error?: string
+  ): TestItemNode | undefined {
+    const node = this.getNodeById(id);
+    if (node) {
+      node.status = status;
+      if (durationMs !== undefined) node.durationMs = durationMs;
+      if (error !== undefined) node.error = error;
+    }
+    return node;
+  }
+
   private findRecursive(map: Map<string, TestItemNode>, targetId: string): TestItemNode | undefined {
     for (const [id, node] of map.entries()) {
       if (id === targetId) return node;

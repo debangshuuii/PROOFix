@@ -36,9 +36,9 @@ export function detectHydrationDrifts(
 
       for (const sig of HYDRATION_SIGNATURES) {
         if (sig.test(msg)) {
-          const key = `${res.route || res.testId}:${msg.slice(0, 80)}`;
-          if (!seenKeys.has(key)) {
-            seenKeys.add(key);
+          const testKey = `${res.route || res.testId}`;
+          if (!seenKeys.has(testKey)) {
+            seenKeys.add(testKey);
 
             // Attempt extracting server and client drift mismatch snippets
             let serverValue: string | undefined;
@@ -87,7 +87,9 @@ export function detectHydrationDrifts(
 }
 
 function extractComponentName(msg: string): string | undefined {
-  const compMatch = msg.match(/in\s+<([A-Z][A-Za-z0-9_]+)>/) || msg.match(/at\s+([A-Z][A-Za-z0-9_]+)\s+\(/);
+  const compMatch =
+    msg.match(/(?:in|at)\s+<([A-Z][A-Za-z0-9_]+)>/) ||
+    msg.match(/at\s+([A-Z][A-Za-z0-9_]+)\s+\(/);
   return compMatch ? compMatch[1] : undefined;
 }
 

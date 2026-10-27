@@ -38,3 +38,16 @@ export function generateAutoFixDispatchLink(options: AutoFixLinkOptions): AutoFi
     buttonMarkdown,
   };
 }
+
+/**
+ * Formats the Auto-Fix section block for embedding into PR comments.
+ */
+export function formatAutoFixSectionMarkdown(autoFix?: AutoFixDispatchLink): string {
+  if (!autoFix) return '';
+
+  return `
+### 🛠️ Self-Healing Auto-Repair Available
+
+${autoFix.buttonMarkdown}
+`.trim();
+}

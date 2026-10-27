@@ -84,3 +84,10 @@ export class RouteCodeLensProvider {
     return lenses;
   }
 }
+
+/**
+ * Formats the Run Journey CodeLens title.
+ */
+export function formatRunJourneyTitle(routePath: string): string {
+  return `▶ Run Journey (${routePath})`;
+}

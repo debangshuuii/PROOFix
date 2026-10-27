@@ -29,7 +29,11 @@
     "onLanguage:javascript",
     "onLanguage:javascriptreact",
     "workspaceContains:**/package.json",
-    "workspaceContains:**/proofix.json"
+    "workspaceContains:**/proofix.json",
+    "onCommand:proofix.runRoute",
+    "onCommand:proofix.proveRoute",
+    "onCommand:proofix.runAll",
+    "onCommand:proofix.showPanel"
   ],
   "contributes": {
     "commands": [

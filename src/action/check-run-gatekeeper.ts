@@ -83,3 +83,22 @@ function resolveFilePathForRoute(route: string): string {
   if (clean.startsWith('api/')) return `src/app/${clean}/route.ts`;
   return clean ? `src/app/${clean}/page.tsx` : 'src/app/page.tsx';
 }
+
+/**
+ * Specifically evaluates the dead link / 404 broken route blocking policy.
+ */
+export function evaluateBrokenRoutesPolicy(brokenRoutes: BrokenRouteDetail[]): {
+  violates: boolean;
+  count: number;
+  message: string;
+} {
+  const count = brokenRoutes.length;
+  const violates = count > 0;
+  return {
+    violates,
+    count,
+    message: violates
+      ? `Blocked merge: ${count} dead link(s) / 404 route(s) detected during automated crawling.`
+      : 'Passed: 0 dead routes detected.',
+  };
+}

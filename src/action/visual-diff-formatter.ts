@@ -36,3 +36,50 @@ ${rows}
 </details>
 `.trim();
 }
+
+/**
+ * Formats a badge string indicating pixel discrepancy severity.
+ */
+export function formatPixelDiscrepancyBadge(pixels: number, percentage: number): string {
+  if (pixels === 0) {
+    return '`0 px (0.00%)` ✅';
+  }
+  if (percentage < 0.5) {
+    return `\`${pixels} px (${percentage.toFixed(2)}%)\` ⚠️ Minor`;
+  }
+  return `\`${pixels} px (${percentage.toFixed(2)}%)\` 🚨 Severe Regression`;
+}
+
+/**
+ * Computes aggregated statistics for a collection of visual diff results.
+ */
+export function summarizeVisualDiscrepancies(diffs: VisualDiffDetail[]): {
+  totalMismatchPixels: number;
+  maxMismatchPct: number;
+  passedCount: number;
+  failedCount: number;
+} {
+  let totalMismatchPixels = 0;
+  let maxMismatchPct = 0;
+  let passedCount = 0;
+  let failedCount = 0;
+
+  for (const d of diffs) {
+    totalMismatchPixels += d.mismatchPixels;
+    if (d.mismatchPercentage > maxMismatchPct) {
+      maxMismatchPct = d.mismatchPercentage;
+    }
+    if (d.passed) {
+      passedCount++;
+    } else {
+      failedCount++;
+    }
+  }
+
+  return {
+    totalMismatchPixels,
+    maxMismatchPct,
+    passedCount,
+    failedCount,
+  };
+}

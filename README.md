@@ -104,6 +104,52 @@ npx proofix prove --scenario ecommerce_checkout
 
 ---
 
+## ⚡ Turnkey Reusable GitHub Action (`proofix/action@v1`)
+
+> **"Never merge unverified code. Turnkey 3-line CI verification with zero-noise sticky PR comments."**
+
+Add PROOFix directly to `.github/workflows/proofix.yml`:
+
+```yaml
+name: PROOFix Verification Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: proofix/action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          fail-on-hydration-drift: 'true'
+          fail-on-broken-routes: 'true'
+          post-sticky-comment: 'true'
+```
+
+- **Sticky PR Comments:** Updates existing bot comments in-place with interactive before/after visual sliders.
+- **Video Failure Bookmarks:** Jump straight to the exact failure timestamp in captured Playwright recordings.
+- **Prove & Auto-Fix:** Dispatches self-healing repairs directly back to your PR branch.
+- **Hard Check-Run Gatekeeper:** Blocks merges if React 19 SSR hydration drift (#418) or dead 404 links occur.
+
+---
+
+## 💻 VS Code & Cursor Native IDE Extension
+
+> **"Prove routes without leaving your editor. Gutter badges, CodeLens, and inline self-healing diffs."**
+
+PROOFix runs natively inside VS Code and Cursor (`extensions/vscode-proofix`):
+
+- **Route Gutter Badges:** Subtle green/red status lenses beside Next.js route handlers (`app/**/page.tsx` & `app/api/**/route.ts`).
+- **Inline CodeLens:** One-click `▶ Run Journey` and `🛡️ Prove Route` above route exports.
+- **VS Code Test Explorer:** Seamless integration into the native Test Activity Bar with live step progress.
+- **Inline Patch Application:** Click "Apply Proven Fix" to review side-by-side split diffs with automatic rollback `.proofix.bak` protection.
+
+---
+
 ## 💻 Native Developer CLI Tooling (`bin/proofix.js`)
 
 PROOFix includes a command-line developer tool for terminal workflows:
@@ -228,6 +274,8 @@ PROOFix/
 
 ## 📄 Documentation
 
+- [Turnkey GitHub Action & Sticky PR Bot](docs/TURNKEY_GITHUB_ACTION_AND_PR_BOT.md)
+- [VS Code & Cursor Native IDE Extension](docs/VSCODE_CURSOR_NATIVE_EXTENSION.md)
 - [Zero-Setup Interactive Demo Playground](docs/ZERO_SETUP_INTERACTIVE_PLAYGROUND.md)
 - [Enterprise UI/UX & Developer Experience](docs/ENTERPRISE_UI_UX_DEVELOPER_EXPERIENCE.md)
 - [Interactive OpenAPI 3.1 Reference](/docs)

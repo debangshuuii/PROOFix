@@ -71,3 +71,83 @@ export async function findExistingStickyComment(
     return null;
   }
 }
+
+/**
+ * Creates or updates a sticky PR comment in-place.
+ */
+export async function createOrUpdateStickyComment(
+  options: GitHubApiOptions & { body: string; sticky?: boolean }
+): Promise<{
+  action: 'created' | 'updated' | 'skipped';
+  commentId?: number;
+  commentUrl?: string;
+  error?: string;
+}> {
+  const { owner, repo, issueNumber, token, body, sticky = true } = options;
+
+  if (!token) {
+    return { action: 'skipped', error: 'Missing GitHub token' };
+  }
+
+  try {
+    let existing: ExistingComment | null = null;
+    if (sticky) {
+      existing = await findExistingStickyComment({ owner, repo, issueNumber, token });
+    }
+
+    if (existing) {
+      // Update existing comment in place
+      const updateUrl = `https://api.github.com/repos/${owner}/${repo}/issues/comments/${existing.id}`;
+      const res = await fetch(updateUrl, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/vnd.github+json',
+          Authorization: `Bearer ${token}`,
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json',
+          'User-Agent': 'PROOFix-GitHub-Action',
+        },
+        body: JSON.stringify({ body }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`PATCH comment failed with HTTP ${res.status}`);
+      }
+
+      const updated = (await res.json()) as { id: number; html_url?: string };
+      return {
+        action: 'updated',
+        commentId: updated.id,
+        commentUrl: updated.html_url || existing.htmlUrl,
+      };
+    } else {
+      // Create new comment
+      const createUrl = `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}/comments`;
+      const res = await fetch(createUrl, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/vnd.github+json',
+          Authorization: `Bearer ${token}`,
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json',
+          'User-Agent': 'PROOFix-GitHub-Action',
+        },
+        body: JSON.stringify({ body }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`POST comment failed with HTTP ${res.status}`);
+      }
+
+      const created = (await res.json()) as { id: number; html_url?: string };
+      return {
+        action: 'created',
+        commentId: created.id,
+        commentUrl: created.html_url,
+      };
+    }
+  } catch (err: any) {
+    console.error(`[PROOFix GitHub Client] Failed publishing sticky PR comment: ${err.message}`);
+    return { action: 'skipped', error: err.message };
+  }
+}

@@ -8,6 +8,13 @@ export interface TestRunProfile {
   isDefault: boolean;
 }
 
+export interface TestMessageDetail {
+  message: string;
+  expected?: string;
+  actual?: string;
+  stackTrace?: string;
+}
+
 export interface TestItemNode {
   id: string;
   label: string;
@@ -17,6 +24,7 @@ export interface TestItemNode {
   status?: 'passed' | 'failed' | 'running' | 'enqueued';
   error?: string;
   durationMs?: number;
+  testMessage?: TestMessageDetail;
 }
 
 /**

@@ -104,6 +104,16 @@ outputs:
     description: 'Markdown formatted summary table of verification findings.'
   artifacts-bundle:
     description: 'Directory path containing all collected evidence artifacts.'
+  sticky-comment-id:
+    description: 'GitHub comment ID of the created or updated sticky PR comment.'
+  sticky-comment-url:
+    description: 'HTML URL linking directly to the sticky PR comment.'
+  hydration-detected:
+    description: 'Whether React 19 SSR hydration drift (#418) was detected during verification ("true" or "false").'
+  broken-routes-count:
+    description: 'Count of dead routes returning HTTP 404 during navigation checks.'
+  proof-preview-url:
+    description: 'Relative path or URI to the standalone zero-auth proof preview HTML artifact.'
 
 runs:
   using: 'node20'

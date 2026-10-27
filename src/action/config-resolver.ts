@@ -14,6 +14,10 @@ export interface ResolvedWorkflowConfig {
   generateSummary: boolean;
   uploadArtifacts: boolean;
   isCustomReportDir: boolean;
+  failOnHydrationDrift: boolean;
+  failOnBrokenRoutes: boolean;
+  postStickyComment: boolean;
+  autoFixWorkflow: string;
 }
 
 /**
@@ -75,5 +79,9 @@ export function resolveWorkflowConfig(inputs: ActionInputs): ResolvedWorkflowCon
     generateSummary: inputs.generateSummary,
     uploadArtifacts: inputs.uploadArtifacts,
     isCustomReportDir,
+    failOnHydrationDrift: inputs.failOnHydrationDrift ?? true,
+    failOnBrokenRoutes: inputs.failOnBrokenRoutes ?? true,
+    postStickyComment: inputs.postStickyComment ?? true,
+    autoFixWorkflow: inputs.autoFixWorkflow || 'proofix-autofix.yml',
   };
 }

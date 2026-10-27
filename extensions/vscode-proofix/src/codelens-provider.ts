@@ -91,3 +91,10 @@ export class RouteCodeLensProvider {
 export function formatRunJourneyTitle(routePath: string): string {
   return `▶ Run Journey (${routePath})`;
 }
+
+/**
+ * Formats the Prove Route CodeLens title.
+ */
+export function formatProveRouteTitle(routePath: string): string {
+  return `🛡️ Prove Route (${routePath})`;
+}

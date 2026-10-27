@@ -12,6 +12,8 @@ export interface ExitCodeDeterminationParams {
   failedChecks: number;
   failOnRegression: boolean;
   hasExecutionError?: boolean;
+  hasHydrationViolation?: boolean;
+  hasBrokenRouteViolation?: boolean;
 }
 
 /**
@@ -26,7 +28,12 @@ export function determineActionExitCode(params: ExitCodeDeterminationParams): Ac
     return EXIT_EXECUTION_ERROR;
   }
 
-  // 2. Failed checks trigger verification failure exit code 1 if failOnRegression is active
+  // 2. Hard check-run gating violations (React 19 hydration drift #418 or dead 404 routes)
+  if (params.hasHydrationViolation || params.hasBrokenRouteViolation) {
+    return EXIT_VERIFICATION_FAILURE;
+  }
+
+  // 3. Failed checks trigger verification failure exit code 1 if failOnRegression is active
   if (params.failedChecks > 0 || params.status === 'failed') {
     if (params.failOnRegression) {
       return EXIT_VERIFICATION_FAILURE;
@@ -35,7 +42,7 @@ export function determineActionExitCode(params: ExitCodeDeterminationParams): Ac
     return EXIT_SUCCESS;
   }
 
-  // 3. Otherwise completely passed
+  // 4. Otherwise completely passed
   return EXIT_SUCCESS;
 }
 

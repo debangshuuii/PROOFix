@@ -102,3 +102,31 @@ export function evaluateBrokenRoutesPolicy(brokenRoutes: BrokenRouteDetail[]): {
       : 'Passed: 0 dead routes detected.',
   };
 }
+
+/**
+ * Transforms test failure results into GitHub Check-Run line-level code annotations.
+ */
+export function formatCheckRunAnnotations(
+  results: Array<{ testId: string; route?: string; error?: string; status: string }>
+): CheckRunGateResult['annotations'] {
+  const annotations: CheckRunGateResult['annotations'] = [];
+
+  for (const r of results) {
+    if (r.status === 'failed' || r.status === 'error') {
+      const path = resolveFilePathForRoute(r.route || r.testId);
+      const title = `Verification Failed: ${r.route || r.testId}`;
+      const message = r.error ? r.error.split('\n')[0] : 'Test execution assertion failed.';
+
+      annotations.push({
+        path,
+        start_line: 1,
+        end_line: 1,
+        annotation_level: 'failure',
+        title,
+        message,
+      });
+    }
+  }
+
+  return annotations;
+}

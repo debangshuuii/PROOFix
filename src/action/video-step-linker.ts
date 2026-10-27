@@ -49,3 +49,41 @@ export function formatVideoTimestamp(seconds: number): string {
   const secs = Math.floor(seconds % 60);
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
+
+/**
+ * Formats a video failure section with timestamp bookmarks into GitHub-flavored Markdown.
+ */
+export function formatFailureVideoSectionMarkdown(
+  steps: FailureVideoStep[],
+  videoUrl?: string
+): string {
+  if (!steps || steps.length === 0) {
+    return '';
+  }
+
+  const primaryVideoLink = videoUrl || (steps[0] && steps[0].videoUrl);
+  const videoBadge = primaryVideoLink
+    ? `[🎬 **Download Playwright Failure Recording (.webm)**](${primaryVideoLink})`
+    : `🎬 **Playwright Failure Recording Captured** *(attached to workflow run artifacts)*`;
+
+  const rows = steps.map((s) => {
+    const timestampFormatted = formatVideoTimestamp(s.videoTimestampSec);
+    const deepLink = primaryVideoLink ? `[▶ ${timestampFormatted}](${primaryVideoLink}#t=${s.videoTimestampSec})` : `\`${timestampFormatted}\``;
+    const snippet = s.errorSnippet ? `<code>${s.errorSnippet}</code>` : '<em>Inspection Failed</em>';
+
+    return `| Step #${s.stepIndex} | **${s.stepName}** | ${deepLink} | ${snippet} |`;
+  }).join('\n');
+
+  return `
+<details>
+<summary><b>📹 Failure Video Recording & Timeline Bookmarks (${steps.length} failure point${steps.length > 1 ? 's' : ''})</b></summary>
+
+${videoBadge}
+
+| Step | Test Journey Target | Video Timestamp | Failure Cause |
+| :---: | :--- | :---: | :--- |
+${rows}
+
+</details>
+`.trim();
+}

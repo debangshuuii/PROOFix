@@ -78,6 +78,18 @@
         "title": "PROOFix: Refresh Route Index",
         "category": "PROOFix",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "proofix.openFailureDiff",
+        "title": "PROOFix: Inspect Failure Diff",
+        "category": "PROOFix",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "proofix.inspectVitals",
+        "title": "PROOFix: Inspect Core Web Vitals",
+        "category": "PROOFix",
+        "icon": "$(dashboard)"
       }
     ],
     "configuration": {

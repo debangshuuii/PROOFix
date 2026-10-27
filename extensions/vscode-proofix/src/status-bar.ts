@@ -26,6 +26,16 @@ export class ProofixStatusBarItem {
     return this.render();
   }
 
+  public updateFromRouteStatuses(statuses: Array<{ status: string }>): StatusBarState {
+    let proven = 0;
+    let failing = 0;
+    for (const s of statuses) {
+      if (s.status === 'proven') proven++;
+      if (s.status === 'failing') failing++;
+    }
+    return this.setCounts(proven, failing, statuses.length);
+  }
+
   public render(): StatusBarState {
     if (this.isRunning) {
       return {

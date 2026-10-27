@@ -94,6 +94,18 @@ export class GutterDecorationProvider {
     return this.computeDecorationsForRoute(route);
   }
 
+  public refreshAllVisibleDecorations(
+    editors: Array<{ document: { fileName: string }; setDecorations: (type: any, ranges: any[]) => void }>,
+    routeIndex: { getByFile: (file: string) => RouteHandlerInfo | undefined }
+  ): DecorationItem[] {
+    const items: DecorationItem[] = [];
+    for (const ed of editors) {
+      const dec = this.updateEditorDecorations(ed, routeIndex);
+      if (dec) items.push(dec);
+    }
+    return items;
+  }
+
   public clear(): void {
     this.routeStatuses.clear();
   }

@@ -151,3 +151,75 @@ export async function createOrUpdateStickyComment(
     return { action: 'skipped', error: err.message };
   }
 }
+
+export interface CheckRunOptions {
+  owner: string;
+  repo: string;
+  commitSha: string;
+  token?: string;
+  name: string;
+  conclusion: 'success' | 'failure' | 'neutral';
+  title: string;
+  summary: string;
+  annotations?: Array<{
+    path: string;
+    start_line: number;
+    end_line: number;
+    annotation_level: 'failure' | 'warning' | 'notice';
+    message: string;
+    title: string;
+  }>;
+}
+
+/**
+ * Creates a GitHub Check Run with annotations to block pull request merges on failure.
+ */
+export async function createOrUpdateCheckRun(
+  options: CheckRunOptions
+): Promise<{ checkRunId?: number; htmlUrl?: string; error?: string }> {
+  const { owner, repo, commitSha, token, name, conclusion, title, summary, annotations = [] } = options;
+
+  if (!token) {
+    return { error: 'Missing GitHub token for Check Run API' };
+  }
+
+  const url = `https://api.github.com/repos/${owner}/${repo}/check-runs`;
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${token}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json',
+        'User-Agent': 'PROOFix-GitHub-Action',
+      },
+      body: JSON.stringify({
+        name,
+        head_sha: commitSha,
+        status: 'completed',
+        conclusion,
+        completed_at: new Date().toISOString(),
+        output: {
+          title,
+          summary,
+          annotations: annotations.slice(0, 50), // GitHub limits to 50 per batch
+        },
+      }),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      return { error: `Check Run API failed (HTTP ${res.status}): ${errText}` };
+    }
+
+    const json = (await res.json()) as { id: number; html_url?: string };
+    return {
+      checkRunId: json.id,
+      htmlUrl: json.html_url,
+    };
+  } catch (err: any) {
+    return { error: err.message };
+  }
+}

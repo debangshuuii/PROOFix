@@ -1,5 +1,13 @@
 import { RouteHandlerInfo } from './types';
 
+export type TestRunProfileKind = 'run' | 'prove' | 'debug';
+
+export interface TestRunProfile {
+  label: string;
+  kind: TestRunProfileKind;
+  isDefault: boolean;
+}
+
 export interface TestItemNode {
   id: string;
   label: string;

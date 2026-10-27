@@ -108,6 +108,17 @@
           "enum": ["gemini", "openai", "anthropic", "offline"],
           "default": "gemini",
           "description": "Preferred AI model provider for failure diagnosis and self-healing patches."
+        },
+        "proofix.diffViewerMode": {
+          "type": "string",
+          "enum": ["split", "unified"],
+          "default": "split",
+          "description": "Default view mode for reviewing proposed self-healing patch diffs."
+        },
+        "proofix.traceRecording": {
+          "type": "boolean",
+          "default": true,
+          "description": "Capture Playwright Chromium video and DOM trace artifacts during test runs."
         }
       }
     }
